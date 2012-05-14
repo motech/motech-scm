@@ -131,6 +131,9 @@ def append_to_file(file_path, content):
 def insert_after_line(file_path, line_to_insert_after, content):
     write_to_file(file_path, get_content_as_string(file_path).replace(line_to_insert_after, line_to_insert_after + os.linesep + content))
 
+def restart_asterisk_and_verboice():
+	os.system("service asterisk restart")
+
 enable_asterisk_manager()
 configure_sound_file_loc()
 channel_id = setup_verboice()
@@ -139,3 +142,4 @@ setup_verboice_restart_config()
 setup_asterisk_manager()
 add_channel_conf_to_etc_host(channel_id)
 add_demo_sip_accounts()
+restart_asterisk_and_verboice()
