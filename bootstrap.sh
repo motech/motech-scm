@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# to setup vm : wget https://raw.github.com/motech/motech-delivery/master/motech-delivery-scm/bootstrap.sh && sh ./bootstrap.sh 
+# to setup vm : wget https://raw.github.com/motech/motech-setup/master/bootstrap.sh && sh ./bootstrap.sh 
 
 echo "MoTeCH: Bootstrap Machine:"
 rpmUrl="http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/6/"`uname -m`"/epel-release-6-6.noarch.rpm"
