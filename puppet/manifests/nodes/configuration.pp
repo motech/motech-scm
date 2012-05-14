@@ -79,7 +79,6 @@
  # include mysql
  # include mysqlserver
  # include asterisk
- # include sox
  # include activemq
  # include tomcat
  # include duplicity
