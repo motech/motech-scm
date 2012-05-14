@@ -37,8 +37,7 @@ include repos::motech
 	}
 
     exec { "/tmp/configure_verboice.py" :
-        require => [File['/tmp/configure_verboice.py'], Exec['/usr/bin/yum -y install Verboice'],
-        Exec['monit -g verboice start all']],
+        require => [File['/tmp/configure_verboice.py'], Exec['monit -g verboice start all']],
         logoutput => true
     }
 }
