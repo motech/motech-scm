@@ -1,0 +1,3 @@
+node default {
+ import "configuration"
+}
