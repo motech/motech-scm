@@ -74,7 +74,7 @@
  # class{postgres_pgpool : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
- # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpRedirectionenabled => "${httpdRedirectionEnabled}", httpdRedirectFromRegex => "${httpdRedirectFromRegex}", httpdRedirectToURL => "${httpdRedirectToURL}" }
+ # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpRedirectionEnabled => "${httpdRedirectionEnabled}", httpdRedirectFromRegex => "${httpdRedirectFromRegex}", httpdRedirectToURL => "${httpdRedirectToURL}" }
 
  # include git
  # include httpd    

@@ -1,5 +1,5 @@
 
-class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpRedirectionenabled, $httpdRedirectFromRegex, $httpdRedirectToURL ) {
+class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpRedirectionEnabled, $httpdRedirectFromRegex, $httpdRedirectToURL ) {
 	package { "httpd" :
 		ensure => "present",
 	}
@@ -29,7 +29,10 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
 		user => "root",
 	}
 
-  if "${httpRedirectionenabled}" == true {
-    command => "echo 'ProxyPassMatch ${httpdRedirectFromRegex} ${$httpdRedirectToURL}' >> /etc/httpd/conf "
+  if "${httpRedirectionEnabled}" == true {
+    exec{
+      command => "echo 'ProxyPassMatch ${httpdRedirectFromRegex} ${$httpdRedirectToURL}' >> /etc/httpd/conf ",
+      user => "root"
+    }
   }
 }
