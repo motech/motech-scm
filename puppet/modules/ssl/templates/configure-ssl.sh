@@ -9,11 +9,11 @@ sed -i 's/\#SSLCertificateFile/SSLCertificateFile/g' /etc/httpd/conf.d/ssl.conf
 sed -i 's/\#SSLCertificateKeyFile/SSLCertificateKeyFile/g' /etc/httpd/conf.d/ssl.conf
 
 sed -i '
-/SSLCertificateFile/ c\
+/SSLCertificateFile\s\// c\
 SSLCertificateFile '"$arg1"'
 ' /etc/httpd/conf.d/ssl.conf
 
 sed -i '
-/SSLCertificateKeyFile/ c\
+/SSLCertificateKeyFile\s\// c\
 SSLCertificateKeyFile '"$arg2"'
 ' /etc/httpd/conf.d/ssl.conf
