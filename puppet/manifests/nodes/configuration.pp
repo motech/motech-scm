@@ -57,6 +57,9 @@
  $httpdMasterPort = "80"
  $httpdSlaveHost = "127.0.0.1"
  $httpdSlavePort = "80"
+ $httpdRedirectionEnabled = false
+ $httpdRedirectFromRegex = "^/ananya/data/(.*)$"
+ $httpdRedirectToURL = "http://localhost:8080/ananya/data/$1"
  
  # https
  $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
@@ -71,7 +74,7 @@
  # class{postgres_pgpool : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
- # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}" }
+ # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpRedirectionenabled => "${httpdRedirectionEnabled}", httpdRedirectFromRegex => "${httpdRedirectFromRegex}", httpdRedirectToURL => "${httpdRedirectToURL}" }
 
  # include git
  # include httpd    
@@ -86,5 +89,5 @@
  # include monitor
  # include ssl
  # include verboice
- #  include doxygen
+ # include doxygen
 
