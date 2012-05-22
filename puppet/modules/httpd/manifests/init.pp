@@ -29,10 +29,10 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
 		user => "root",
 	}
 
-  if "${httpRedirectionEnabled}" == true {
+  if "${httpRedirectionEnabled}" == 'true' {
     exec{
       "setup_apache_redirection":
-      command => "echo 'ProxyPassMatch ${httpdRedirectFromRegex} ${$httpdRedirectToURL}' >> /etc/httpd/conf ",
+      command => "echo 'ProxyPassMatch ${httpdRedirectFromRegex} ${$httpdRedirectToURL}' >> /etc/httpd/conf/httpd.conf ",
       user => "root",
       require => Package["httpd"]
     }
