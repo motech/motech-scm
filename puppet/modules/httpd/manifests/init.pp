@@ -1,23 +1,23 @@
 
-class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpRedirectionEnabled, $httpdRedirectFromRegex, $httpdRedirectToURL ) {
+class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpRedirectionEnabled, $httpdRedirectFromRegex, $httpdRedirectToURL, $onMobileHostAddress ) {
 	package { "httpd" :
 		ensure => "present",
 	}
 
-    if "${httpdMachine}" == 'failoverProxy' {
-       exec {
-            "backup_slave_conf":
-                cwd     => "/etc/httpd/conf",
-                command => "mv httpd.conf httpd.conf.backup",
-       }
+  if "${httpdMachine}" == 'failoverProxy' {
+     exec {
+          "backup_slave_conf":
+              cwd     => "/etc/httpd/conf",
+              command => "mv httpd.conf httpd.conf.backup",
+     }
 
-       file { "/etc/httpd/conf/httpd.conf":
-           notify => Service["httpd"],
-           content => template("httpd/httpd_slave.conf.erb"),
-           mode   =>  644,
-           require => Exec["backup_slave_conf"],
-       }
-    }
+     file { "/etc/httpd/conf/httpd.conf":
+         notify => Service["httpd"],
+         content => template("httpd/httpd_slave.conf.erb"),
+         mode   =>  644,
+         require => Exec["backup_slave_conf"],
+     }
+  }
 
 	service {"httpd" :
 		ensure => "running",
@@ -31,6 +31,16 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
 	}
 
   if "${httpRedirectionEnabled}" == 'true' {
+    exec{
+      "setup_https_redirection":
+      command => "echo 'RewriteEngine On
+                        RewriteCond %{HTTPS} off
+                        RewriteCond %{REMOTE_HOST} !(${onMobileHostAddress})
+                        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}' >> /etc/httpd/conf/httpd.conf ",
+      user => "root",
+      require => Package["httpd"]
+    }
+
     exec{
       "setup_apache_redirection":
       command => "echo 'ProxyPassMatch ${httpdRedirectFromRegex} ${$httpdRedirectToURL}' >> /etc/httpd/conf/httpd.conf ",
