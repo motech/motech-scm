@@ -93,4 +93,5 @@
  # include ssl
  # include verboice
  # include doxygen
+ # include ruby
 
