@@ -3,10 +3,14 @@ class ruby {
 		ensure  =>  "present"
 	}
 
+	package { "rubygems" :
+		ensure  =>  "present",
+        require => [Package["ruby"]]
+	}
+
     exec { "install_rubygem_sinatra":
         command => "gem install sinatra",
-        require => [Package["ruby"]]
-
+        require => [Package["rubygems"]]
     }
 }
 
