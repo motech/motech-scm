@@ -95,3 +95,6 @@
  # include doxygen
  # include ruby
 
+ ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
+ # include nscd
+
