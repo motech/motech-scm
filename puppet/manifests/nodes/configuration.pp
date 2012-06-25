@@ -60,9 +60,10 @@
  $httpdSlaveHost = "127.0.0.1"
  $httpdSlavePort = "80"
  $httpdRedirectionEnabled = false
- $httpdRedirectFromRegex = "^/(.*)$"
- $httpdRedirectToURL = "http://localhost:8080/$1"
- $onMobileHostAddress = "127.0.0.1"
+ $httpsExcludedHostAddress = "127.0.0.1"
+ $apacheHttpPort = "80"
+ $httpSslPort = "443"
+ $apacheTomcatPort = "8080"
  
  # https
  $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
@@ -77,7 +78,7 @@
  # class{postgres_pgpool : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
- # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpRedirectionEnabled => "${httpdRedirectionEnabled}", httpdRedirectFromRegex => "${httpdRedirectFromRegex}", httpdRedirectToURL => "${httpdRedirectToURL}", onMobileHostAddress => "${onMobileHostAddress}" }
+ # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpRedirectionEnabled => "${httpdRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
 
  # include git
  # include httpd    

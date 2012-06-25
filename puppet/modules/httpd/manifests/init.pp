@@ -1,5 +1,5 @@
 
-class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpRedirectionEnabled, $httpdRedirectFromRegex, $httpdRedirectToURL, $onMobileHostAddress ) {
+class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpRedirectionEnabled, $httpsExcludedHostAddress, $apacheHttpPort, $httpSslPort, $apacheTomcatPort) {
 	package { "httpd" :
 		ensure => "present",
 	}
@@ -8,14 +8,19 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
      exec {
           "backup_slave_conf":
               cwd     => "/etc/httpd/conf",
-              command => "mv httpd.conf httpd.conf.backup",
+              command => "cp httpd.conf httpd.conf.backup",
      }
 
-     file { "/etc/httpd/conf/httpd.conf":
-         notify => Service["httpd"],
-         content => template("httpd/httpd_slave.conf.erb"),
-         mode   =>  644,
-         require => Exec["backup_slave_conf"],
+    file {"/home/${motechUser}/config-httpd-load-balance.sh" :
+        content => template("httpd/config-httpd-load-balance.sh"),
+        owner => "${motechUser}",
+        group => "${motechUser}",
+        mode   =>  764,
+    }
+
+     exec { "config-httpd-load-balance":
+         require => File["/home/${motechUser}/config-httpd-load-balance.sh"],
+         command => "sh /home/${motechUser}/config-httpd-load-balance.sh ${httpdProxyPort} ${httpdMasterHost} ${httpdMasterPort} ${httpdSlaveHost} ${httpdSlavePort}"
      }
   }
 
@@ -31,21 +36,33 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
 	}
 
   if "${httpRedirectionEnabled}" == 'true' {
-    exec{
-      "setup_https_redirection":
-      command => "echo 'RewriteEngine On
-                        RewriteCond %{HTTPS} off
-                        RewriteCond %{REMOTE_HOST} !(${onMobileHostAddress})
-                        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}' >> /etc/httpd/conf/httpd.conf ",
-      user => "root",
-      require => Package["httpd"]
+    file {"/home/${motechUser}/config-httpd-redirect-to-https.sh" :
+        content => template("httpd/config-httpd-redirect-to-https.sh"),
+        owner => "${motechUser}",
+        group => "${motechUser}",
+        mode   =>  764,
     }
 
-    exec{
-      "setup_apache_redirection":
-      command => "echo 'ProxyPassMatch ${httpdRedirectFromRegex} ${$httpdRedirectToURL}' >> /etc/httpd/conf/httpd.conf ",
-      user => "root",
-      require => Package["httpd"]
+     exec { "config-httpd-redirect-to-https":
+         require => File["/home/${motechUser}/config-httpd-redirect-to-https.sh"],
+         command => "sh /home/${motechUser}/config-httpd-redirect-to-https.sh ${httpsExcludedHostAddress}"
+     }
+
+    file {"/home/${motechUser}/config-httpd-redirect-internal-to-port.sh" :
+        content => template("httpd/config-httpd-redirect-internal-to-port.sh"),
+        owner => "${motechUser}",
+        group => "${motechUser}",
+        mode   =>  764,
     }
+
+     exec { "config-httpd-redirect-internal-to-port-for-httpd-conf":
+         require => File["/home/${motechUser}/config-httpd-redirect-internal-to-port.sh"],
+         command => "sh /home/${motechUser}/config-httpd-redirect-internal-to-port.sh ${apacheHttpPort} ${apacheTomcatPort} /etc/httpd/conf/httpd.conf"
+     }
+
+     exec { "config-httpd-redirect-internal-to-port-for-ssl-conf":
+         require => File["/home/${motechUser}/config-httpd-redirect-internal-to-port.sh"],
+         command => "sh /home/${motechUser}/config-httpd-redirect-internal-to-port.sh ${httpSslPort} ${apacheTomcatPort} /etc/httpd/conf.d/ssl.conf"
+     }
   }
 }
