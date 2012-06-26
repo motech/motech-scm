@@ -59,7 +59,8 @@
  $httpdMasterPort = "80"
  $httpdSlaveHost = "127.0.0.1"
  $httpdSlavePort = "80"
- $httpdRedirectionEnabled = false
+ $httpToHttpsRedirectionEnabled = false
+ $httpInternalPortRedirectionEnabled = false
  $httpsExcludedHostAddress = "127.0.0.1"
  $apacheHttpPort = "80"
  $httpSslPort = "443"
@@ -78,7 +79,7 @@
  # class{postgres_pgpool : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
- # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpRedirectionEnabled => "${httpdRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
+ # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpToHttpsRedirectionEnabled => "${httpToHttpsRedirectionEnabled}", httpInternalPortRedirectionEnabled => "${httpInternalPortRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}",  = falseapacheTomcatPort => "${apacheTomcatPort}" }
 
  # include git
  # include httpd    

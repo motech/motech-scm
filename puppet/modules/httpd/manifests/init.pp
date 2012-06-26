@@ -1,5 +1,5 @@
 
-class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpRedirectionEnabled, $httpsExcludedHostAddress, $apacheHttpPort, $httpSslPort, $apacheTomcatPort) {
+class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort, $httpdSlaveHost, $httpdSlavePort, $httpToHttpsRedirectionEnabled, $httpInternalPortRedirectionEnabled, $httpsExcludedHostAddress, $apacheHttpPort, $httpSslPort, $apacheTomcatPort) {
 	package { "httpd" :
 		ensure => "present",
 	}
@@ -35,7 +35,7 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
     require => Package["httpd"],
 	}
 
-  if "${httpRedirectionEnabled}" == 'true' {
+  if "${httpToHttpsRedirectionEnabled}" == 'true' {
     file {"/home/${motechUser}/config-httpd-redirect-to-https.sh" :
         content => template("httpd/config-httpd-redirect-to-https.sh"),
         owner => "${motechUser}",
@@ -47,6 +47,9 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
          require => File["/home/${motechUser}/config-httpd-redirect-to-https.sh"],
          command => "sh /home/${motechUser}/config-httpd-redirect-to-https.sh ${httpsExcludedHostAddress}"
      }
+  }
+
+  if "${httpInternalPortRedirectionEnabled}" == 'true' {
 
     file {"/home/${motechUser}/config-httpd-redirect-internal-to-port.sh" :
         content => template("httpd/config-httpd-redirect-internal-to-port.sh"),
