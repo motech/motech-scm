@@ -2,7 +2,7 @@ httpFromPort=$1
 httpToPort=$2
 confFile=$3
 
-virtualHost80BlockPresent=`cat httpd.conf | grep '^<VirtualHost \*:'"$httpFromPort"'>' | wc -l`
+virtualHost80BlockPresent=`cat $confFile | grep '^<VirtualHost .*:'"$httpFromPort"'>' | wc -l`
 
 if [[ $virtualHost80BlockPresent -eq 0 ]];
 then
@@ -10,7 +10,7 @@ then
 	$ a\
 <VirtualHost \*:'"$httpFromPort"'>\
 </VirtualHost>
-	' /etc/httpd/conf/httpd.conf;
+	' $confFile;
 fi
 
 sed -i '
