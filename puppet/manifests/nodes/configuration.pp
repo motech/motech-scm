@@ -29,7 +29,7 @@
  $couchMaster = "127.0.0.1"
  $couchDbs = "tama-web ananya"
  $couchDbBackupLink = "/opt/backups/couchdb"
- #$couchDbDataLocation=/var/lib/couchdb
+ #$couchDbDataLocation = "/var/lib/couchdb"
 
 
  # postgres
@@ -41,7 +41,7 @@
  $postgresMaster = "127.0.0.1"
  $postgresSlave = "127.0.0.1"
  $postgresBackupLink = "/opt/backups/postgres"
- #$postgresDataLocation=/usr/local/pgsql/data
+ #$postgresDataLocation = "/usr/local/pgsql/data"
 
  # data backup
  $dataBackupDir = "/opt/backups"
