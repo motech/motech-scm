@@ -1,4 +1,4 @@
-class tomcat {
+class tomcat6 {
   include users
   
   exec {"gettomcattarfile" :
@@ -16,7 +16,7 @@ class tomcat {
   }
 
   file { "/etc/init.d/tomcat" :
-  	content => template("tomcat/tomcat.initd"),
+  	content => template("tomcat6/tomcat6.initd"),
   	mode   =>  777,
   	group  => "root",
   	owner  => "root",

@@ -23,11 +23,13 @@
  $monitor_app_url = "http://localhost:8080/tama/login"
 
  # couchdb
+ # present installs the newest version when nothing is installed
+ $couchVersion = "present" #["1.0.1-4.el5" | "1.0.3-2.el6" | "1.2.0-7.el6" | "present" ]
  $couchMachine = "master" #[master | slave]
  $couchMaster = "127.0.0.1"
  $couchDbs = "tama-web ananya"
  $couchDbBackupLink = "/opt/backups/couchdb"
- #$couchDbDataLocation=/var/lib/couchdb
+ #$couchDbDataLocation = "/var/lib/couchdb"
 
 
  # postgres
@@ -39,7 +41,7 @@
  $postgresMaster = "127.0.0.1"
  $postgresSlave = "127.0.0.1"
  $postgresBackupLink = "/opt/backups/postgres"
- #$postgresDataLocation=/usr/local/pgsql/data
+ #$postgresDataLocation = "/usr/local/pgsql/data"
 
  # data backup
  $dataBackupDir = "/opt/backups"
@@ -52,11 +54,17 @@
 
  # httpd
  $httpdMachine = "regular" #[regular | failoverProxy] Running in slave sets up the
- $httpdProxyPort = 8082
+ $httpdProxyPort = "8082"
  $httpdMasterHost = "127.0.0.1"
  $httpdMasterPort = "80"
  $httpdSlaveHost = "127.0.0.1"
  $httpdSlavePort = "80"
+ $httpToHttpsRedirectionEnabled = false
+ $httpInternalPortRedirectionEnabled = false
+ $httpsExcludedHostAddress = "127.0.0.1"
+ $apacheHttpPort = "80"
+ $httpSslPort = "443"
+ $apacheTomcatPort = "8080"
  
  # https
  $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
@@ -66,12 +74,12 @@
  # comment out resources not required to be installed
 
  # class{users : userName => "${motechUser}", password => "${motechPassword}" }
- # class{couchdb : couchMaster => "${couchMaster}", couchDbs => "${couchDbs}", couchMachine => "${couchMachine}" }
+ # class{couchdb : couchMaster => "${couchMaster}", couchDbs => "${couchDbs}", couchMachine => "${couchMachine}", couchVersion => "${couchVersion}" }
  # class{postgres : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}"}
  # class{postgres_pgpool : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
- # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}" }
+ # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpToHttpsRedirectionEnabled => "${httpToHttpsRedirectionEnabled}", httpInternalPortRedirectionEnabled => "${httpInternalPortRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
 
  # include git
  # include httpd    
@@ -86,5 +94,9 @@
  # include monitor
  # include ssl
  # include verboice
- #  include doxygen
+ # include doxygen
+ # include ruby
+
+ ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
+ # include nscd
 

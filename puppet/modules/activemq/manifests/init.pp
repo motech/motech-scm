@@ -24,7 +24,7 @@ class activemq ( $activemqMachine, $activemqMasterHost, $activemqMasterPort ) {
   
   if "${activemqMachine}" == 'slave' {
        exec {
-            "backup_slave_conf":
+            "activemq_backup_slave_conf":
                 cwd     => "/home/${motechUser}/apache-activemq-5.5.1/conf",
                 command => "mv activemq.xml activemq.xml.backup",
                 user    => "${motechUser}",
@@ -37,7 +37,7 @@ class activemq ( $activemqMachine, $activemqMasterHost, $activemqMasterPort ) {
            owner => "${motechUser}",
            group => "${motechUser}",
            mode   =>  644,
-           require => Exec["backup_slave_conf"],
+           require => Exec["activemq_backup_slave_conf"],
        }
     }
 

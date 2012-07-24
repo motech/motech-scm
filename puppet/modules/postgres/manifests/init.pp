@@ -82,7 +82,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         }
 
         slave:{
-            exec{"backup_slave_conf":
+            exec{"postgres_backup_slave_conf":
                 cwd     => "/usr/local/pgsql/data/",
                 command => "mv postgresql.conf postgresql.conf.backup",
                 user    => "${postgresUser}",
@@ -94,7 +94,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
                 owner => "${postgresUser}",
                 group => "${postgresUser}",
                 mode   =>  600,
-                require => Exec["backup_slave_conf"],
+                require => Exec["postgres_backup_slave_conf"],
             }
 
             file {"/usr/local/pgsql/data/recovery.conf":

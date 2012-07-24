@@ -1,10 +1,14 @@
-class couchdb  ($couchMaster, $couchDbs, $couchMachine ) {
+class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
   
   include repos::epelcouchdb
+  include repos::motech
    
   package { "couchdb":
-    ensure  =>  "present",
-    require => File["/etc/yum.repos.d/epel-couchdb.repo"],
+    ensure  =>  "${couchVersion}",
+    require => [
+        Yumrepo["motech"],
+        File["/etc/yum.repos.d/epel-couchdb.repo"]
+    ],
   }
 
   service { "couchdb":
