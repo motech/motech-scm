@@ -3,7 +3,8 @@ class tomcat {
   
   exec {"gettomcattarfile" :
   	command => "/usr/bin/wget -O /tmp/apache-tomcat-7.0.22.tar.gz http://motechrepo.github.com/pub/motech/other/apache-tomcat-7.0.22.tar.gz",
-  	require => [Exec["${motechUser} homedir"]]
+  	require => [Exec["${motechUser} homedir"]],
+    timeout => 0
   }
   
   exec { "tomcat_untar":

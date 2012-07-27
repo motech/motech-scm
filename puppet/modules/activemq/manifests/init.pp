@@ -1,7 +1,8 @@
 class activemq ( $activemqMachine, $activemqMasterHost, $activemqMasterPort ) {
 
   exec { "getactivemqtar":
-  	command => "/usr/bin/wget -O /tmp/activemq.tar.gz http://motechrepo.github.com/pub/motech/other/apache-activemq-5.5.1-bin.tar.gz"
+  	command => "/usr/bin/wget -O /tmp/activemq.tar.gz http://motechrepo.github.com/pub/motech/other/apache-activemq-5.5.1-bin.tar.gz",
+    timeout => 0
   }
 
 

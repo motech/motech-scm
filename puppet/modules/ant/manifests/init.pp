@@ -1,7 +1,8 @@
 
 class ant {
   exec {"getanttarfile" :
-  	command => "/usr/bin/wget -O /tmp/ant.tar.gz http://motechrepo.github.com/pub/motech/other/apache-ant-1.8.2-bin.tar.gz"
+  	command => "/usr/bin/wget -O /tmp/ant.tar.gz http://motechrepo.github.com/pub/motech/other/apache-ant-1.8.2-bin.tar.gz",
+    timeout => 0
    }
 	
   exec { "ant_untar":
