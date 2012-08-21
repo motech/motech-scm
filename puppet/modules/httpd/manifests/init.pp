@@ -44,6 +44,7 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
     }
 
      exec { "config-httpd-redirect-to-https":
+         notify => Service["httpd"],
          require => File["/home/${motechUser}/config-httpd-redirect-to-https.sh"],
          command => "sh /home/${motechUser}/config-httpd-redirect-to-https.sh ${httpsExcludedHostAddress}"
      }
@@ -59,11 +60,13 @@ class httpd ( $httpdMachine, $httpdProxyPort, $httpdMasterHost, $httpdMasterPort
     }
 
      exec { "config-httpd-redirect-internal-to-port-for-httpd-conf":
+         notify => Service["httpd"],
          require => File["/home/${motechUser}/config-httpd-redirect-internal-to-port.sh"],
          command => "sh /home/${motechUser}/config-httpd-redirect-internal-to-port.sh ${apacheHttpPort} ${apacheTomcatPort} /etc/httpd/conf/httpd.conf"
      }
 
      exec { "config-httpd-redirect-internal-to-port-for-ssl-conf":
+         notify => Service["httpd"],
          require => File["/home/${motechUser}/config-httpd-redirect-internal-to-port.sh"],
          command => "sh /home/${motechUser}/config-httpd-redirect-internal-to-port.sh ${httpSslPort} ${apacheTomcatPort} /etc/httpd/conf.d/ssl.conf"
      }

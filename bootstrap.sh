@@ -13,4 +13,4 @@ cd /tmp && rpm -ivh "$rpmUrl"
 yum -y install puppet && yum -y install git && \
 cd /tmp/ && git clone git://github.com/motech/motech-scm.git && \
 cd /tmp/motech-scm/puppet && vi manifests/nodes/configuration.pp && \
-puppet apply manifests/site.pp --modulepath=modules/ && echo "Completed!"
+puppet apply manifests/site.pp --modulepath=modules/ && echo "Completed"
