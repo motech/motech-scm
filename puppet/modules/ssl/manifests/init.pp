@@ -1,14 +1,18 @@
-class ssl {
+class ssl ( $userName, $sslCertificateFile, $sslCertificateKeyFile ) {
 	package { "mod_ssl" :
-		ensure  =>  "present"
+		ensure  =>  "present",
 	}
-	file {"/home/${motechUser}/configure-ssl.sh" :
+
+	file { "/home/${userName}/configure-ssl.sh" :
         content => template("ssl/configure-ssl.sh"),
-        owner => "${motechUser}",
-        group => "${motechUser}",
+        owner => "${userName}",
+        group => "${userName}",
         mode   =>  764,
+        require => Package["mod_ssl"],
     }
-	exec {"config-ssl" :
-        require => File["/home/${motechUser}/configure-ssl.sh"],
-	command => "sh /home/${motechUser}/configure-ssl.sh ${SSLCertificateFile} ${SSLCertificateKeyFile} "}
+
+	exec { "config-ssl" :
+        command => "/bin/sh /home/${userName}/configure-ssl.sh ${sslCertificateFile} ${sslCertificateKeyFile} ",
+        require => File["/home/${userName}/configure-ssl.sh"],
+	}
 }

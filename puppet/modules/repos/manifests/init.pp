@@ -3,5 +3,6 @@ class repos {
   include repos::jenkins
   include repos::epel
   include repos::jpackage
+  include repos::motech
   include repos::epelcouchdb
 }
