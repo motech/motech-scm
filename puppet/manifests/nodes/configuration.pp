@@ -73,6 +73,8 @@
  #ssh
  $SSHPort = ""
  $SSHPublicKeyFilePath = ""
+ $DeactivatePasswordAuthentication = false #true if passowrd login to be enabled
+
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
 
