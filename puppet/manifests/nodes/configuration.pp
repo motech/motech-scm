@@ -70,6 +70,9 @@
  $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
  $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
 
+ #ssh
+ $SSHPort = ""
+ $SSHPublicKeyFilePath = ""
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
 
@@ -96,6 +99,7 @@
  # include verboice
  # include doxygen
  # include ruby
+ # include ssh
 
  ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
  # include nscd
