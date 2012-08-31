@@ -1,24 +1,24 @@
 port=$1
-publicKeyFilePath=$2
-motechUser=$3
-DeactivatePasswordAuthentication=$4
+motechUser=$2
+DeactivatePasswordAuthentication=$3
 configFile=/etc/ssh/sshd_config
 
-sed -i 's/#\(Port\)\ \([0-9]*\)/\1\ '$port'/' $configFile
+findAndReplace()
+{
+    if [[ -z `grep ^$1 $configFile` ]]
+    then
+        echo $1 $2 >> $configFile
+    else
+        sed -i "s/^$1\\t* .*/$1 $2/" $configFile
+    fi
+}
 
-sed -i 's/#*\(PermitRootLogin\)\ .*/\1\ no/' $configFile
+findAndReplace "Port" "$port"
+findAndReplace "PermitRootLogin" "no"
+findAndReplace "X11Forwarding" "no"
+findAndReplace "AllowUsers" "$motechUser"
 
 if $DeactivatePasswordAuthentication
 then
-    sed -i 's/^\(PasswordAuthentication\) \(yes\)/\1 no/' $configFile
+    findAndReplace "PasswordAuthentication" "no"
 fi
-
-sed -i 's/^\(X11Forwarding\)\ \(yes\)/\1 no/' $configFile
-
-if [-z `grep -e "AllowUsers" -f $configFile` ]
-then
-    sed -i '${/^$/!s/$/\
-    AllowUsers motech/;}' $configFile
-fi
-
-cat $publicKeyFilePath >> /home/$motechUser/.ssh/authorized_keys
