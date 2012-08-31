@@ -75,6 +75,11 @@
  $SSHPublicKeyFilePath = ""
  $DeactivatePasswordAuthentication = false #true if password login to be enabled
 
+ #nagios
+ $nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/87/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
+ $nagios_objects_path = "nagios/objects/"
+ $nagios_plugins_path = "nagios/plugins/"
+
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
 
@@ -85,6 +90,14 @@
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
  # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpToHttpsRedirectionEnabled => "${httpToHttpsRedirectionEnabled}", httpInternalPortRedirectionEnabled => "${httpInternalPortRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
+
+ /*
+ class { nagios :
+    nagios_config_url => "${nagios_config_url}",
+    nagios_objects_path => "${nagios_objects_path}",
+    nagios_plugins_path => "${nagios_plugins_path}"
+ }
+ */
 
  # include git
  # include httpd    
@@ -102,6 +115,7 @@
  # include doxygen
  # include ruby
  # include ssh
+ # include nagios
 
  ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
  # include nscd
