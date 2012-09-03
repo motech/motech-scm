@@ -76,9 +76,9 @@
  $DeactivatePasswordAuthentication = false #true if password login to be enabled
 
 #iptables configuration
-$admin_access_ips = "127.0.0.1" #comma seperated list of ips. example "11.1.1.1,2.2.2.2"
-$ssh_allowed_ips = "0/0"  #comma seperated list of ips. example "11.1.1.1,2.2.2.2"
-$tcp_ports_open = "80, 443" #List of ports that can be accessed from outside world.
+$admin_access_ips = "127.0.0.1" #space seperated list of ips. example "11.1.1.1 2.2.2.2"
+$ssh_allowed_ips = "0/0"  #space seperated list of ips. example "11.1.1.1 2.2.2.2"
+$tcp_ports_open = "80 443" #List of ports that can be accessed from outside world.
 $ssh_port = "22" #Port on which ssh daemon works.
 
  #nagios

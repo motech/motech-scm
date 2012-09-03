@@ -43,7 +43,7 @@
   # allowed services
   for service in $tcpservices ; do
       $ip -A INPUT -p tcp -m tcp --dport $service -j ACCEPT 
-      $ip                                  done             
+      $ip -A OUTPUT -p tcp -m tcp --sport $service -m state --state RELATED,ESTABLISHED -j ACCEPT
   done
  # for service in $udpservices ; do
  #     $ip -A INPUT -p udp -m udp --dport $service -j ACCEPT
