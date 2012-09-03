@@ -79,6 +79,7 @@
   $ip -A INPUT -p tcp -m tcp --dport 1:1024 -j DROP
   $ip -A INPUT -p udp -m udp --dport 1:1024 -j DROP
 
+  iptables-save > /etc/sysconfig/iptables
 
   echo "OK. Check rules with iptables -L -n"
 
