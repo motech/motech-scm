@@ -19,5 +19,5 @@ class iptables($admin_access_ips,$ssh_allowed_ips,$tcp_ports_open,$ssh_port) {
     }
 	exec {"configure-iptables" :
         require => File["/home/${motechUser}/configure_iptables.sh"],
-	command => "sh /home/${motechUser}/configure_iptables.sh ${admin_access_machine} ${ssh_allowed_ips} ${tcp_ports_open} ${ssh_port}"}
+	command => "sh /home/${motechUser}/configure_iptables.sh ${admin_access_ips} ${ssh_allowed_ips} ${tcp_ports_open} ${ssh_port}"}
 }
