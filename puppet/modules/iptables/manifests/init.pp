@@ -11,7 +11,7 @@ class iptables($admin_access_ips,$ssh_allowed_ips,$tcp_ports_open,$ssh_port) {
 
      }
 	file {"/home/${motechUser}/configure_iptables.sh" :
-        content => template("ssl/configure_iptables.sh"),
+        content => template("iptables/configure_iptables.sh"),
         owner => "${motechUser}",
         group => "${motechUser}",
         mode   =>  764,
