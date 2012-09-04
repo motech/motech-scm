@@ -197,6 +197,7 @@ max_wal_senders = 3		# max number of walsender processes
 				# (change requires restart)
 #wal_sender_delay = 1s		# walsender cycle time, 1-10000 milliseconds
 #wal_keep_segments = 0		# in logfile segments, 16MB each; 0 disables
+wal_keep_segments = 32		# in logfile segments, 16MB each; 0 disables
 #vacuum_defer_cleanup_age = 0	# number of xacts by which cleanup is delayed
 #replication_timeout = 60s	# in milliseconds; 0 disables
 #synchronous_standby_names = ''	# standby servers that provide sync rep
