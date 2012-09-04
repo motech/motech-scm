@@ -70,6 +70,22 @@
  $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
  $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
 
+ #ssh
+ $SSHPort = ""
+ $SSHPublicKeyFilePath = ""
+ $DeactivatePasswordAuthentication = false #true if password login to be enabled
+
+#iptables configuration
+$admin_access_ips = "127.0.0.1" #space seperated list of ips. example "11.1.1.1 2.2.2.2"
+$ssh_allowed_ips = "0/0"  #space seperated list of ips. example "11.1.1.1 2.2.2.2"
+$tcp_ports_open = "80 443" #List of ports that can be accessed from outside world.
+$ssh_port = "22" #Port on which ssh daemon works.
+
+ #nagios
+ $nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/87/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
+ $nagios_objects_path = "nagios/objects/"
+ $nagios_plugins_path = "nagios/plugins/"
+
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
 
@@ -79,7 +95,16 @@
  # class{postgres_pgpool : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
+ # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
  # class { httpd : httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpToHttpsRedirectionEnabled => "${httpToHttpsRedirectionEnabled}", httpInternalPortRedirectionEnabled => "${httpInternalPortRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
+
+ /*
+ class { nagios :
+    nagios_config_url => "${nagios_config_url}",
+    nagios_objects_path => "${nagios_objects_path}",
+    nagios_plugins_path => "${nagios_plugins_path}"
+ }
+ */
 
  # include git
  # include httpd    
@@ -96,6 +121,8 @@
  # include verboice
  # include doxygen
  # include ruby
+ # include ssh
+ # include nagios
 
  ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
  # include nscd
