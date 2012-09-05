@@ -24,7 +24,7 @@ fi
 echo "MoTeCH: Bootstrap Machine:"
 yum -y install git && \
 cd /tmp/ && \
-git clone git://github.com/motech/motech-scm.git -b incremental-deployment && \
+git clone git://github.com/motech/motech-scm.git && \
 cd /tmp/motech-scm/puppet && \
 if [ -f $configurationFileLocation ]
 then
