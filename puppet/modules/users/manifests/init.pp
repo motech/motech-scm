@@ -12,11 +12,18 @@ class users ( $userName, $password ) {
     creates => "/home/$userName",
     require => User[$userName],
   }
-   
-  file {"/etc/sudoers" :
-  	content => template("users/sudoers.erb"),
-  	owner => "root",
-  	group => "root",
-  	mode   =>  440,
-  } 
+
+  file { "add-user-to-sudoers.sh" :
+    path => "/home/${userName}/add-user-to-sudoers.sh",
+    content => template("users/add-user-to-sudoers.sh"),
+    owner => "${userName}",
+    group => "${userName}",
+    mode   =>  764,
+    require => Exec["$userName homedir"],
+  }
+
+  exec { "add-user-to-sudoers":
+      command => "/bin/sh /home/${userName}/add-user-to-sudoers.sh ${userName}",
+      require => File["add-user-to-sudoers.sh"],
+  }
 }
