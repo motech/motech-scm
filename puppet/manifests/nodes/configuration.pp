@@ -80,6 +80,9 @@ $ssh_allowed_ips = "0/0"  #space seperated list of ips. example "11.1.1.1 2.2.2.
 $tcp_ports_open = "80 443" #List of ports that can be accessed from outside world.
 $ssh_port = "22" #Port on which ssh daemon works.
 
+#hostname configuration
+$host_name="localhost"
+
  #nagios
  $nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/87/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
  $nagios_objects_path = "nagios/objects/"
@@ -94,6 +97,7 @@ $ssh_port = "22" #Port on which ssh daemon works.
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : version => "5.5.1", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
  # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
+ # class { hostname : host_name => "${host_name}" }
  # class { httpd : userName => "${motechUser}", httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpToHttpsRedirectionEnabled => "${httpToHttpsRedirectionEnabled}", httpInternalPortRedirectionEnabled => "${httpInternalPortRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
  # class { "tomcat" : version => "7.0.22", userName => "${motechUser}"}
  # class { "ssl" : userName => "${motechUser}", sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
