@@ -11,7 +11,7 @@ manifestsDir="$myDir"
 # Functions Start
 setup_vagrantfile(){
   sed '/^  config.vm.box = ".*"$/ a\
-    config.vm.provision :puppet, :module_path => "'$modulesDir'", :options => "--verbose --debug", :manifests_path => "'$manifestsDir'", :manifest_file => "common.pp"
+    config.vm.provision :puppet, :module_path => "'$modulesDir'", :options => "--verbose --debug", :manifests_path => "'$manifestsDir'", :manifest_file => "config.pp"
   ' Vagrantfile > Vagrantfile.bk
   mv Vagrantfile{.bk,}
 }
@@ -28,8 +28,8 @@ init(){
   vagrant init $boxFileName && echo "Vagrantfile created"
   setup_vagrantfile && echo "Vagrantfile setup done"
 
-  cp $commonPP{,.bk} && echo "common.pp backed-up"
-  cat $configFile >> $commonPP && echo "common.pp prepared"
+  cp $commonPP config.pp && echo "created config.pp from common.pp"
+  cat $configFile >> config.pp && echo "application config added to config.pp"
 }
 
 clear(){
@@ -44,7 +44,7 @@ clear(){
     rm Vagrantfile && echo "Vagrantfile removed"
   fi
 
-  [[ -f $commonPP".bk" ]] && mv $commonPP{.bk,} && echo "common.pp restored"
+  [[ -f config.pp ]] && rm -f config.pp && echo "config.pp removed"
 }
 
 usage(){
