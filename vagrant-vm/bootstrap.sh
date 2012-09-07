@@ -50,7 +50,7 @@ clear(){
 usage(){
   echo "**** HELP ****"
   echo "1) Make sure you are in vagrant-vm folder"
-  echo "2) Run: <sh bootstap.sh /path/to/image.box /path/to/configuration.pp> This creates Vagrantfile and initiates vagrant"
+  echo "2) Run: <sh bootstap.sh init /path/to/image.box /path/to/configuration.pp> This creates Vagrantfile and initiates vagrant"
   echo "3) From with-in vagrant-vm execute vagrant up/destroy/package to test your changes in motech-scm/puppet/modules or configuration.pp"
   echo "4) Run: <sh bootstrap.sh clear> to delete extra created files and destroy vagrant"
 }
