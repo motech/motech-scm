@@ -1,13 +1,13 @@
 class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
   include repos::epel
   include repos::motech
-   
+
   package { "couchdb":
     ensure  =>  "${couchVersion}",
     require => [
-        Package["epel-release.noarch"],
-        Yumrepo["motech"]
-    ],
+      Package["epel-release.noarch"],
+      Yumrepo["motech"]
+      ],
   }
 
   service { "couchdb":

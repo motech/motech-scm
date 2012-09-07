@@ -5,4 +5,5 @@ class repos {
   include repos::jpackage
   include repos::motech
   include repos::epelcouchdb
+  include repos::twsify
 }
