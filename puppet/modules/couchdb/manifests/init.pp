@@ -18,20 +18,36 @@ class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
     require => Package["couchdb"],
   }
 
-  if $couchMachine == 'slave' {
+  if $couchVersion >= "1.2.0-7.el6" {
+    file {"/home/${motechUser}/start-replication.sh" :
+              content => template("couchdb/start-replication.sh"),
+              owner => "${motechUser}",
+              group => "${motechUser}",
+              mode   =>  764,
+          }
 
-    file {"/home/${motechUser}/couch-slave.sh" :
-        content => template("couchdb/couch-slave.sh"),
-        owner => "${motechUser}",
-        group => "${motechUser}",
-        mode   =>  764,
+    exec { "start_replication":
+          require => File["/home/${motechUser}/start-replication.sh"],
+          command =>  "/home/${motechUser}/start-replication.sh",
     }
 
-    exec {"run_slave_script":
-        require => File["/home/${motechUser}/couch-slave.sh"],
-        command =>  "/home/${motechUser}/couch-slave.sh",
-    }
+  } else {
 
+    if $couchMachine == 'slave' {
+
+      file {"/home/${motechUser}/couch-slave.sh" :
+          content => template("couchdb/couch-slave.sh"),
+          owner => "${motechUser}",
+          group => "${motechUser}",
+          mode   =>  764,
+      }
+
+      exec {"run_slave_script":
+          require => File["/home/${motechUser}/couch-slave.sh"],
+          command =>  "/home/${motechUser}/couch-slave.sh",
+      }
+
+    }
   }
 
 }
