@@ -36,9 +36,9 @@ clear(){
   if [ -f Vagrantfile ]; then
     local boxFileName=`grep "  config.vm.box" Vagrantfile | sed 's/.*\"\(.*\)\"/\1/g'`
     local boxExists=`vagrant box list | grep $boxFileName | wc -l`
-    local boxRunning=`vagrant status | grep default | grep running | wc -l`
+    local boxDestroyed=`vagrant status | grep default | grep "not created" | wc -l`
 
-    [[ ! boxRunning -eq 0 ]] && vagrant destroy -f && echo "VM destroyed"
+    [[ boxDestroyed -eq 0 ]] && vagrant destroy -f && echo "VM destroyed"
     [[ ! boxExists -eq 0 ]] && vagrant box remove $boxFileName && echo "VM removed"
 
     rm Vagrantfile && echo "Vagrantfile removed"
@@ -51,7 +51,7 @@ usage(){
   echo "**** HELP ****"
   echo "1) Make sure you are in vagrant-vm folder"
   echo "2) Run: <sh bootstap.sh init /path/to/image.box /path/to/configuration.pp> This creates Vagrantfile and initiates vagrant"
-  echo "3) From with-in vagrant-vm execute vagrant up/destroy/package to test your changes in motech-scm/puppet/modules or configuration.pp"
+  echo "3) From with-in vagrant-vm execute vagrant up/halt/reload/package (http://tinyurl.com/d4ljaxm) to test your changes in motech-scm/puppet/modules or configuration.pp or Vagrantfile"
   echo "4) Run: <sh bootstrap.sh clear> to delete extra created files and destroy vagrant"
 }
 # Functions End
