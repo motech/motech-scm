@@ -20,6 +20,7 @@ class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
 
   if $couchVersion >= "1.2.0-7.el6" {
     file {"/home/${motechUser}/start-replication.sh" :
+              require => Service["couchdb"],
               content => template("couchdb/start-replication.sh"),
               owner => "${motechUser}",
               group => "${motechUser}",
@@ -28,8 +29,13 @@ class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
 
     exec { "start_replication":
           require => File["/home/${motechUser}/start-replication.sh"],
-          command =>  "/home/${motechUser}/start-replication.sh",
+          command =>  "/bin/sh /home/${motechUser}/start-replication.sh ${couchDbs} ${couchMaster}",
     }
+
+    exec {"delete-scripts" :
+             require => Exec["start_replication"],
+             command => "rm -rf /home/${motechUser}/start-replication.sh"
+             }
 
   } else {
 

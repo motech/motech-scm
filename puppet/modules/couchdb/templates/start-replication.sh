@@ -1,6 +1,9 @@
+#! /bin/sh
 
-master="<%= couchMaster %>"
-dbs="<%= couchDbs %>"
+wget --spider --tries 10 --retry-connrefused --no-check-certificate http://localhost:5984/
+
+dbs=$1
+master=$2
 
 p1='{"source": "http://'
 p2=':5984/'
