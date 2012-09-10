@@ -15,10 +15,15 @@ class nagios ($nagios_config_url, $nagios_objects_path, $nagios_plugins_path) {
         require => Package["nagios-plugins-all"]
     }
 
+    package { "perl-Time-HiRes" :
+        ensure  => "present",
+        require => Package["perl-libwww-perl"]
+    }
+
     file { "/tmp/nagios_package" :
         #purge  => true,
         ensure  => "directory",
-        require => Package["perl-libwww-perl"]
+        require => Package["perl-Time-HiRes"]
     }
 
     exec { "wget '${nagios_config_url}' -O nagios_repo.jar" :
