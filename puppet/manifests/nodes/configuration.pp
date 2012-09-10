@@ -82,11 +82,13 @@ $ssh_port = "22" #Port on which ssh daemon works.
 
 #hostname configuration
 $host_name="localhost"
+$env="<environment>"
 
  #nagios
  $nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/87/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
  $nagios_objects_path = "nagios/objects/"
  $nagios_plugins_path = "nagios/plugins/"
+ $host_file_path = "properties/${env}/hosts.cfg" #env is the environment for nagios configuration
 
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
@@ -107,6 +109,7 @@ $host_name="localhost"
     nagios_config_url => "${nagios_config_url}",
     nagios_objects_path => "${nagios_objects_path}",
     nagios_plugins_path => "${nagios_plugins_path}"
+    host_file_path => "${host_file_path}"
  }
  */
 

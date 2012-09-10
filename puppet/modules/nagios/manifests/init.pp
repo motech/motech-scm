@@ -1,4 +1,4 @@
-class nagios ($nagios_config_url, $nagios_objects_path, $nagios_plugins_path) {
+    class nagios ($nagios_config_url, $nagios_objects_path, $nagios_plugins_path, $host_file_path) {
 
     package { "nagios" :
         ensure  =>  "present"
@@ -51,13 +51,18 @@ class nagios ($nagios_config_url, $nagios_objects_path, $nagios_plugins_path) {
       require   => File["/etc/nagios/objects/"]
     }
 
+    file { "/etc/nagios/objects/hosts.cfg":
+      source    => "/tmp/nagios_package/${host_file_path}",
+      require   => Exec["unjar_nagios_package"]
+    }
+
     exec { "setup_object_files_in_config" :
         command => "sed -i 's/^cfg_file\s*=.*$//g' /etc/nagios/nagios.cfg ; find /etc/nagios/objects -name \\*cfg | sed 's/\\(.*\\)/cfg_file=\\1/g' >> /etc/nagios/nagios.cfg",
-        require => File["/usr/lib64/nagios/plugins/"]
+        require => File["/etc/nagios/objects/"]
     }
 
     service { "nagios":
-        ensure     => running,
+        ensure  => running,
         require => Exec["setup_object_files_in_config"]
     }
 }
