@@ -63,6 +63,6 @@
 
     service { "nagios":
         ensure  => running,
-        require => Exec["setup_object_files_in_config"]
+        require => [ Exec["setup_object_files_in_config"], File["/usr/lib64/nagios/plugins/"] ]
     }
 }
