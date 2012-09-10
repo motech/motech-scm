@@ -1,3 +1,4 @@
 config.pp
 Vagrantfile
 .vagrant
+.testvm.properties
