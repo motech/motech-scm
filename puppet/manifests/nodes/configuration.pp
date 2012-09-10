@@ -70,8 +70,8 @@
  $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
 
  #ssh
- $SSHPort = ""
- $SSHPublicKeyFilePath = ""
+ $SSHPort = "12200"
+ $SSHPublicKeyFilePath = "" #Provide valid file path containing public key to be added to .ssh/authorized_keys.
  $DeactivatePasswordAuthentication = false #true if password login to be enabled
 
 #iptables configuration
