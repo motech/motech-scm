@@ -1,38 +1,45 @@
-class tomcat ( $version, $userName ){
+class tomcat ( $version, $userName ) {
 
-  exec {"gettomcattarfile" :
-    command => "/usr/bin/wget -O /tmp/apache-tomcat-${version}.tar.gz http://motechrepo.github.com/pub/motech/other/apache-tomcat-${version}.tar.gz",
-    require => [User["${userName}"]],
-    timeout => 0
-  }
-  
-  exec { "tomcat_untar":
-    command => "tar xfz /tmp/apache-tomcat-${version}.tar.gz",
-    user => "${userName}",
-    cwd     => "/home/${userName}",
-    creates => "/home/${userName}/apache-tomcat-${version}",
-    path    => ["/bin"],
-    require => Exec["gettomcattarfile"],
-  }
+    exec {"gettomcattarfile" :
+        command     => "/usr/bin/wget -O /tmp/apache-tomcat-${version}.tar.gz http://motechrepo.github.com/pub/motech/other/apache-tomcat-${version}.tar.gz",
+        require     => [User["${userName}"]],
+        timeout     => 0,
+        provider    => "shell",
+        onlyif      => "test ! -f /tmp/apache-tomcat-${version}.tar.gz"
+    }
 
-  file { "/etc/init.d/tomcat" :
-    content => template("tomcat/tomcat.initd"),
-    mode   =>  777,
-    group  => "root",
-    owner  => "root",
-    require => Exec["tomcat_untar"],
-  }
+    exec { "tomcat_untar":
+        command     => "tar xfz /tmp/apache-tomcat-${version}.tar.gz",
+        user        => "${userName}",
+        cwd         => "/home/${userName}",
+        creates     => "/home/${userName}/apache-tomcat-${version}",
+        path        => ["/bin"],
+        require     => Exec["gettomcattarfile"],
+        provider    => "shell",
+        onlyif      => "test ! -f /home/${userName}/apache-tomcat-${version}"
+    }
 
-  exec { "installtomcatservice" :
-    command => "/sbin/chkconfig --add tomcat",
-    user => "root", 
-    require => File["/etc/init.d/tomcat"],
-  }
-  
-  service { "tomcat":
-    ensure => running,
-    enable => true,
-    hasstatus => false,
-    require => Exec["installtomcatservice"],
-  }
+    file { "/etc/init.d/tomcat" :
+        ensure      => present,
+        content     => template("tomcat/tomcat.initd"),
+        mode        => 777,
+        group       => "root",
+        owner       => "root",
+        require     => Exec["tomcat_untar"],
+    }
+
+    exec { "installtomcatservice" :
+        provider    => "shell",
+        user        => "root",
+        command     => "/sbin/chkconfig --add tomcat",
+        require     => File["/etc/init.d/tomcat"],
+        onlyif      => "chkconfig --list tomcat; [ $? -eq 1 ]"
+    }
+
+    service { "tomcat" :
+        ensure      => running,
+        enable      => true,
+        hasstatus   => false,
+        require     => Exec["installtomcatservice"],
+    }
 }
