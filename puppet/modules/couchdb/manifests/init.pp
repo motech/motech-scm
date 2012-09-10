@@ -29,7 +29,7 @@ class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
 
     exec { "start_replication":
           require => File["/home/${motechUser}/start-replication.sh"],
-          command =>  "/bin/sh /home/${motechUser}/start-replication.sh ${couchDbs} ${couchMaster}",
+          command =>  "/bin/sh /home/${motechUser}/start-replication.sh",
     }
 
     exec {"delete-scripts" :
