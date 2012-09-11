@@ -48,6 +48,7 @@
     file { "/usr/lib64/nagios/plugins/":
       source    => "/tmp/nagios_package/${nagios_plugins_path}",
       recurse   => true,
+      mode      =>  554,
       require   => File["/etc/nagios/objects/"]
     }
 
