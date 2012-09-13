@@ -1,7 +1,7 @@
 class couchlucene ($version) {
 
     exec { "get_couch_lucene_tar" :
-        command     => "/usr/bin/wget -O /tmp/couch-lucene.tar.gz http://motechrepo.github.com/pub/motech/other/couch-lucene-${version}-bin.tar.gz",
+        command     => "/usr/bin/wget -O /tmp/couch-lucene.tar.gz http://dl.dropbox.com/u/102967387/couchdb-lucene-0.9.0-SNAPSHOT-dist.tar.gz",
         timeout     => 0,
         provider    => "shell",
         onlyif      => "test ! -f /tmp/couch-lucene.tar.gz"
