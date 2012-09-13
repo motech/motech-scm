@@ -12,11 +12,11 @@ class couchlucene ($version) {
         command     => "tar xfz /tmp/couch-lucene.tar.gz",
         user        => "${motechUser}",
         cwd         => "/home/${motechUser}",
-        creates     => "/home/${motechUser}/couch-lucene-${version}",
+        creates     => "/home/${motechUser}/couch-lucene",
         path        => ["/bin",],
         require     => [Exec["${motechUser} homedir"], Exec["get_couch_lucene_tar"]],
         provider    => "shell",
-        onlyif      => "test ! -d /home/${motechUser}/couch-lucene-${version}"
+        onlyif      => "test ! -d /home/${motechUser}/couch-lucene"
     }
 
     file { "/etc/init.d/couch_lucene" :
@@ -55,7 +55,7 @@ class couchlucene ($version) {
 
     service { "couch_lucene":
         ensure     => running,
-        path       => "/home/${motechUser}/couch-lucene-${version}/bin/run",
+        path       => "/home/${motechUser}/couch-lucene/bin/run",
         enable     => true,
         require    => Exec["install_couch_lucene_service"],
     }
