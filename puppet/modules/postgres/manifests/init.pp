@@ -59,49 +59,43 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         target      => "/etc/init.d/postgresql-9.1",
     }
 
-    case $postgresMachine {
-
-        master:{
-            exec{"backup_master_conf":
+    exec{"backup_conf":
                 cwd         => "/usr/local/pgsql/data/",
                 command     => "mv postgresql.conf postgresql.conf.backup && mv pg_hba.conf pg_hba.conf.backup",
                 user        => "${postgresUser}",
                 require     => Exec["start-server"],
             }
 
+    file {"/usr/local/pgsql/data/pg_hba.conf":
+                content     => template("postgres/pg_hba.erb"),
+                owner       => "${postgresUser}",
+                group       => "${postgresUser}",
+                mode        => 600,
+                require     => Exec["backup_conf"],
+            }
+
+    case $postgresMachine {
+
+        master:{
             file {"/usr/local/pgsql/data/postgresql.conf":
                 content     => template("postgres/master_postgresql.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
                 mode        => 600,
-                require     => Exec["backup_master_conf"],
-            }
-
-            file {"/usr/local/pgsql/data/pg_hba.conf":
-                content     => template("postgres/master_pg_hba.erb"),
-                owner       => "${postgresUser}",
-                group       => "${postgresUser}",
-                mode        => 600,
-                require     => Exec["backup_master_conf"],
+                require     => Exec["backup_conf"],
             }
         }
 
         slave:{
-            exec{"postgres_backup_slave_conf":
-                cwd         => "/usr/local/pgsql/data/",
-                command     => "mv postgresql.conf postgresql.conf.backup",
-                user        => "${postgresUser}",
-                require     => Exec["start-server"],
-            }
 
             file {"/usr/local/pgsql/data/postgresql.conf":
                 content     => template("postgres/slave_postgresql.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
                 mode        => 600,
-                require     => Exec["postgres_backup_slave_conf"],
+                require     => Exec["backup_conf"],
             }
-
+            
             file {"/usr/local/pgsql/data/recovery.conf":
                 content     => template("postgres/slave_recovery.erb"),
                 owner       => "${postgresUser}",
