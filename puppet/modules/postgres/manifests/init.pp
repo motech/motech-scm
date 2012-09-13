@@ -45,7 +45,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         user        => "${postgresUser}",
         require     => [File["/usr/local/pgsql/data"], Package["postgres_packs"]],
         provider    => "shell",
-        onlyif      => "test ! -f /usr/local/pgsql/data/postgresql.conf",
+        onlyif      => "test ! -f /usr/local/pgsql/data/PG_VERSION",
     }
 
     exec { "start-server":
