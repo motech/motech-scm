@@ -41,7 +41,7 @@ class couchdblucene ($version) {
         onlyif      => "chkconfig --list couchdb-lucene; [ $? -eq 1 ]"
     }
 
-    service { "couchdb_lucene":
+    service { "couchdb-lucene":
         ensure     => running,
         path       => "/home/${motechUser}/couchdb-lucene/bin/run",
         enable     => true,
