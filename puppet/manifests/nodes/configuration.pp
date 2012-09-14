@@ -103,7 +103,7 @@ $env="<environment>"
  # class { httpd : userName => "${motechUser}", httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpToHttpsRedirectionEnabled => "${httpToHttpsRedirectionEnabled}", httpInternalPortRedirectionEnabled => "${httpInternalPortRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
  # class { "tomcat" : version => "7.0.22", userName => "${motechUser}"}
  # class { "ssl" : userName => "${motechUser}", sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
-# class { couchdblucene : version => "0.9.0" }
+# class { couchdblucene : version => "0.9.0-SNAPSHOT" }
  /*
  class { nagios :
     nagios_config_url => "${nagios_config_url}",
