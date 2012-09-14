@@ -1,24 +1,29 @@
 class couchdblucene ($version) {
 
- =begin
-    exec { "get_couchdb_lucene_tar" :
-        command     => "/usr/bin/wget -O /tmp/couchdb-lucene.tar.gz http://dl.dropbox.com/u/102967387/couchdb-lucene-0.9.0-SNAPSHOT-dist.tar.gz",
+   exec { "get_couchdb_lucene_tar" :
+        command     => "/usr/bin/wget -O /tmp/couchdb-lucene.tar.gz http://motechrepo.github.com/pub/motech/other/couchdb-lucene-0.9.0-SNAPSHOT-dist.tar.gz",
         timeout     => 0,
         provider    => "shell",
         onlyif      => "test ! -f /tmp/couchdb-lucene.tar.gz"
     }
-=end
 
     exec { "couchdb_lucene_untar" :
         command     => "tar xfz /tmp/couchdb-lucene.tar.gz",
         user        => "${motechUser}",
         cwd         => "/home/${motechUser}",
-        creates     => "/home/${motechUser}/couchdb-lucene",
         path        => ["/bin",],
-        require     => [Exec["${motechUser} homedir"]],
+        require     => [Exec["${motechUser} homedir"], Exec["get_couchdb_lucene_tar"]],
         provider    => "shell",
-        onlyif      => "test ! -d /home/${motechUser}/couchdb-lucene"
     }
+
+    exec { "couchdb_lucene_rename" :
+        command     => "mv couchdb-lucene-${version} couchdb-lucene",
+        cwd         => "/home/${motechUser}",
+        user        => "${motechUser}",
+        require     => [Exec["couchdb_lucene_untar"]],
+        provider    => "shell",
+    }
+
 
     file { "/etc/init.d/couchdb-lucene" :
         ensure      => present,
@@ -26,7 +31,7 @@ class couchdblucene ($version) {
         mode        =>  777,
         group       => "root",
         owner       => "root",
-        require     => Exec["couchdb_lucene_untar"],
+        require     => Exec["couchdb_lucene_rename"],
     }
 
     exec { "install_couchdb_lucene_service" :
