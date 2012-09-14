@@ -12,15 +12,15 @@ class couchdblucene ($version) {
     exec { "couchdb_lucene_untar" :
         command     => "tar xfz /tmp/couchdb-lucene.tar.gz",
         user        => "${motechUser}",
-        cwd         => "/home/${motechUser}",
-        creates     => "/home/${motechUser}/couchdb-lucene",
+        cwd         => "/usr/local",
+        creates     => "/usr/local/couchdb-lucene",
         path        => ["/bin",],
         require     => [Exec["${motechUser} homedir"]],
         provider    => "shell",
-        onlyif      => "test ! -d /home/${motechUser}/couchdb-lucene"
+        onlyif      => "test ! -d /usr/local/couchdb-lucene"
     }
 
-    file { "/etc/init.d/couchdb_lucene" :
+    file { "/etc/init.d/couchdb-lucene" :
         ensure      => present,
         content     => template("couchdblucene/couchdb-lucene-init.d"),
         mode        =>  777,
@@ -38,7 +38,7 @@ class couchdblucene ($version) {
 
     service { "couchdb_lucene":
         ensure     => running,
-        path       => "/home/${motechUser}/couchdb-lucene/bin/run",
+        path       => "/usr/local/couchdb-lucene/bin/run",
         enable     => true,
         require    => Exec["install_couchdb_lucene_service"],
     }
