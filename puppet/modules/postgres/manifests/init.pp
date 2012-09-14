@@ -29,27 +29,27 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         require     => Exec["run_postgres_repo"],
     }
 
-    file { "/usr/local/pgsql/" :
+    file { "/var/lib/pgsql/9.1/" :
         ensure      => "directory",
         owner       => "${postgresUser}",
     }
 
-    file { "/usr/local/pgsql/data":
+    file { "/var/lib/pgsql/9.1/data":
         ensure      => "directory",
-        require     => File["/usr/local/pgsql/"],
+        require     => File["/var/lib/pgsql/9.1/"],
         owner       => "${postgresUser}",
     }
 
     exec { "initdb":
-        command     => "/usr/pgsql-9.1/bin/initdb -D /usr/local/pgsql/data",
+        command     => "/usr/pgsql-9.1/bin/initdb -D /var/lib/pgsql/9.1/data",
         user        => "${postgresUser}",
-        require     => [File["/usr/local/pgsql/data"], Package["postgres_packs"]],
+        require     => [File["/var/lib/pgsql/9.1/data"], Package["postgres_packs"]],
         provider    => "shell",
-        onlyif      => "test ! -f /usr/local/pgsql/data/PG_VERSION",
+        onlyif      => "test ! -f /var/lib/pgsql/9.1/data/PG_VERSION",
     }
 
     exec { "start-server":
-        command     => "/usr/pgsql-9.1/bin/postgres -D /usr/local/pgsql/data &",
+        command     => "/usr/pgsql-9.1/bin/postgres -D /var/lib/pgsql/9.1/data &",
         user        => "${postgresUser}",
         require     => Exec["initdb"],
     }
@@ -60,13 +60,13 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec{"backup_conf":
-                cwd         => "/usr/local/pgsql/data/",
+                cwd         => "/var/lib/pgsql/9.1/data/",
                 command     => "mv postgresql.conf postgresql.conf.backup && mv pg_hba.conf pg_hba.conf.backup",
                 user        => "${postgresUser}",
                 require     => Exec["start-server"],
             }
 
-    file {"/usr/local/pgsql/data/pg_hba.conf":
+    file {"/var/lib/pgsql/9.1/data/pg_hba.conf":
                 content     => template("postgres/pg_hba.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
@@ -77,7 +77,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     case $postgresMachine {
 
         master:{
-            file {"/usr/local/pgsql/data/postgresql.conf":
+            file {"/var/lib/pgsql/9.1/data/postgresql.conf":
                 content     => template("postgres/master_postgresql.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
@@ -88,7 +88,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
 
         slave:{
 
-            file {"/usr/local/pgsql/data/postgresql.conf":
+            file {"/var/lib/pgsql/9.1/data/postgresql.conf":
                 content     => template("postgres/slave_postgresql.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
@@ -96,7 +96,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
                 require     => Exec["backup_conf"],
             }
             
-            file {"/usr/local/pgsql/data/recovery.conf":
+            file {"/var/lib/pgsql/9.1/data/recovery.conf":
                 content     => template("postgres/slave_recovery.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",

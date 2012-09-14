@@ -40,7 +40,6 @@
  $postgresMaster = "127.0.0.1"
  $postgresSlave = "127.0.0.1"
  $postgresBackupLink = "/opt/backups/postgres"
- #$postgresDataLocation = "/usr/local/pgsql/data"
 
  # data backup
  $dataBackupDir = "/opt/backups"

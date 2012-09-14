@@ -12,7 +12,7 @@ class databackup  ($couchDbBackupLink, $postgresBackupLink, $dataBackupDir, $mac
 
             file { "${postgresBackupLink}" :
                 ensure => "link",
-                target => "/usr/local/pgsql/data",
+                target => "/var/lib/pgsql/9.1/data",
             }
         }
     }
