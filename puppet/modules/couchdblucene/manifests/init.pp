@@ -24,6 +24,20 @@ class couchdblucene ($version) {
         provider    => "shell",
     }
 
+   define replace($file, $pattern, $replacement) {
+        $pattern_no_slashes = regsubst($pattern, '/', '\\/', 'G', 'U')
+     #   $replacement_no_slashes = regsubst($replacement, '/', '\\/', 'G', 'U')
+        $replacement_no_slashes=$replacement
+        exec {"replace_couch_conf" :
+                    command => "/usr/bin/perl -pi -e 's/$pattern_no_slashes/$replacement_no_slashes/' '$file'",
+        }
+    }
+
+    replace { "append_http_global_handlers":
+        file => "/etc/couchdb/local.ini",
+        pattern => "\[httpd_global_handlers\]",
+        replacement => '\[httpd_global_handlers\] \n_fti = {couch_httpd_proxy, handle_proxy_req, <<"http:\/\/127.0.0.1:5985">>} ',
+    }
 
     file { "/etc/init.d/couchdb-lucene" :
         ensure      => present,
