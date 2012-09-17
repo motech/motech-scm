@@ -55,10 +55,16 @@ class couchdblucene ($version) {
         onlyif      => "chkconfig --list couchdb-lucene; [ $? -eq 1 ]"
     }
 
+    exec { "restart_couchdb" :
+        command     => "service couchdb restart",
+        user        => "root",
+        require => Exec["install_couchdb_lucene_service"]
+    }
+
     service { "couchdb-lucene":
         ensure     => running,
         path       => "/home/${motechUser}/couchdb-lucene/bin/run",
         enable     => true,
-        require    => Exec["install_couchdb_lucene_service"],
+        require    => Exec["restart_couchdb"],
     }
 }
