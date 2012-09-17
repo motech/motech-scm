@@ -31,6 +31,8 @@
  $couchDbBackupLink = "/opt/backups/couchdb"
  #$couchDbDataLocation = "/var/lib/couchdb"
 
+#couchdb-lucene
+ $couchDbURL="http://localhost:5984/"
 
  # postgres
  $postgresUser="postgres"
