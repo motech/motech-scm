@@ -9,6 +9,25 @@
         require => Package["nagios"]
     }
 
+    package { "nrpe" :
+        ensure  => "present",
+        require => Package["nagios-plugins-all"]
+    }
+
+    service { "nrpe":
+        ensure     => running,
+        enable     => true,
+        hasrestart => true,
+        hasstatus  => true,
+        require => Package["nrpe"]
+    }
+
+
+    package { "nagios-plugins-nrpe" :
+        ensure  => "present",
+        require => Service["nrpe"]
+    }
+
     # This package is required for the check_activemq plugin to run
     package { "perl-libwww-perl" :
         ensure  => "present",
