@@ -24,12 +24,12 @@ class couchdblucene ($version) {
         provider    => "shell",
     }
 
-    file { "/home/${motechUser}/conf/couchdb-lucene.ini" :
+    file { "/home/${motechUser}/couchdb-lucene/conf/couchdb-lucene.ini" :
         ensure      => present,
         content     => template("couchdblucene/couchdb-lucene.ini"),
         mode        =>  777,
-        group       => "root",
-        owner       => "root",
+        group       => "${motechUser}",
+        owner       => "${motechUser}",
         require     => Exec["couchdb_lucene_rename"],
     }
    define replace($file, $pattern, $replacement) {
