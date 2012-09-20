@@ -47,6 +47,18 @@ class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMaste
        }
     }
 
+   if "${activemqMachine}" == 'master' {
+
+       file { "/home/${motechUser}/apache-activemq-${version}/conf/activemq.xml":
+           notify       => Service["activemq"],
+           content      => template("activemq/activemq_master.xml.erb"),
+           owner        => "${motechUser}",
+           group        => "${motechUser}",
+           mode         => 644,
+           require      => Exec["activemq_untar"]
+       }
+    }
+
     exec { "installservice" :
         command     => "/sbin/chkconfig --add activemq",
         user        => "root",
