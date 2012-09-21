@@ -2,15 +2,29 @@
 # Project specific rules need to be inserted manually into httpd.conf and ssl.conf
 
 class httpd () { #($config_url, $config_path) {
+
     package { "httpd" :
         ensure => "present"
     }
 
-    service {"httpd" :
-        ensure => "running",
-        enable => true,
-        require => Package["httpd"]
+    exec { "httpd_conf_backup" :
+        cwd         => "/etc/httpd/conf",
+        command     => "mv httpd.conf httpd.conf.bkup",
+        require     => Package["httpd"],
     }
+
+    file { "/etc/httpd/conf/httpd.conf":
+       content      => template("httpd/httpd.conf.erb", "httpd/httpd.conf.redirects.erb"),
+       require      => Exec["httpd_conf_backup"],
+       notify       => Service["httpd"],
+    }
+
+    service {"httpd" :
+        ensure      => "running",
+        enable      => true,
+        require     => Package["httpd"]
+    }
+
 
     # file { "/tmp/httpd_package" :
     #     purge  => true,

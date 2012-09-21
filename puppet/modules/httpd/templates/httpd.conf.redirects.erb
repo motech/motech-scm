@@ -1,0 +1,21 @@
+# Customization starts here
+<VirtualHost *:80>
+    <% if @ssl_enabled == true -%>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+
+    <% if @ssl_exclude_list.length > 0 -%>
+    RewriteCond %{REMOTE_HOST} !(<%= @ssl_exclude_list.join("|") %>)
+    <% end -%>
+
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+    <% end -%>
+
+    <% if @http_redirects.length > 0 -%>
+    <% @http_redirects.each do |str| -%>
+    ProxyPass <%= str %>
+    ProxyPassReverse <%= str %>
+    <% end -%>
+    <% end -%>
+</VirtualHost>
+
