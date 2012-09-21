@@ -25,7 +25,7 @@ class httpd ($sslEnabled, $sslCertificateFile, $sslCertificateKeyFile) {
         require     => Package["httpd"]
     }
 
-	if $sslEnabled == 'true' {
+	if $sslEnabled == true {
 		package { "mod_ssl" :
 		    ensure      =>  "present",
 		    require     => File["/etc/httpd/conf/httpd.conf"],

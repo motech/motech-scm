@@ -54,22 +54,22 @@
  $activemqMasterPort = 61616
 
  # httpd
- $httpdMachine = "regular" #[regular | failoverProxy] Running in slave sets up the
- $httpdProxyPort = "8082"
- $httpdMasterHost = "127.0.0.1"
- $httpdMasterPort = "80"
- $httpdSlaveHost = "127.0.0.1"
- $httpdSlavePort = "80"
- $httpToHttpsRedirectionEnabled = false
- $httpInternalPortRedirectionEnabled = false
- $httpsExcludedHostAddress = "127.0.0.1"
- $apacheHttpPort = "80"
- $httpSslPort = "443"
- $apacheTomcatPort = "8080"
- 
- # https
- $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
- $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
+$sslEnabled = true
+$sslExcludeList = ["10.155.8.115","127.0.0.1","192.168.42.45"]
+
+$httpRedirects = ["/ananya/ http://192.168.42.38:8080/ananya/"]
+$httpsRedirects = ["/nagios http://192.168.42.45/nagios",
+					"/ananyabatch http://192.168.42.45:8081/ananyabatch"]
+
+$couchdbClusteringEnabled = true
+$couchdbClusterPort = 8181
+$couchdbPrimaryIp = "192.168.42.51"
+$couchdbSecondaryIp = "192.168.42.52"
+
+
+# https
+$SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
+$SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
 
  #ssh
  $SSHPort = "12200"
@@ -102,10 +102,9 @@ $env="<environment>"
  # class { activemq : version => "5.5.1", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
  # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
  # class { hostname : host_name => "${host_name}" }
- # class { httpd : userName => "${motechUser}", httpdMachine => "${httpdMachine}", httpdProxyPort => "${httpdProxyPort}", httpdMasterHost => "${httpdMasterHost}", httpdMasterPort => "${httpdMasterPort}", httpdSlaveHost => "${httpdSlaveHost}", httpdSlavePort => "${httpdSlavePort}", httpToHttpsRedirectionEnabled => "${httpToHttpsRedirectionEnabled}", httpInternalPortRedirectionEnabled => "${httpInternalPortRedirectionEnabled}", httpsExcludedHostAddress => "${httpsExcludedHostAddress}", apacheHttpPort => "${apacheHttpPort}", httpSslPort => "${httpSslPort}", apacheTomcatPort => "${apacheTomcatPort}" }
+ # class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
  # class { "tomcat" : version => "7.0.22", userName => "${motechUser}"}
- # class { "ssl" : userName => "${motechUser}", sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
-# class { couchdblucene : version => "0.9.0-SNAPSHOT" }
+  class { couchdblucene : version => "0.9.0-SNAPSHOT" }
  /*
  class { nagios :
     nagios_config_url => "${nagios_config_url}",
@@ -126,7 +125,6 @@ $env="<environment>"
  # include duplicity
  # include motechquartz
  # include monitor
- # include ssl
  # include verboice
  # include doxygen
  # include ruby

@@ -1,16 +1,16 @@
 # Virtual host for default port 80 to tomcat(8080)
 <VirtualHost *:80>
-<% if @ssl_enabled == true -%>
+<% if @sslEnabled == true -%>
 	RewriteEngine On
 	RewriteCond %{HTTPS} off
-<% if @ssl_exclude_list.length > 0 -%>
-	RewriteCond %{REMOTE_HOST} !(<%= @ssl_exclude_list.join("|") %>)
+<% if @sslExcludeList.length > 0 -%>
+	RewriteCond %{REMOTE_HOST} !(<%= @sslExcludeList.join("|") %>)
 <% end -%>
 	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 <% end -%>
 
-<% if @http_redirects.length > 0 -%>
-<% @http_redirects.each do |str| -%>
+<% if @httpRedirects.length > 0 -%>
+<% @httpRedirects.each do |str| -%>
 	ProxyPass <%= str %>
 	ProxyPassReverse <%= str %>
 <% end -%>
@@ -18,11 +18,13 @@
 </VirtualHost>
 
 # Virtual host for couchdb clustering
-<VirtualHost *:<%= @couchdb_cluster_port %>>
+<% if @couchdbClusteringEnabled == true -%>
+<VirtualHost *:<%= @couchdbClusterPort %>>
 	ProxyPass / balancer://hotcluster/
 	<Proxy balancer://hotcluster>
-		BalancerMember http://<%= @couchdb_primary_ip %>:5984
-		BalancerMember http://<%= @couchdb_secondary_ip %>:5984 status=+H
+		BalancerMember http://<%= @couchdbPrimaryIp %>:5984
+		BalancerMember http://<%= @couchdbSecondaryIp %>:5984 status=+H
 	</Proxy>
 </VirtualHost>
+<% end -%>
 

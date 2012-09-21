@@ -218,8 +218,8 @@ SetEnvIf User-Agent ".*MSIE.*" \
 CustomLog logs/ssl_request_log \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
-<% if @https_redirects.length > 0 -%>
-<% @https_redirects.each do |str| -%>
+<% if @httpsRedirects.length > 0 -%>
+<% @httpsRedirects.each do |str| -%>
 ProxyPass <%= str %>
 ProxyPassReverse <%= str %>
 
