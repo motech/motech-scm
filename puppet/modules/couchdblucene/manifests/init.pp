@@ -64,7 +64,7 @@ class couchdblucene ($version) {
     exec { "install_couchdb_lucene_service" :
         command     => "/sbin/chkconfig --add couchdb-lucene",
         user        => "root",
-        require     => File["/etc/init.d/couchdb-lucene"], Exec["kill_exisiting_couchdb_lucene_processes"],
+        require     => [File["/etc/init.d/couchdb-lucene"], Exec["kill_exisiting_couchdb_lucene_processes"]],
         onlyif      => "chkconfig --list couchdb-lucene; [ $? -eq 1 ]"
     }
 
