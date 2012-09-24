@@ -104,7 +104,7 @@ $env="<environment>"
  # class { hostname : host_name => "${host_name}" }
  # class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
  # class { "tomcat" : version => "7.0.22", userName => "${motechUser}"}
-  class { couchdblucene : version => "0.9.0-SNAPSHOT" }
+ # class { couchdblucene : version => "0.9.0-SNAPSHOT" }
  /*
  class { nagios :
     nagios_config_url => "${nagios_config_url}",
