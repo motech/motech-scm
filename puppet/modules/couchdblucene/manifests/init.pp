@@ -16,6 +16,11 @@ class couchdblucene ($version) {
         provider    => "shell",
     }
 
+    exec { "kill_exisiting_couchdb_lucene_processes" :
+            command     => "kill -9 `ps -ef | grep couchdb-lucene | grep -v grep | awk '{print $2}'`",
+            provider    => "shell",
+    }
+
     exec { "couchdb_lucene_rename" :
         command     => "mv couchdb-lucene-${version} couchdb-lucene",
         cwd         => "/home/${motechUser}",
@@ -32,9 +37,9 @@ class couchdblucene ($version) {
         owner       => "${motechUser}",
         require     => Exec["couchdb_lucene_rename"],
     }
-   define replace($file, $pattern, $replacement) {
+
+    define replace($file, $pattern, $replacement) {
         $pattern_no_slashes = regsubst($pattern, '/', '\\/', 'G', 'U')
-     #   $replacement_no_slashes = regsubst($replacement, '/', '\\/', 'G', 'U')
         $replacement_no_slashes=$replacement
         exec {"replace_couch_conf" :
                     command => "/usr/bin/perl -pi -e 's/$pattern_no_slashes/$replacement_no_slashes/' '$file'",
@@ -59,7 +64,7 @@ class couchdblucene ($version) {
     exec { "install_couchdb_lucene_service" :
         command     => "/sbin/chkconfig --add couchdb-lucene",
         user        => "root",
-        require     => File["/etc/init.d/couchdb-lucene"],
+        require     => File["/etc/init.d/couchdb-lucene"], Exec["kill_exisiting_couchdb_lucene_processes"],
         onlyif      => "chkconfig --list couchdb-lucene; [ $? -eq 1 ]"
     }
 
