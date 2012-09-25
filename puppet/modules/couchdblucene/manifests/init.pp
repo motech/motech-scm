@@ -14,6 +14,7 @@ class couchdblucene ($version) {
         path        => ["/bin",],
         require     => [Exec["${motechUser} homedir"], Exec["get_couchdb_lucene_tar"]],
         provider    => "shell",
+        onlyif      => "test ! -d couchdb-lucene-${version}",
     }
 
     exec { "kill_exisiting_couchdb_lucene_processes" :
@@ -28,6 +29,7 @@ class couchdblucene ($version) {
         user        => "${motechUser}",
         require     => [Exec["couchdb_lucene_untar"]],
         provider    => "shell",
+        onlyif      => "test ! -d couchdb-lucene",
     }
 
     file { "/home/${motechUser}/couchdb-lucene/conf/couchdb-lucene.ini" :
@@ -37,6 +39,7 @@ class couchdblucene ($version) {
         group       => "${motechUser}",
         owner       => "${motechUser}",
         require     => Exec["couchdb_lucene_rename"],
+        onlyif      => "test ! -f /home/${motechUser}/couchdb-lucene/conf/couchdb-lucene.ini",
     }
 
     define replace($file, $pattern, $replacement) {
@@ -60,6 +63,7 @@ class couchdblucene ($version) {
         group       => "root",
         owner       => "root",
         require     => Exec["couchdb_lucene_rename"],
+        onlyif      => "test ! -f /etc/init.d/couchdb-lucene",
     }
 
     exec { "install_couchdb_lucene_service" :
