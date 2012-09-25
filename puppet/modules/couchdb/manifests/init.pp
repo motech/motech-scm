@@ -15,7 +15,7 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
         enable      => true,
         hasrestart  => true,
         hasstatus   => true,
-        require     => Package["couchdb"],
+        require     => File["/etc/sysconfig/couchdb"],
     }
 
     # setup Pull based replication
@@ -46,6 +46,11 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
              require    => Exec["start_replication"],
              command    => "rm -rf /home/${motechUser}/start-replication.sh"
         }
-
     }
+
+    file { "/etc/sysconfig/couchdb"
+        content     => template("couchdb/couchdb-config.erb"),
+        require     => Package["couchdb"]
+    }
+
 }
