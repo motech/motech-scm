@@ -48,7 +48,7 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
         }
     }
 
-    file { "/etc/sysconfig/couchdb"
+    file { "/etc/sysconfig/couchdb":
         content     => template("couchdb/couchdb-config.erb"),
         require     => Package["couchdb"]
     }
