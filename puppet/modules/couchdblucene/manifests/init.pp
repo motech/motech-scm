@@ -18,8 +18,8 @@ class couchdblucene ($version) {
     }
 
     exec { "kill_exisiting_couchdb_lucene_processes" :
-            onlyif      => ["test -f /etc/init.d/couchdb-lucene"],
-            command     => "kill -9 `ps -ef | grep couchdb-lucene | grep -v grep | awk '{print $2}'`",
+            onlyif      => ["ps -ef | grep couchdb-lucene | grep -v grep | awk '{print \$2}' | grep ."],
+            command     => "kill -9 `ps -ef | grep couchdb-lucene | grep -v grep | awk '{print \$2}'`",
             provider    => "shell",
     }
 
