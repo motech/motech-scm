@@ -1,6 +1,6 @@
 #!/bin/bash
 
-master="<%= couchMaster %>"
+master="<%= couchReplicationSourceMachine %>"
 dbs="<%= couchDbs %>"
 
 p1='{"source": "http://'

@@ -1,4 +1,4 @@
-class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
+class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMode, $couchVersion ) {
     include repos::epel
     include repos::motech
 
@@ -18,8 +18,8 @@ class couchdb  ($couchMaster, $couchDbs, $couchMachine, $couchVersion ) {
         require     => Package["couchdb"],
     }
 
-    # Pull based replication from slave
-    if $couchMachine == 'slave' {
+    # setup Pull based replication
+    if $couchInstallationMode == 'withReplication' {
         if $couchVersion >= "1.2.0-7.el6" {
             file {"/home/${motechUser}/start-replication.sh" :
                 require     => Service["couchdb"],

@@ -2,7 +2,7 @@
 
 wget --spider --tries 10 --retry-connrefused --no-check-certificate http://localhost:5984/
 
-master="<%= couchMaster %>"
+master="<%= couchReplicationSourceMachine %>"
 dbs="<%= couchDbs %>"
 
 p1='{"source": "http://'
