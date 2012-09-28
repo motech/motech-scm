@@ -18,11 +18,6 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
         require     => File["/etc/sysconfig/couchdb"],
     }
 
-    exec { "couchdb_compaction_config":
-        command     =>  "sed -i 's/^;_default = \[{db_fragmentation,.*/_default = \[{db_fragmentation, \"50%\"}, {view_fragmentation, \"50%\"}, {from, \"00:00\"}, {to, \"03:30\"}\]/' /etc/couchdb/default.ini",
-        require     =>  Package["couchdb"]
-    }
-
     # setup Pull based replication
     if $couchInstallationMode == 'withReplication' {
         if $couchVersion >= "1.2.0-7.el6" {
@@ -58,4 +53,11 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
         require     => Package["couchdb"]
     }
 
+    if $couchVersion >= "1.2.0-7.el6" {
+        file {"/etc/couchdb/default.ini" :
+            require     => Package["couchdb"],
+            content     => template("couchdb/default.ini.erb"),
+            owner       => "couchdb",
+        }
+    }
 }
