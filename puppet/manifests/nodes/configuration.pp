@@ -71,10 +71,10 @@ $couchdbSecondaryIp = "192.168.42.52"
 $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
 $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
 
- #ssh
- $SSHPort = "12200"
- $SSHPublicKeyFilePath = "" #Provide valid file path containing public key to be added to .ssh/authorized_keys.
- $DeactivatePasswordAuthentication = false #true if password login to be enabled
+#ssh
+$SSHPort = "12200"
+$SSHPublicKeyFilePath = "" #Provide valid file path containing public key to be added to .ssh/authorized_keys.
+$DeactivatePasswordAuthentication = false #true if password login to be enabled
 
 #iptables configuration
 $admin_access_ips = "127.0.0.1" #space seperated list of ips. example "11.1.1.1 2.2.2.2"
@@ -86,16 +86,24 @@ $ssh_port = "22" #Port on which ssh daemon works.
 $host_name="localhost"
 $env="<environment>"
 
- #nagios
- $nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/lastStableBuild/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
- $nagios_objects_path = "nagios/objects/"
- $nagios_plugins_path = "nagios/plugins/"
- $host_file_path = "properties/${env}/hosts.cfg" #env is the environment for nagios configuration
+#nagios
+$nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/lastStableBuild/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
+$nagios_objects_path = "nagios/objects/"
+$nagios_plugins_path = "nagios/plugins/"
+$host_file_path = "properties/${env}/hosts.cfg" #env is the environment for nagios configuration
+
+#keepalived
+$machine_type = "MASTER" #Can be one of MASTER/SLAVE
+$check_services_script_path = "/root/checkservices.sh" #Path of the script that will be executed at scheduled intervals. Should return 0 for success and 1 for failure.
+$interface = "eth0"
+$priority = "101" #Higher the priority the virtual ip address will be attached to that node
+$virtual_ipaddress = "192.168.42.38/24" #Virtual ip address that is attached to the winning node
 
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
 
  # class{users : userName => "${motechUser}", password => "${motechPassword}" }
+ # class{keepalived : machine_type => "${machine_type}", check_services_script_path => "${check_services_script_path}", interface => "${interface}", priority => "${priority}", virtual_ipaddress => "${virtual_ipaddress}"}
  # class{couchdb : couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}" }
  # class{postgres : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
