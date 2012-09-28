@@ -1,4 +1,4 @@
-class keepalived (machine_type, check_services_script_path, interface, priority, virtual_ipaddress){
+class keepalived ($machine_type, $check_services_script_path, $interface, $priority, $virtual_ipaddress){
 	package { "keepalived":
 		ensure => "present",
 	}
