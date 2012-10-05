@@ -99,6 +99,10 @@ $interface = "eth0"
 $priority = "101" #Higher the priority the virtual ip address will be attached to that node
 $virtual_ipaddress = "192.168.42.38/24" #Virtual ip address that is attached to the winning node
 
+#Tomcat 7.0.22 configuration
+$tomcatManagerUserName = "tomcat"
+$tomcatManagerPassword = "p@ssw0rd"
+
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
 
@@ -111,7 +115,7 @@ $virtual_ipaddress = "192.168.42.38/24" #Virtual ip address that is attached to 
  # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
  # class { hostname : host_name => "${host_name}" }
  # class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
- # class { "tomcat" : version => "7.0.22", userName => "${motechUser}"}
+ # class { "tomcat" : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}"}
  # class { couchdblucene : version => "0.9.0-SNAPSHOT" }
  /*
  class { nagios :

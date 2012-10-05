@@ -1,4 +1,4 @@
-class tomcat ( $version, $userName ) {
+class tomcat ( $version, $userName, $tomcatManagerUserName, $tomcatManagerPassword ) {
 
     exec {"gettomcattarfile" :
         command     => "/usr/bin/wget -O /tmp/apache-tomcat-${version}.tar.gz http://motechrepo.github.com/pub/motech/other/apache-tomcat-${version}.tar.gz",
@@ -26,6 +26,14 @@ class tomcat ( $version, $userName ) {
         group       => "root",
         owner       => "root",
         require     => Exec["tomcat_untar"],
+    }
+
+    file { "/home/${userName}/apache-tomcat-${version}/conf/tomcat-users.xml"
+        ensure      => present,
+        content     => template("tomcat/tomcat-users.xml.erb"),
+        group       => "${userName}",
+        owner       => "${userName}",
+        require     => File["/etc/init.d/tomcat"]
     }
 
     exec { "installtomcatservice" :
