@@ -1,4 +1,4 @@
-class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMode, $couchVersion ) {
+class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMode, $couchVersion, $couchDatabaseDir) {
     include repos::epel
     include repos::motech
 

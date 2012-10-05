@@ -3,8 +3,8 @@
 ; Upgrading CouchDB will overwrite this file.
 
 [couchdb]
-database_dir = /var/lib/couchdb
-view_index_dir = /var/lib/couchdb
+database_dir = <%= couchDatabaseDir %>
+view_index_dir = <%= couchDatabaseDir %>
 util_driver_dir = /usr/lib64/erlang/lib/couch-1.2.0/priv/lib
 max_document_size = 4294967296 ; 4 GB
 os_process_timeout = 5000 ; 5 seconds. for view and external servers.

@@ -25,11 +25,11 @@
  # couchdb
  # present installs the newest version when nothing is installed
  $couchVersion = "present" #["1.0.1-4.el5" | "1.0.3-2.el6" | "1.2.0-7.el6" | "present" ]
+ $couchDatabaseDir = "/var/lib/couchdb"
  $couchInstallationMode = "standalone" #[standalone | withReplication]
  $couchReplicationSourceMachine = "127.0.0.1"
  $couchDbs = "tama-web ananya"
  $couchDbBackupLink = "/opt/backups/couchdb"
- #$couchDbDataLocation = "/var/lib/couchdb"
 
 #couchdb-lucene
  $couchDbURL="http://localhost:5984/"
@@ -108,7 +108,7 @@ $tomcatManagerPassword = "p@ssw0rd"
 
  # class{users : userName => "${motechUser}", password => "${motechPassword}" }
  # class{keepalived : machine_type => "${machine_type}", check_services_script_path => "${check_services_script_path}", interface => "${interface}", priority => "${priority}", virtual_ipaddress => "${virtual_ipaddress}"}
- # class{couchdb : couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}" }
+ # class{couchdb : couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}", couchDatabaseDir => "${couchDatabaseDir}"}
  # class{postgres : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}"}
  # class{databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}"}
  # class { activemq : version => "5.5.1", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}" }
