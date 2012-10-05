@@ -1,4 +1,4 @@
-class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMasterPort ) {
+class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMasterPort, $activemqDataDir) {
 
     exec { "getactivemqtar" :
         command     => "/usr/bin/wget -O /tmp/activemq.tar.gz http://motechrepo.github.com/pub/motech/other/apache-activemq-${version}-bin.tar.gz",
@@ -25,7 +25,14 @@ class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMaste
         mode        =>  777,
         group       => "root",
         owner       => "root",
+        require     => File["$activemqDataDir"],
+    }
+
+    file { "$activemqDataDir":
+        ensure      => "directory",
         require     => Exec["activemq_untar"],
+        group       => "${motechUser}",
+        owner       => "${motechUser}",
     }
   
   if "${activemqMachine}" == 'slave' {

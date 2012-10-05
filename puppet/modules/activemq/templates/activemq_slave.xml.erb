@@ -32,7 +32,7 @@
     <!--
         The <broker> element is used to configure the ActiveMQ broker.
     -->
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.base}/data" destroyApplicationContextOnStop="true" schedulerSupport="true">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="<%= activemqDataDir %>" destroyApplicationContextOnStop="true" schedulerSupport="true">
 
         <!--
 			For better performances use VM cursor and small memory limit.
@@ -88,7 +88,7 @@
             http://activemq.apache.org/persistence.html
         -->
         <persistenceAdapter>
-            <kahaDB directory="${activemq.base}/data/kahadb"/>
+            <kahaDB directory="<%= activemqDataDir %>/kahadb"/>
         </persistenceAdapter>
 
         <services>
