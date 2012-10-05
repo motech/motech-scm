@@ -25,12 +25,19 @@ class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMaste
         mode        =>  777,
         group       => "root",
         owner       => "root",
-        require     => File["$activemqDataDir"],
+        require     => File["$activemqDataDir/data"],
     }
 
     file { "$activemqDataDir":
         ensure      => "directory",
         require     => Exec["activemq_untar"],
+        group       => "${motechUser}",
+        owner       => "${motechUser}",
+    }
+
+    file { "$activemqDataDir/data":
+        ensure      => "directory",
+        require     => File["activemqDataDir"],
         group       => "${motechUser}",
         owner       => "${motechUser}",
     }

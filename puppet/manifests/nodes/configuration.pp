@@ -52,7 +52,7 @@
  $activemqMachine = "master" #[master | slave]
  $activemqMasterHost = "127.0.0.1"
  $activemqMasterPort = 61616
- $activemqDataDir = "${activemq.base}/data"
+ $activemqDataDir = "/home/${motechUser}/apache-activemq-5.5.1" #Root directory of activemq data directory
 
  # httpd
 $sslEnabled = true
