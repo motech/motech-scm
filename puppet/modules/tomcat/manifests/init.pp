@@ -28,7 +28,7 @@ class tomcat ( $version, $userName, $tomcatManagerUserName, $tomcatManagerPasswo
         require     => Exec["tomcat_untar"],
     }
 
-    file { "/home/${userName}/apache-tomcat-${version}/conf/tomcat-users.xml"
+    file { "/home/${userName}/apache-tomcat-${version}/conf/tomcat-users.xml" :
         ensure      => present,
         content     => template("tomcat/tomcat-users.xml.erb"),
         group       => "${userName}",
