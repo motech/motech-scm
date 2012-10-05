@@ -37,7 +37,7 @@ class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMaste
 
     file { "$activemqDataDir/data":
         ensure      => "directory",
-        require     => File["activemqDataDir"],
+        require     => File["$activemqDataDir"],
         group       => "${motechUser}",
         owner       => "${motechUser}",
     }
