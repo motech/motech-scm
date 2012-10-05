@@ -50,7 +50,7 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
 
     file { "/etc/sysconfig/couchdb":
         content     => template("couchdb/couchdb-config.erb"),
-        require     => Package["couchdb"]
+        require     => File["$couchDatabaseDir"]
     }
 
     file { "$couchDatabaseDir":
@@ -60,10 +60,9 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
         owner       => "couchdb",
     }
 
-
     if $couchVersion >= "1.2.0-7.el6" {
         file {"/etc/couchdb/default.ini" :
-            require     => File["$couchDatabaseDir"],
+            require     => Package["couchdb"],
             content     => template("couchdb/default.ini.erb"),
             owner       => "couchdb",
         }
