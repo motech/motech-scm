@@ -32,9 +32,9 @@ cd /tmp/ && \
 
 if [ ! -d /tmp/motech-scm/ ]
 then
-    git clone git://github.com/motech/motech-scm.git && \
+    git clone git://github.com/motech/motech-scm.git
 else
-    cd /tmp/motech-scm/ && git pull --rebase && cd /tmp/ && \
+    cd /tmp/motech-scm/ && git pull --rebase && cd /tmp/
 fi
 
 cd /tmp/motech-scm/puppet && \
