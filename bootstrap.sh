@@ -6,10 +6,13 @@
 if ! type puppet > /dev/null 2>&1
 then
   arch=`uname -m`
+
   epelFileName=`curl --location 'http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/6/'$arch'/' | grep epel-release | sed -e 's/^.*\(epel.*rpm\).*$/\1/g'`
+
   rpmUrl="http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/6/$arch/$epelFileName"
 
   cd /tmp && rpm -ivh "$rpmUrl"
+
   yum -y install puppet
 fi
 
@@ -22,14 +25,25 @@ then
 fi
 
 echo "MoTeCH: Bootstrap Machine:"
+
 yum -y install git && \
+
 cd /tmp/ && \
-git clone git://github.com/motech/motech-scm.git && \
+
+if [ ! -d /tmp/motech-scm/ ]
+then
+    git clone git://github.com/motech/motech-scm.git && \
+else
+    cd /tmp/motech-scm/ && git pull --rebase && cd /tmp/ && \
+fi
+
 cd /tmp/motech-scm/puppet && \
+
 if [ -f $configurationFileLocation ]
 then
   cp $configurationFileLocation manifests/nodes/configuration.pp
 else
   vi manifests/nodes/configuration.pp
 fi
+
 puppet apply manifests/site.pp --modulepath=modules/ && echo "Completed"
