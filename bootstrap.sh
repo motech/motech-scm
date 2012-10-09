@@ -67,4 +67,6 @@ fi
 
 if [ "$DEBUG" = "true" ]; then
     puppet apply manifests/site.pp --debug --modulepath=modules/ && echo "Completed"
+else
+    puppet apply manifests/site.pp --modulepath=modules/ && echo "Completed"
 fi
