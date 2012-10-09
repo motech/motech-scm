@@ -65,6 +65,6 @@ else
   vi manifests/nodes/configuration.pp
 fi
 
-if [ $DEBUG -eq 'true' ]; then
+if [ "$DEBUG" = "true" ]; then
     puppet apply manifests/site.pp --debug --modulepath=modules/ && echo "Completed"
 fi
