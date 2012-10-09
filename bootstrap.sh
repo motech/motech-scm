@@ -1,8 +1,10 @@
 #!/bin/sh
 
-# to setup vm : wget https://raw.github.com/motech/motech-scm/master/bootstrap.sh && sh ./bootstrap.sh path/to/configuration.pp
+# to setup vm : wget https://raw.github.com/motech/motech-scm/master/bootstrap.sh && sh ./bootstrap.sh
 
-#usage ./bootstrap.sh or ./bootstrap.sh path/to/configuration.pp or ./bootstrap.sh path/to/configuration.pp --debug
+#parameters:
+# config=path/to/config/file
+# debug=true
 
 #install puppet if not exists
 if ! type puppet > /dev/null 2>&1
@@ -18,8 +20,23 @@ then
   yum -y install puppet
 fi
 
+CONFIG_FILE=
+DEBUG=
+
+while getopts “config:debug” OPTION
+do
+  case $OPTION in
+    'config')
+        CONFIG_FILE=$OPTARG
+        ;;
+     'debug')
+        DEBUG=$OPTARG
+        ;;
+  esac
+done
+
 #set configuration file location
-configurationFileLocation=$1
+configurationFileLocation=$CONFIG_FILE
 locationPathFromRoot=`echo $configurationFileLocation | cut -c 1 | grep / | wc -l`
 if [ $locationPathFromRoot -eq 0 ]
 then
@@ -48,4 +65,6 @@ else
   vi manifests/nodes/configuration.pp
 fi
 
-puppet apply manifests/site.pp $2 --modulepath=modules/ && echo "Completed"
+if [ $DEBUG -eq 'true' ]; then
+    puppet apply manifests/site.pp --debug --modulepath=modules/ && echo "Completed"
+fi
