@@ -1,8 +1,8 @@
-class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMode, $couchVersion, $couchDatabaseDir) {
+class couchdb  ($couchdbPackageName, $couchReplicationSourceMachine, $couchDbs, $couchInstallationMode, $couchVersion, $couchDatabaseDir) {
     include repos::epel
     include repos::motech
 
-    package { "couchdb":
+    package { "${couchdbPackageName}":
         ensure      =>  "${couchVersion}",
         require     => [
           Package["epel-release.noarch"],
@@ -55,14 +55,14 @@ class couchdb  ($couchReplicationSourceMachine, $couchDbs, $couchInstallationMod
 
     file { "$couchDatabaseDir":
         ensure      => "directory",
-        require     => Package["couchdb"],
+        require     => Package["${couchdbPackageName}"],
         group       => "couchdb",
         owner       => "couchdb",
     }
 
     if $couchVersion >= "1.2.0-7.el6" {
         file {"/etc/couchdb/default.ini" :
-            require     => Package["couchdb"],
+            require     => Package["${couchdbPackageName}"],
             content     => template("couchdb/default.ini.erb"),
             owner       => "couchdb",
         }
