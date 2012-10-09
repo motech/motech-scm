@@ -20,7 +20,7 @@ class couchdb  ($couchdbPackageName, $couchReplicationSourceMachine, $couchDbs, 
 
     # setup Pull based replication
     if $couchInstallationMode == 'withReplication' {
-        if $couchVersion >= "1.2.0-7.el6" {
+        if $couchVersion >= "1.2.0" {
             file {"/home/${motechUser}/start-replication.sh" :
                 require     => Service["couchdb"],
                 content     => template("couchdb/start-replication-couchv1.2.sh"),

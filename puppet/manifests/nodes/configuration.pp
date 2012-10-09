@@ -25,7 +25,7 @@
  # couchdb
  # present installs the newest version when nothing is installed
  $couchdbPackageName = "couchdb" #["couchdb" | "apache-couchdb"]
- $couchVersion = "present" #["1.0.1-4.el5" | "1.0.3-2.el6" | "1.2.0-7.el6" | "present" ]
+ $couchVersion = "1.2.0-7.el6" #["1.0.1-4.el5" | "1.0.3-2.el6" | "1.2.0-7.el6" ]
  $couchDatabaseDir = "/var/lib/couchdb"
  $couchInstallationMode = "standalone" #[standalone | withReplication]
  $couchReplicationSourceMachine = "127.0.0.1"
