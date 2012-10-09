@@ -2,6 +2,8 @@
 
 # to setup vm : wget https://raw.github.com/motech/motech-scm/master/bootstrap.sh && sh ./bootstrap.sh path/to/configuration.pp
 
+#usage ./bootstrap.sh or ./bootstrap.sh path/to/configuration.pp or ./bootstrap.sh path/to/configuration.pp --debug
+
 #install puppet if not exists
 if ! type puppet > /dev/null 2>&1
 then
@@ -46,4 +48,4 @@ else
   vi manifests/nodes/configuration.pp
 fi
 
-puppet apply manifests/site.pp --modulepath=modules/ && echo "Completed"
+puppet apply manifests/site.pp $2 --modulepath=modules/ && echo "Completed"
