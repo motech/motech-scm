@@ -31,7 +31,7 @@ keyvalue_buffer_size = 2097152 ; value in bytes
 
 [httpd]
 port = 5984
-bind_address = 127.0.0.1
+bind_address = <%= couchBindAddress %>
 authentication_handlers = {couch_httpd_oauth, oauth_authentication_handler}, {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
 default_handler = {couch_httpd_db, handle_request}
 secure_rewrites = true
