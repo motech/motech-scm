@@ -112,6 +112,7 @@ $authenticationKey = ""             #The key which is to be authenticated.
 $authenticationValue = ""           #The value which must be compared for authentication.
 $redirectionRequired = false        #Specify if a redirection is needed after authentication.
 $redirectionCondition = ""          #The redirection condition for valid authentication value.
+$authenticationExcludeList = []
 
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed

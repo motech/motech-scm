@@ -12,6 +12,11 @@
 #httpd rules for authentication
 <% if @authenticationRequired == true -%>
     SetEnvIf <%= @authenticationKey %> ^<%= @authenticationValue %>$ validAuthenticationKey=1
+
+    <% if @authenticationExcludeList.length > 0 -%>
+    SetEnvIf Remote_Addr <%= @authenticationExcludeList.join("|") %> validAuthenticationKey=1
+    <% end -%>
+
     RewriteCond %{ENV:validAuthenticationKey} =1
     <% if @redirectionRequired == true -%>
     RewriteRule <%= @redirectionCondition %>
