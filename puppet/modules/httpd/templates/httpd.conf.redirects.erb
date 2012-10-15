@@ -2,11 +2,20 @@
 <VirtualHost *:80>
 <% if @sslEnabled == true -%>
 	RewriteEngine On
-	RewriteCond %{HTTPS} off
+    RewriteCond %{HTTPS} off
 <% if @sslExcludeList.length > 0 -%>
 	RewriteCond %{REMOTE_HOST} !(<%= @sslExcludeList.join("|") %>)
 <% end -%>
 	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+<% end -%>
+
+#httpd rules for authentication
+<% if @authenticationRequired == true -%>
+    SetEnvIf <%= @authenticationKey %> ^<%= @authenticationValue %>$ validAuthenticationKey=1
+    RewriteCond %{ENV:validAuthenticationKey} =1
+    <% if @redirectionRequired == true -%>
+    RewriteRule <%= @redirectionCondition %>
+    <% end -%>
 <% end -%>
 
 <% if @httpRedirects.length > 0 -%>

@@ -106,6 +106,13 @@ $virtual_ipaddress = "192.168.42.38/24" #Virtual ip address that is attached to 
 $tomcatManagerUserName = "tomcat"
 $tomcatManagerPassword = "p@ssw0rd"
 
+#Authentication
+$authenticationRequired = false     #Specify if authentication is necessary.
+$authenticationKey = ""             #The key which is to be authenticated.
+$authenticationValue = ""           #The value which must be compared for authentication.
+$redirectionRequired = false        #Specify if a redirection is needed after authentication.
+$redirectionCondition = ""          #The redirection condition for valid authentication value.
+
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
 
@@ -130,7 +137,7 @@ $tomcatManagerPassword = "p@ssw0rd"
  */
 
  # include git
- # include httpd    
+ # include httpd
  # include ant
  # include mysql
  # include mysqlserver
