@@ -111,7 +111,8 @@ $authenticationRequired = false     #Specify if authentication is necessary.
 $authenticationKey = ""             #The key which is to be authenticated.
 $authenticationValue = ""           #The value which must be compared for authentication.
 $redirectionRequired = false        #Specify if a redirection is needed after authentication.
-$redirectionCondition = ""          #The redirection condition for valid authentication value.
+$redirectionRules = ["/motech/ananya-reference-data/(.*) http://192.168.42.49/ananya-reference-data",
+                     "/motech/flw/(.*) http://192.168.42.38/ananya"]               #The rules for redirection on successful validation.
 $authenticationExcludeList = []
 
  #--------------------------------RESOURCES--------------------------------------------
