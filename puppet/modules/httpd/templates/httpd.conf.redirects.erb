@@ -15,10 +15,12 @@
 
     <% if @authenticationExcludeList.length > 0 -%>
     SetEnvIf Remote_Addr <%= @authenticationExcludeList.join("|") %> validAuthenticationKey=1
+    RewriteCond %{ENV:validAuthenticationKey} !=1
+    RewriteRule (.*) /$1 [R=401]
     <% end -%>
     <% @redirectionRules.each do |str| -%>
-        RewriteCond %{ENV:validAuthenticationKey} =1
-        RewriteRule <%= str %>
+        ProxyPass <%= str %>
+        ProxyPassReverse <%= str %>
     <% end -%>
     RewriteCond %{ENV:validAuthenticationKey} !=1
     RewriteRule (.*) /$1 [R=401]
