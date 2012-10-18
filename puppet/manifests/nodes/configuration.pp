@@ -56,23 +56,10 @@
  $activemqMasterPort = 61616
  $activemqDataDir = "/home/${motechUser}/apache-activemq-5.5.1" #Root directory of activemq data directory
 
- # httpd
-$sslEnabled = true
-$sslExcludeList = ["10.155.8.115","127.0.0.1","192.168.42.45"]
-
-$httpRedirects = ["/ananya/ http://192.168.42.38:8080/ananya/"]
-$httpsRedirects = ["/nagios http://192.168.42.45/nagios",
-					"/ananyabatch http://192.168.42.45:8081/ananyabatch"]
-
 $couchdbClusteringEnabled = true
 $couchdbClusterPort = 8181
 $couchdbPrimaryIp = "192.168.42.51"
 $couchdbSecondaryIp = "192.168.42.52"
-
-
-# https
-$SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
-$SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
 
 #ssh
 $SSHPort = "12200"
@@ -106,13 +93,28 @@ $virtual_ipaddress = "192.168.42.38/24" #Virtual ip address that is attached to 
 $tomcatManagerUserName = "tomcat"
 $tomcatManagerPassword = "p@ssw0rd"
 
+######################## HTTPD CONFIG START#############################################
+ # httpd
+$sslEnabled = true
+$sslExcludeList = ["10.155.8.115","127.0.0.1","192.168.42.45"]
+
+$httpRedirects = ["/ananya/ http://192.168.42.38:8080/ananya/"]
+$httpsRedirects = ["/nagios http://192.168.42.45/nagios",
+					"/ananyabatch http://192.168.42.45:8081/ananyabatch"]
+
+# https
+$SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
+$SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
+
+
 #Authentication
 $authenticationRequired = false     #Specify if authentication is necessary.
-$authenticationKey = ""             #The key which is to be authenticated.
-$authenticationValue = ""           #The value which must be compared for authentication.
-$redirectionRules = ["/motech/ananya-reference-data https://192.168.42.49/ananya-reference-data",
-                     "/motech/flw https://192.168.42.38/ananya"]               #The rules for redirection on successful validation.
+$authenticationKey = "APIKey"             #The key which is to be authenticated.
+$authenticationValues = ["1234","5678"]           #The values which must be compared for authentication.
+# Use property httpsRedirects to setup proxypass redirects
 $authenticationExcludeList = []
+
+######################## HTTPD CONFIG END#############################################
 
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed

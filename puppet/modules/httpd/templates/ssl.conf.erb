@@ -218,6 +218,18 @@ SetEnvIf User-Agent ".*MSIE.*" \
 CustomLog logs/ssl_request_log \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 
+SSLProxyEngine on
+#https rules for authentication
+<% if @authenticationRequired == true -%>
+	RewriteEngine on
+    SetEnvIf <%= @authenticationKey %> ^(<%= @authenticationValues.join("|") %>)$ validAuthenticationKey=1
+    <% if @authenticationExcludeList.length > 0 -%>
+    SetEnvIf Remote_Addr <%= @authenticationExcludeList.join("|") %> validAuthenticationKey=1
+    <% end -%>
+    RewriteCond %{ENV:validAuthenticationKey} !=1
+    RewriteRule (.*) /$1 [R=401]
+<% end -%>
+
 <% if @httpsRedirects.length > 0 -%>
 <% @httpsRedirects.each do |str| -%>
 ProxyPass <%= str %>

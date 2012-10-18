@@ -9,21 +9,6 @@
 	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 <% end -%>
 
-#httpd rules for authentication
-<% if @authenticationRequired == true -%>
-    SetEnvIf <%= @authenticationKey %> ^<%= @authenticationValue %>$ validAuthenticationKey=1
-    RewriteCond %{ENV:validAuthenticationKey} !=1
-    RewriteRule (.*) /$1 [R=401]
-
-    <% if @authenticationExcludeList.length > 0 -%>
-    SetEnvIf Remote_Addr <%= @authenticationExcludeList.join("|") %> validAuthenticationKey=1
-    <% end -%>
-    <% @redirectionRules.each do |str| -%>
-        ProxyPass <%= str %>
-        ProxyPassReverse <%= str %>
-    <% end -%>
-<% end -%>
-
 <% if @httpRedirects.length > 0 -%>
 <% @httpRedirects.each do |str| -%>
 	ProxyPass <%= str %>
