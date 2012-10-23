@@ -92,6 +92,12 @@ $virtual_ipaddress = "192.168.42.38/24" #Virtual ip address that is attached to 
 #Tomcat 7.0.22 configuration
 $tomcatManagerUserName = "tomcat"
 $tomcatManagerPassword = "p@ssw0rd"
+$tomcatInstance = "primary" #This suffix will be discriminator for tomcat installations
+$tomcatHttpPort="8080"
+$tomcatRedirectPort="8443"
+$tomcatShutdownPort="8005"
+$tomcatAjpPort="8009"
+$tomcatInstallationDirectory="/home/${motechUser}/apache-tomcat-7.0.22-$tomcatInstance"
 
 ######################## HTTPD CONFIG START#############################################
  # httpd
@@ -128,7 +134,7 @@ $authenticationExcludeList = []
  # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
  # class { hostname : host_name => "${host_name}" }
  # class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
- # class { "tomcat" : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}"}
+ class { "tomcat" : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}"}
  # class { couchdblucene : version => "0.9.0-SNAPSHOT" }
  /*
  class { nagios :

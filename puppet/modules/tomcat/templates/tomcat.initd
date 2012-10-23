@@ -15,26 +15,26 @@
 
 # Source function library.
 source /etc/environment
-. /etc/init.d/functions
+source /etc/init.d/functions
 
+INSTALLATION_DIRECTORY=<%= tomcatInstallationDirectory %>
 RUN_AS_USER=<%= motechUser %> # Adjust run user here
-CATALINA_HOME=/home/$RUN_AS_USER/apache-tomcat-7.0.22
 
 start() {
         echo "Starting Tomcat: "
         if [ "x$USER" != "x$RUN_AS_USER" ]; then
-          su - $RUN_AS_USER -c "export JAVA_OPTS='-XX:MaxPermSize=256M';$CATALINA_HOME/bin/startup.sh"
+          su - $RUN_AS_USER -c "export JAVA_OPTS='-XX:MaxPermSize=256M';$INSTALLATION_DIRECTORY/bin/startup.sh"
         else
-          $CATALINA_HOME/bin/startup.sh
+          $INSTALLATION_DIRECTORY/bin/startup.sh
         fi
         echo "done."
 }
 stop() {
         echo "Shutting down Tomcat: "
         if [ "x$USER" != "x$RUN_AS_USER" ]; then
-          su - $RUN_AS_USER -c "$CATALINA_HOME/bin/shutdown.sh"
+          su - $RUN_AS_USER -c "$INSTALLATION_DIRECTORY/bin/shutdown.sh"
         else
-          $CATALINA_HOME/bin/shutdown.sh
+          $INSTALLATION_DIRECTORY/bin/shutdown.sh
         fi
         echo "done."
 }
@@ -50,7 +50,7 @@ case "$1" in
         stop
         sleep 10
         #echo "Hard killing any remaining threads.."
-        #kill -9 `cat $CATALINA_HOME/work/catalina.pid`
+        #kill -9 `cat $INSTALLATION_DIRECTORY/work/catalina.pid`
         start
         ;;
   *)
