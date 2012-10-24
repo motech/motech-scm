@@ -37,16 +37,16 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "tomcat", $tomcatMa
         require     => Exec["tomcat_untar"],
     }
 
-    file { "/home/${userName}/apache-tomcat-${version}${instanceSuffix}/conf/server.xml" :
-            ensure      => present,
-            content     => template("tomcat/server.xml.erb"),
-            group       => "${userName}",
-            owner       => "${userName}",
-            replace     => true,
-            require     => File["/etc/init.d/tomcat${instanceSuffix}"],
+    file { "$tomcatInstallationDirectory/conf/server.xml" :
+        ensure      => present,
+        content     => template("tomcat/server.xml.erb"),
+        group       => "${userName}",
+        owner       => "${userName}",
+        replace     => true,
+        require     => File["/etc/init.d/tomcat${instanceSuffix}"],
     }
 
-    file { "/home/${userName}/apache-tomcat-${version}${instanceSuffix}/conf/tomcat-users.xml" :
+    file { "$tomcatInstallationDirectory/conf/tomcat-users.xml" :
         ensure      => present,
         content     => template("tomcat/tomcat-users.xml.erb"),
         group       => "${userName}",
