@@ -9,11 +9,11 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "tomcat", $tomcatMa
     }
 
     $instanceSuffix = ""
-    $moveAfterExtractCommand = "mv apache-tomcat-${version} apache-tomcat-${version}${instanceSuffix}"
+    $moveAfterExtractCommand = ""
 
     if $tomcatInstance != "" {
         $instanceSuffix = "-${tomcatInstance}"
-        $moveAfterExtractCommand = ""
+        $moveAfterExtractCommand = "mv apache-tomcat-${version} apache-tomcat-${version}${instanceSuffix}"
     }
 
     $tomcatInstallationDirectory = "/home/${userName}/apache-tomcat-${version}${instanceSuffix}"
