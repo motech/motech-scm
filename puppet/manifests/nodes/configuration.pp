@@ -90,14 +90,16 @@ $priority = "101" #Higher the priority the virtual ip address will be attached t
 $virtual_ipaddress = "192.168.42.38/24" #Virtual ip address that is attached to the winning node
 
 #Tomcat 7.0.22 configuration
-$tomcatManagerUserName = "tomcat"
+
 $tomcatManagerPassword = "p@ssw0rd"
-$tomcatInstance = "primary" #This suffix will be discriminator for tomcat installations
+
+## optional
+$tomcatManagerUserName = "tomcat"
 $tomcatHttpPort="8080"
 $tomcatRedirectPort="8443"
 $tomcatShutdownPort="8005"
 $tomcatAjpPort="8009"
-$tomcatInstallationDirectory="/home/${motechUser}/apache-tomcat-7.0.22-$tomcatInstance"
+$tomcatInstance = "primary" # [primary / secondary] This suffix will be discriminator for tomcat installations
 
 ######################## HTTPD CONFIG START#############################################
  # httpd
