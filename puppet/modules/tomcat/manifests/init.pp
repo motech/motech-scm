@@ -1,4 +1,4 @@
-class tomcat ( $version, $userName, $tomcatManagerUserName, $tomcatManagerPassword, $tomcatInstance ) {
+class tomcat ( $version, $userName, $tomcatManagerUserName, $tomcatManagerPassword, $tomcatInstance, $tomcatHttpPort, $tomcatRedirectPort, $tomcatShutdownPort, $tomcatAjpPort, $tomcatInstallationDirectory ) {
 
     exec {"gettomcattarfile" :
         command     => "/usr/bin/wget -O /tmp/apache-tomcat-${version}.tar.gz http://motechrepo.github.com/pub/motech/other/apache-tomcat-${version}.tar.gz",
