@@ -223,14 +223,14 @@ SSLProxyEngine on
 <% if @authenticationRequired == true -%>
 	RewriteEngine on
     SetEnvIf <%= @authenticationKey %> ^(<%= @authenticationValues.join("|") %>)$ validAuthenticationKey=1
-    <% if @authenticationExcludeList.length > 0 -%>
+    <% if @authenticationExcludeList!=nil and @authenticationExcludeList.length > 0 -%>
     SetEnvIf Remote_Addr <%= @authenticationExcludeList.join("|") %> validAuthenticationKey=1
     <% end -%>
     RewriteCond %{ENV:validAuthenticationKey} !=1
     RewriteRule (.*) /$1 [R=401]
 <% end -%>
 
-<% if @httpsRedirects.length > 0 -%>
+<% if @httpsRedirects!=nil and  @httpsRedirects.length > 0 -%>
 <% @httpsRedirects.each do |str| -%>
 ProxyPass <%= str %>
 ProxyPassReverse <%= str %>

@@ -3,13 +3,13 @@
 <% if @sslEnabled == true -%>
 	RewriteEngine On
     RewriteCond %{HTTPS} off
-<% if @sslExcludeList.length > 0 -%>
+<% if @sslExcludeList!=nil and @sslExcludeList.length > 0 -%>
 	RewriteCond %{REMOTE_HOST} !(<%= @sslExcludeList.join("|") %>)
 <% end -%>
 	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 <% end -%>
 
-<% if @httpRedirects.length > 0 -%>
+<% if @httpRedirects!=nil and @httpRedirects.length > 0 -%>
 <% @httpRedirects.each do |str| -%>
 	ProxyPass <%= str %>
 	ProxyPassReverse <%= str %>
