@@ -8,12 +8,12 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "tomcat", $tomcatMa
         onlyif      => "test ! -f /tmp/apache-tomcat-${version}.tar.gz"
     }
 
-    $instanceSuffix = ""
-    $moveAfterExtractCommand = ""
-
     if $tomcatInstance != "" {
         $instanceSuffix = "-${tomcatInstance}"
         $moveAfterExtractCommand = "mv apache-tomcat-${version} apache-tomcat-${version}${instanceSuffix}"
+    } else {
+	    $instanceSuffix = ""
+	    $moveAfterExtractCommand = ""
     }
 
     $tomcatInstallationDirectory = "/home/${userName}/apache-tomcat-${version}${instanceSuffix}"
