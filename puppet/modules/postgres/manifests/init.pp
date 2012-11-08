@@ -60,23 +60,23 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec{"backup_conf":
-                cwd         => "/usr/local/pgsql/data/",
-                command     => "mv postgresql.conf postgresql.conf.backup && mv pg_hba.conf pg_hba.conf.backup",
-                user        => "${postgresUser}",
-                require     => Exec["start-server"],
-            }
+        cwd         => "/usr/local/pgsql/data/",
+        command     => "mv postgresql.conf postgresql.conf.backup && mv pg_hba.conf pg_hba.conf.backup",
+        user        => "${postgresUser}",
+        require     => Exec["start-server"],
+    }
 
-    file {"/usr/local/pgsql/data/pg_hba.conf":
-                content     => template("postgres/pg_hba.erb"),
+    case $postgresMachine {
+
+        master:{
+            file {"/usr/local/pgsql/data/pg_hba.conf":
+                content     => template("postgres/master_pg_hba.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
                 mode        => 600,
                 require     => Exec["backup_conf"],
             }
 
-    case $postgresMachine {
-
-        master:{
             file {"/usr/local/pgsql/data/postgresql.conf":
                 content     => template("postgres/master_postgresql.erb"),
                 owner       => "${postgresUser}",
@@ -87,6 +87,13 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         }
 
         slave:{
+            file {"/usr/local/pgsql/data/pg_hba.conf":
+                content     => template("postgres/slave_pg_hba.erb"),
+                owner       => "${postgresUser}",
+                group       => "${postgresUser}",
+                mode        => 600,
+                require     => Exec["backup_conf"],
+            }
 
             file {"/usr/local/pgsql/data/postgresql.conf":
                 content     => template("postgres/slave_postgresql.erb"),
