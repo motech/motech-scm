@@ -71,8 +71,13 @@ clear(){
 usage(){
   echo "**** HELP ****"
   echo "1) Make sure you are in vagrant-vm folder"
-  echo "2) Run: <sh bootstap.sh init /path/to/image.box /path/to/configuration.pp> This creates Vagrantfile and initiates vagrant"
-  echo "3) From with-in vagrant-vm execute vagrant up/halt/reload/package (http://tinyurl.com/d4ljaxm) to test your changes in motech-scm/puppet/modules or configuration.pp or Vagrantfile"
+  echo ""
+  echo "2) Run: <source bootstap.sh init /path/to/image.box /path/to/configuration.pp>"
+  echo "      This creates Vagrantfile and initiates vagrant"
+  echo "      \`source\` causes vagrant command to be overridden to reload config file"
+  echo ""
+  echo "3) Execute vagrant up/halt/reload/package to test your changes"
+  echo ""
   echo "4) Run: <sh bootstrap.sh clear> to delete extra created files and destroy vagrant"
 }
 
