@@ -120,7 +120,8 @@ $authenticationRequired = false     #Specify if authentication is necessary.
 $authenticationKey = "APIKey"             #The key which is to be authenticated.
 $authenticationValues = ["1234","5678"]           #The values which must be compared for authentication.
 # Use property httpsRedirects to setup proxypass redirects
-$authenticationExcludeList = []
+$authenticationExcludeHosts = []
+$authenticationExcludeUrlPatterns = []
 
 ######################## HTTPD CONFIG END#############################################
 

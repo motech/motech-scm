@@ -223,9 +223,14 @@ SSLProxyEngine on
 <% if @authenticationRequired == true -%>
 	RewriteEngine on
     SetEnvIf <%= @authenticationKey %> ^(<%= @authenticationValues.join("|") %>)$ validAuthenticationKey=1
-    <% if @authenticationExcludeList!=nil and @authenticationExcludeList.length > 0 -%>
-    SetEnvIf Remote_Addr <%= @authenticationExcludeList.join("|") %> validAuthenticationKey=1
+    <% if @authenticationExcludeHosts!=nil and @authenticationExcludeHosts.length > 0 -%>
+    SetEnvIf Remote_Addr <%= @authenticationExcludeHosts.join("|") %> validAuthenticationKey=1
     <% end -%>
+    <% if @authenticationExcludeUrlPatterns!=nil -%>
+        <% for @authenticationExcludeUrlPattern in @authenticationExcludeUrlPatterns %>
+    SetEnvIf Request_URI <%= @authenticationExcludeUrlPattern %> validAuthenticationKey=1
+        <% end %>
+    <% end %>
     RewriteCond %{ENV:validAuthenticationKey} !=1
     RewriteRule (.*) /$1 [R=401]
 <% end -%>
