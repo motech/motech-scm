@@ -30,6 +30,16 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         managehome => true,
     }
 
+    file { "/etc/init.d/postgresql-9.1" :
+            ensure      => present,
+            content     => template("postgres/postgres-init.d"),
+            mode        =>  777,
+            group       => "root",
+            owner       => "root",
+            require     => Package["postgres_packs"],
+    }
+
+
     file { "/usr/local/pgsql/" :
         ensure      => "directory",
         owner       => "${postgresUser}",
