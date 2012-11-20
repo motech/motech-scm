@@ -52,7 +52,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     exec { "start-server":
         command     => "/usr/pgsql-9.1/bin/postgres -D /usr/local/pgsql/data &",
         user        => "${postgresUser}",
-        require     => Exec["initdb"], Exec["add_to_path"],
+        require     => [Exec["initdb"], Exec["add_to_path"]],
     }
 
     file { "/etc/init.d/postgresql":
@@ -68,9 +68,9 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec{"add_to_path":
-        command     => "echo PATH=$PATH:/usr/pgsql-9.1/bin/ >> /etc/environment",
-        require     => Package["postgres_packs"]],
-        onlyif      => [ ! `grep "/usr/pgsql-9.1/bin" /etc/environment` ],
+        command     => "echo \"export PATH=\$PATH:/usr/pgsql-9.1/bin/\" >> /etc/environment && source /etc/environment",
+        require     => Package["postgres_packs"],
+        onlyif      => "test ! `grep \"/usr/pgsql-9.1/bin\" /etc/environment` ",
     }
 
     case $postgresMachine {
