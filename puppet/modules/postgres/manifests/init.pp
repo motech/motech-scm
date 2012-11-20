@@ -68,9 +68,9 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec{"add_to_path":
-        command     => "echo PATH=$PATH:/usr/pgsql-9.1/bin/ >> /etc/environments",
+        command     => "echo PATH=$PATH:/usr/pgsql-9.1/bin/ >> /etc/environment",
         require     => Package["postgres_packs"]],
-        onlyif      => [ ! `grep "/usr/pgsql-9.1/bin" /etc/environments` ],
+        onlyif      => [ ! `grep "/usr/pgsql-9.1/bin" /etc/environment` ],
     }
 
     case $postgresMachine {
