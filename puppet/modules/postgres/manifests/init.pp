@@ -27,6 +27,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         home        => "/home/$postgresUser",
         password    => $postgresPassword,
         require     => Exec["run_postgres_repo"],
+        managehome => true,
     }
 
     file { "/usr/local/pgsql/" :
@@ -51,7 +52,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     exec { "start-server":
         command     => "/usr/pgsql-9.1/bin/postgres -D /usr/local/pgsql/data &",
         user        => "${postgresUser}",
-        require     => Exec["initdb"],
+        require     => Exec["initdb"], Exec["add_to_path"],
     }
 
     file { "/etc/init.d/postgresql":
@@ -64,6 +65,12 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         command     => "mv postgresql.conf postgresql.conf.backup && mv pg_hba.conf pg_hba.conf.backup",
         user        => "${postgresUser}",
         require     => Exec["start-server"],
+    }
+
+    exec{"add_to_path":
+        command     => "echo PATH=$PATH:/usr/pgsql-9.1/bin/ >> /etc/environments",
+        require     => Package["postgres_packs"]],
+        onlyif      => [ ! `grep "/usr/pgsql-9.1/bin" /etc/environments` ],
     }
 
     case $postgresMachine {
