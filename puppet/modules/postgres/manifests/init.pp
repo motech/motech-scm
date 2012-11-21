@@ -78,9 +78,9 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec{"add_to_path":
-        command     => "echo \"export PATH=\$PATH:/usr/pgsql-9.1/bin/\" >> /etc/environment && source /etc/environment",
+        command     => "echo \"export PATH=\$PATH:/usr/pgsql-9.1/bin/\" > /etc/profile.d/repmgr.sh && source /etc/profile.d/repmgr.sh",
         require     => Package["postgres_packs"],
-        onlyif      => "test ! `grep \"/usr/pgsql-9.1/bin\" /etc/environment` ",
+        onlyif      => "test ! -f  /etc/profile.d/repmgr.sh",
     }
 
     case $postgresMachine {
