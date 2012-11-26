@@ -140,6 +140,7 @@ $authenticationExcludeUrlPatterns = []
  # class { "tomcat" : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}"}
  # class { couchdblucene : version => "0.9.0-SNAPSHOT" }
  # class { repmgr : postgresVersion => "9.1", repmgrVersion => "1.2.0" }
+ # class { scripts : urlOfScriptsJar => "your project scripts jar"}
  /*
  class { nagios :
     nagios_config_url => "${nagios_config_url}",
