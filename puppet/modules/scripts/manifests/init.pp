@@ -5,11 +5,16 @@ class scripts($urlOfScriptsJar) {
         onlyif => "test ! -f /tmp/scripts.jar",
     }
 
-    exec { "unJarScripts" :
-        cwd => "/tmp",
-        command => "tar -xvf /tmp/scripts.jar",
-        require => Exec["getScriptsJar"],
+    exec { "createScriptsFolder" :
+        command => "mkdir /tmp/scripts",
         onlyif => "test ! -d /tmp/scripts",
+    }
+
+    exec { "unJarScripts" :
+        cwd => "/tmp/scripts",
+        command => "jar -xvf /tmp/scripts.jar",
+        require => [Exec[createScriptsFolder], Exec["getScriptsJar"]],
+        onlyif => "test -d /tmp/scripts",
     }
 
     exec { "install-scripts" :
