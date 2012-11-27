@@ -12,7 +12,7 @@ class scripts($urlOfScriptsJar) {
 
     exec { "createScriptsFolder" :
         command => "mkdir /tmp/scripts",
-        require => Exec["resetScriptsFolder"]
+        require => Exec["resetScriptsFolder"],
         onlyif => "test ! -d /tmp/scripts",
     }
 
