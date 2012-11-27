@@ -10,7 +10,7 @@
 ### END INIT INFO
 case "$1" in
   start)
-    /home/motech/couchdb-lucene/bin/run </dev/null &> /dev/null &
+    /home/$motechUser/couchdb-lucene/bin/run </dev/null &> /dev/null &
     exit 0;
     ;;
   stop)
