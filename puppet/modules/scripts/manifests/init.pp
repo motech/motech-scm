@@ -12,7 +12,7 @@ class scripts($urlOfScriptsJar) {
 
     exec { "unJarScripts" :
         cwd => "/tmp/scripts",
-        command => "jar -xvf /tmp/scripts.jar",
+        command => "unzip /tmp/scripts.jar",
         require => [Exec["createScriptsFolder"], Exec["getScriptsJar"]],
         onlyif => "test -d /tmp/scripts",
     }
