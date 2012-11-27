@@ -5,8 +5,14 @@ class scripts($urlOfScriptsJar) {
         onlyif => "test ! -f /tmp/scripts.jar",
     }
 
+    exec { "resetScriptsFolder" :
+            command => "rm -rf /tmp/scripts",
+            onlyif => "test  -d /tmp/scripts",
+    }
+
     exec { "createScriptsFolder" :
         command => "mkdir /tmp/scripts",
+        require => Exec["resetScriptsFolder"]
         onlyif => "test ! -d /tmp/scripts",
     }
 
@@ -14,7 +20,7 @@ class scripts($urlOfScriptsJar) {
         cwd => "/tmp/scripts",
         command => "unzip /tmp/scripts.jar",
         require => [Exec["createScriptsFolder"], Exec["getScriptsJar"]],
-        onlyif => "test -d /tmp/scripts",
+        onlyif => "test ! -f /tmp/scripts/install.sh",
     }
 
     exec { "install-scripts" :
