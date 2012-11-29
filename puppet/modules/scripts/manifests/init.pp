@@ -1,8 +1,14 @@
 class scripts($urlOfScriptsJar) {
 
+    exec { "resetScriptsJar" :
+                command => "rm -rf /tmp/scripts.jar",
+                onlyif => "test  -f /tmp/scripts.jar",
+    }
+
     exec { "getScriptsJar" :
         command => "/usr/bin/wget -O /tmp/scripts.jar $urlOfScriptsJar",
         onlyif => "test ! -f /tmp/scripts.jar",
+        require => Exec["resetScriptsJar"],
     }
 
     exec { "resetScriptsFolder" :
