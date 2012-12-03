@@ -123,7 +123,19 @@ $authenticationValues = ["1234","5678"]           #The values which must be comp
 $authenticationExcludeHosts = []
 $authenticationExcludeUrlPatterns = []
 
-######################## HTTPD CONFIG END#############################################
+######################## HTTPD CONFIG END################################################
+
+######################## JASPER CONFIG START##############################################
+$jasperTomcatHome = "/home/motech/apache-tomcat-7.0.22-secondary"
+$jasperDbType = "postgresql" #Or "mysql" for mysql database.
+$jasperDbHost = "localhost"
+$jasperDbUsername = "postgres"
+$jasperDbPassword = "password"
+$jasperDbName = "jasperserver"
+$jasperOverwriteDb = "n" # y or n
+
+######################## JASPER CONFIG END################################################
+
 
  #--------------------------------RESOURCES--------------------------------------------
  # comment out resources not required to be installed
@@ -170,3 +182,4 @@ $authenticationExcludeUrlPatterns = []
  ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
  # include nscd
 
+#include jasperserver
