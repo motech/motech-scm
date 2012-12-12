@@ -2,12 +2,12 @@ class faketime($javaHome) {
 
     file { "/tmp/faketime.tar.gz" :
         source => "puppet:///modules/faketime/faketime.tar.gz",
-        ensure => "absent",
+        ensure => "present",
     }
 
-    exec { "recreateWorkingDirectory"
+    exec { "recreateWorkingDirectory":
         command => "rm -rf /tmp/jvmfaketime; mkdir /tmp/jvmfaketime;",
-        require => File["/tmp/faketime.tar.gz],
+        require => File["/tmp/faketime.tar.gz"],
     }
 
     exec { "unTarFakeTime" :
@@ -17,8 +17,8 @@ class faketime($javaHome) {
     }
 
     exec { "install-faketime" :
-        cwd => "/tmp/jvmfaketime",
-        command => "cp -f rt.jar $javaHome/jre/lib; cp -f libfaketime.so $javaHome/jre/lib",
+        cwd => "/tmp/jvmfaketime/faketime",
+        command => "cp -f rt.jar $javaHome/jre/lib; cp -f libjvmfaketime.so $javaHome/jre/lib",
         require => Exec["unTarFakeTime"],
     }
 }
