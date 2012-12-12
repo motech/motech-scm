@@ -1,4 +1,4 @@
-class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize) {
+class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8) {
 
     $allPacks = [ "postgresql91", "postgresql91-server", "postgresql91-libs", "postgresql91-contrib", "postgresql91-devel"]
 
@@ -63,6 +63,22 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         command     => "/usr/pgsql-9.1/bin/postgres -D /usr/local/pgsql/data &",
         user        => "${postgresUser}",
         require     => [Exec["initdb"], Exec["add_to_path"]],
+    }
+
+    if $changeDefaultEncodingToUTF8 == "true" {
+        exec { "postgres-utf8-encoding":
+            command     => "/usr/pgsql-9.1/bin/psql -U ${postgresUser} < /tmp/postgres-utf8-encoding.sql",
+            user        => "${motechUser}",
+            require     => File["/tmp/postgres-utf8-encoding.sql"]
+        }
+
+        file { "/tmp/postgres-utf8-encoding.sql" :
+            require     => Exec["start-server"],
+            content     => template("postgres/postgres-utf8-encoding.sql"),
+            owner       => "${motechUser}",
+            group       => "${motechUser}",
+            mode        =>  764
+        }
     }
 
     file { "/etc/init.d/postgresql":
