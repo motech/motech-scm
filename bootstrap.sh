@@ -8,7 +8,7 @@
 # help
 
 #Globals:
-CONFIG_FILE=
+CONFIG_FILE=$1
 DEBUG="false"
 
 usage() {
