@@ -105,6 +105,7 @@ $tomcatInstance = "primary" ## [primary / secondary] This suffix will be discrim
 ## HTTPD
 $sslEnabled = true
 $sslExcludeList = ["10.155.8.115","127.0.0.1","192.168.42.45"]
+$dropPacketsIfIPNotInSslExcludeList = false # true if the packets have to dropped when accessed over http
 
 $httpRedirects = ["/ananya/ http://192.168.42.38:8080/ananya/"]
 $httpsRedirects = ["/nagios http://192.168.42.45/nagios",

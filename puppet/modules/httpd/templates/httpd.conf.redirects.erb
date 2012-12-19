@@ -6,7 +6,11 @@
 <% if @sslExcludeList!=nil and @sslExcludeList.length > 0 -%>
 	RewriteCond %{REMOTE_HOST} !(<%= @sslExcludeList.join("|") %>)
 <% end -%>
-	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+    <% if @dropPacketsIfIPNotInSslExcludeList == true -%>
+	    RewriteRule (.*) [F]
+    <% else -%>
+        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+    <% end -%>
 <% end -%>
 
 <% if @httpRedirects!=nil and @httpRedirects.length > 0 -%>
