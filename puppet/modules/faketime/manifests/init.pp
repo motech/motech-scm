@@ -1,4 +1,4 @@
-class faketime($javaHome) {
+class faketime($javaHome, $sunBootLibraryPath) {
 
     file { "/tmp/faketime.tar.gz" :
         source => "puppet:///modules/faketime/faketime.tar.gz",
@@ -29,7 +29,7 @@ class faketime($javaHome) {
 
     exec { "install-faketime" :
         cwd => "/tmp/jvmfaketime/faketime",
-        command => "cp -f jvmfaketime.jar $javaHome/jre/lib; cp -f libjvmfaketime.so $javaHome/jre/lib",
+        command => "cp -f jvmfaketime.jar $javaHome/jre/lib; cp -f libjvmfaketime.so $sunBootLibraryPath",
         require => Exec["setMavenOpts"],
     }
 }

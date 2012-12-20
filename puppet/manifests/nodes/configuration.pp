@@ -155,7 +155,7 @@ $jasperResetDb = "y" ## Provide "y" or "n"
 # class { repmgr : postgresVersion => "9.1", repmgrVersion => "1.2.0" }
 # class { scripts : urlOfScriptsJar => "your project scripts jar" }
 # class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}" }
-# class { faketime : javaHome => "path/to/java/home" }
+# class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
 
 # include git
 # include httpd
