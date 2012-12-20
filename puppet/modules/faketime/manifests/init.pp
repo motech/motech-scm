@@ -16,9 +16,20 @@ class faketime($javaHome) {
         require => Exec["recreateWorkingDirectory"],
     }
 
+
+    exec { "setJavaOpts":
+        command => "echo \"\\\nexport JAVA_OPTS=\\\"-Xbootclasspath/p:$javaHome/jre/lib/jvmfaketime.jar\\\"\" >> /etc/environment",
+        require => Exec["unTarFakeTime"],
+    }
+
+    exec { "setMavenOpts":
+        command => "echo \"\\\nexport MAVEN_OPTS=\\\"-Xbootclasspath/p:$javaHome/jre/lib/jvmfaketime.jar\\\"\" >> /etc/environment",
+        require => Exec["setJavaOpts"],
+    }
+
     exec { "install-faketime" :
         cwd => "/tmp/jvmfaketime/faketime",
-        command => "cp -f rt.jar $javaHome/jre/lib; cp -f libjvmfaketime.so $javaHome/jre/lib",
-        require => Exec["unTarFakeTime"],
+        command => "cp -f jvmfaketime.jar $javaHome/jre/lib; cp -f libjvmfaketime.so $javaHome/jre/lib",
+        require => Exec["setMavenOpts"],
     }
 }
