@@ -118,13 +118,21 @@ SSLCertificateKeyFile <%= @sslCertificateKeyFile %>
 #   the referenced file can be the same as SSLCertificateFile
 #   when the CA certificates are directly appended to the server
 #   certificate for convinience.
+<% if !sslCertificateChainFile.nil? &&  !sslCertificateChainFile.empty? %>
+SSLCertificateChainFile <%= @sslCertificateChainFile %>
+<% else %>
 #SSLCertificateChainFile /etc/pki/tls/certs/server-chain.crt
+<% end %>
 
 #   Certificate Authority (CA):
 #   Set the CA certificate verification path where to find CA
 #   certificates for client authentication or alternatively one
 #   huge file containing all of them (file must be PEM encoded)
+<% if !sslCACertificateFile.nil? &&  !sslCACertificateFile.empty? %>
+SSLCACertificateFile <%= @sslCACertificateFile %>
+<% else %>
 #SSLCACertificateFile /etc/pki/tls/certs/ca-bundle.crt
+<% end %>
 
 #   Client Authentication (Type):
 #   Client certificate verification type and depth.  Types are

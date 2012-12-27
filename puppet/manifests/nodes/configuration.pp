@@ -114,6 +114,8 @@ $httpsRedirects = ["/nagios http://192.168.42.45/nagios",
 ## HTTPS
 $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
 $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
+$sslCertificateChainFile = "" ## Leave blank if no chain certificate is required.
+$sslCACertificateFile = "" ## Leave blank if no CA certificate is required.
 
 ## Authentication
 $authenticationRequired = false     ## Specify if authentication is necessary.
@@ -148,7 +150,7 @@ $jasperResetDb = "y" ## Provide "y" or "n"
 # class { activemq : version => "5.5.1", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}" }
 # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
 # class { hostname : host_name => "${host_name}" }
-# class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}" }
+# class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile }
 # class { tomcat : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
 # class { jasperserver : }
 # class { couchdblucene : version => "0.9.0-SNAPSHOT" }
