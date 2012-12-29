@@ -43,9 +43,24 @@ class jasperserver () {
         cwd         => "${jasperHome}"
     }
 
+    file { "/home/${motechUser}/config-jasper-war.sh" :
+        require => Exec["set_jasperserver_scripts_permission"],
+        content => template("jasperserver/config-jasper-war.sh"),
+        owner   => "${motechUser}",
+        group   => "${motechUser}",
+        mode    =>  764,
+    }
+
+    exec { "config-jasper-validation-properties-and-replace-war" :
+        require => File["/home/${motechUser}/config-jasper-war.sh"],
+        command => "/bin/sh /home/${motechUser}/config-jasper-war.sh",
+        cwd     => "${jasperHome}",
+        user    => "${motechUser}"
+    }
+
     exec { "make_jasperserver":
         command     => "echo '$jasperResetDb' | /bin/sh ${jasperHome}/buildomatic/js-install-ce.sh minimal",
-        require     => Exec["set_jasperserver_scripts_permission"],
+        require     => Exec["config-jasper-validation-properties-and-replace-war"],
         cwd         => "${jasperHome}/buildomatic",
         user        => "${motechUser}"
     }
