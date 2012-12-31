@@ -129,7 +129,7 @@ $authenticationExcludeUrlPatterns = []
 
 ######################## JASPER CONFIG START##############################################
 $jasperTomcatHome = "/home/motech/apache-tomcat-7.0.22-secondary"
-$jasperHome = "/home/motech/jasperserver-4.7.0-bin"
+$jasperHome = "/home/motech/jasperserver-5.0.0-bin"
 $jasperDbType = "postgresql" #Or "mysql" for mysql database.
 $jasperDbHost = "localhost"
 $jasperDbUsername = "postgres"
