@@ -48,12 +48,12 @@
         <destinationPolicy>
             <policyMap>
               <policyEntries>
-                <policyEntry topic=">" producerFlowControl="true" memoryLimit="1mb">
+                <policyEntry topic=">" producerFlowControl="true" memoryLimit="<%= memoryLimit %>">
                   <pendingSubscriberPolicy>
                     <vmCursor />
                   </pendingSubscriberPolicy>
                 </policyEntry>
-                <policyEntry queue=">" producerFlowControl="true" memoryLimit="1mb">
+                <policyEntry queue=">" producerFlowControl="true" memoryLimit="<%= memoryLimit %>">
                   <!-- Use VM cursor for better latency
                        For more information, see:
                        

@@ -1,4 +1,4 @@
-class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMasterPort, $activemqDataDir) {
+class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMasterPort, $activemqDataDir, $memoryLimit = "1mb") {
 
     exec { "getactivemqtar" :
         command     => "/usr/bin/wget -O /tmp/activemq.tar.gz http://motechrepo.github.com/pub/motech/other/apache-activemq-${version}-bin.tar.gz",
