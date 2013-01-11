@@ -46,6 +46,14 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "tomcat", $tomcatMa
         require     => File["/etc/init.d/tomcat${instanceSuffix}"],
     }
 
+    file { "$tomcatInstallationDirectory/bin/catalina.sh" :
+            ensure      => present,
+            content     => template("tomcat/catalina.sh.erb"),
+            group       => "${userName}",
+            owner       => "${userName}",
+            require     => File["/etc/init.d/tomcat${instanceSuffix}"],
+    }
+
     file { "$tomcatInstallationDirectory/conf/tomcat-users.xml" :
         ensure      => present,
         content     => template("tomcat/tomcat-users.xml.erb"),
