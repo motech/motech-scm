@@ -37,7 +37,7 @@ class jasperserver () {
     }
 
     exec { "set_jasperserver_scripts_permission":
-        command     => "find . -name '*.sh' | xargs chmod u+x",
+        command     => "find . -name '*.sh' | xargs chmod u+x && chmod u+x ./apache-ant/bin/ant",
         user        => "${motechUser}",
         require     => [File["${jasperHome}/buildomatic/bin/do-js-setup.sh"], File["${jasperHome}/buildomatic/default_master.properties"]],
         cwd         => "${jasperHome}"
