@@ -23,6 +23,7 @@
 
 # Virtual host for couchdb clustering
 <% if @couchdbClusteringEnabled == true -%>
+Listen 8181
 <VirtualHost *:<%= @couchdbClusterPort %>>
 	ProxyPass / balancer://hotcluster/
 	<Proxy balancer://hotcluster>
