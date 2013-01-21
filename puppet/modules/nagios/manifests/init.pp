@@ -40,7 +40,6 @@
     }
 
     file { "/tmp/nagios_package" :
-        #purge  => true,
         ensure  => "directory",
         require => Package["perl-Time-HiRes"]
     }
@@ -81,6 +80,11 @@
     exec { "setup_object_files_in_config" :
         command => "sed -i 's/^cfg_file\s*=.*$//g' /etc/nagios/nagios.cfg ; find /etc/nagios/objects -name \\*cfg | sed 's/\\(.*\\)/cfg_file=\\1/g' >> /etc/nagios/nagios.cfg",
         require => File["/etc/nagios/objects/"]
+    }
+
+    exec { "remove_nagios_package" :
+         require   => File["/tmp/nagios_package"],
+         command => rm -rf /tmp/nagios_package
     }
 
     service { "nagios":
