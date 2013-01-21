@@ -84,7 +84,7 @@
 
     exec { "remove_nagios_package" :
          require   => File["/tmp/nagios_package"],
-         command => rm -rf /tmp/nagios_package
+         command => "rm -rf /tmp/nagios_package"
     }
 
     service { "nagios":
