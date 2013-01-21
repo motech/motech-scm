@@ -93,6 +93,7 @@ $virtual_ipaddress = "192.168.42.38/24" ## Virtual ip address that is attached t
 ## Tomcat 7.0.22 configuration
 
 $tomcatManagerPassword = "p@ssw0rd"
+$tomcatManagerRoles = "manager-script"
 
 ## Optional
 $tomcatManagerUserName = "tomcat"
