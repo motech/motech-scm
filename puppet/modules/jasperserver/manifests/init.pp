@@ -58,9 +58,43 @@ class jasperserver () {
         user    => "${motechUser}"
     }
 
+    package { "unzip" :
+        ensure => "present"
+    }
+
+    file { "/home/${motechUser}/apply_jasper_patches.sh" :
+        require => Exec["config-jasper-validation-properties-and-replace-war"],
+        ensure  => present,
+        content => template("jasperserver/apply_jasper_patches.sh"),
+        owner   => "${motechUser}",
+        group   => "${motechUser}",
+        mode    =>  764
+    }
+
+    file { "/tmp/jasper_patches/" :
+        require => File["/home/${motechUser}/apply_jasper_patches.sh"],
+        ensure => directory,
+        source => "puppet:///modules/jasperserver/patches/",
+        recurse => true,
+        owner   => "${motechUser}",
+        group   => "${motechUser}",
+        mode    =>  764
+    }
+
+    package { "patch" :
+        ensure => "present"
+    }
+
+    exec { "apply_jasper_patches" :
+        require => File["/tmp/jasper_patches/"],
+        command => "/bin/sh /home/${motechUser}/apply_jasper_patches.sh `ls /tmp/jasper_patches/*.diff`",
+        cwd     => "${jasperHome}",
+        user    => "${motechUser}"
+    }
+
     exec { "make_jasperserver":
         command     => "echo '$jasperResetDb' | /bin/sh ${jasperHome}/buildomatic/js-install-ce.sh minimal",
-        require     => Exec["config-jasper-validation-properties-and-replace-war"],
+        require     => Exec["apply_jasper_patches"],
         cwd         => "${jasperHome}/buildomatic",
         user        => "${motechUser}"
     }
