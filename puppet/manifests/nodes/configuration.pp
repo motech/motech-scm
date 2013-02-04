@@ -138,7 +138,6 @@ $jasperDbUsername = "postgres"
 $jasperDbPassword = "password"
 $jasperDbName = "jasperserver"
 $jasperResetDb = "y" ## Provide "y" or "n"
-$jasperPatches = "patch_add_export_restriction.diff"
 ######################## JASPER CONFIG END################################################
 
 

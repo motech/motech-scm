@@ -87,7 +87,7 @@ class jasperserver () {
 
     exec { "apply_jasper_patches" :
         require => File["/tmp/jasper_patches/"],
-        command => "/bin/sh /home/${motechUser}/apply_jasper_patches.sh ${jasperPatches}",
+        command => "/bin/sh /home/${motechUser}/apply_jasper_patches.sh `ls /tmp/jasper_patches/*.diff`",
         cwd     => "${jasperHome}",
         user    => "${motechUser}"
     }
