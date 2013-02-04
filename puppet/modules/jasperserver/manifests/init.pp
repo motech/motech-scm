@@ -1,4 +1,4 @@
-class jasperserver () {
+class jasperserver ($jasperPatches) {
 
     exec {"get_jasperserver":
         command     => "/usr/bin/wget -O /tmp/jasperserver-5.0.0.zip http://nchc.dl.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%205.0.0/jasperreports-server-cp-5.0.0-bin.zip",
@@ -87,7 +87,7 @@ class jasperserver () {
 
     exec { "apply_jasper_patches" :
         require => File["/tmp/jasper_patches/"],
-        command => "/bin/sh /home/${motechUser}/apply_jasper_patches.sh `ls /tmp/jasper_patches/*.diff`",
+        command => "/bin/sh /home/${motechUser}/apply_jasper_patches.sh ${jasperPatches}",
         cwd     => "${jasperHome}",
         user    => "${motechUser}"
     }
