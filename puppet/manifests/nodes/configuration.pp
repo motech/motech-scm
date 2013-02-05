@@ -155,7 +155,7 @@ $jasperPatches = "patch_add_export_restriction"
 # class { hostname : host_name => "${host_name}" }
 # class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile }
 # class { tomcat : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
-# class { jasperserver : }
+# class { jasperserver :, jasperPatches = "${jasperPatches}" }
 # class { couchdblucene : version => "0.9.0-SNAPSHOT" }
 # class { repmgr : postgresVersion => "9.1", repmgrVersion => "1.2.0" }
 # class { scripts : urlOfScriptsJar => "your project scripts jar" }
