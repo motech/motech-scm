@@ -1,7 +1,7 @@
 # This class as of now ensures httpd installed and running
 # Project specific rules need to be inserted manually into httpd.conf and ssl.conf
 
-class httpd ($sslEnabled = false, $sslCertificateFile = "/etc/pki/tls/certs/localhost.crt", $sslCertificateKeyFile = "/etc/pki/tls/private/localhost.key", $sslCertificateChainFile = "", $sslCACertificateFile = "") {
+class httpd ($sslEnabled = false, $sslCertificateFile = "/etc/pki/tls/certs/localhost.crt", $sslCertificateKeyFile = "/etc/pki/tls/private/localhost.key", $sslCertificateChainFile = "", $sslCACertificateFile = "", $serverName = "") {
 
     package { "httpd" :
         ensure => "present"
