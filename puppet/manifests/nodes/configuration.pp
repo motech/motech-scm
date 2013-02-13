@@ -118,6 +118,7 @@ $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
 $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
 $sslCertificateChainFile = "" ## Leave blank if no chain certificate is required.
 $sslCACertificateFile = "" ## Leave blank if no CA certificate is required.
+$serverName = "" ##ServerName entry in httpd and ssl conf
 
 ## Authentication
 $authenticationRequired = false     ## Specify if authentication is necessary.
@@ -153,7 +154,7 @@ $jasperPatches = "patch_add_export_restriction"
 # class { activemq : version => "5.5.1", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }
 # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
 # class { hostname : host_name => "${host_name}" }
-# class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile }
+# class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName}
 # class { tomcat : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
 # class { jasperserver :, jasperPatches = "${jasperPatches}" }
 # class { couchdblucene : version => "0.9.0-SNAPSHOT" }
