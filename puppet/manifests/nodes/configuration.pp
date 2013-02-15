@@ -109,9 +109,16 @@ $sslEnabled = true
 $sslExcludeList = ["10.155.8.115","127.0.0.1","192.168.42.45"]
 $dropPacketsIfIPNotInSslExcludeList = false # true if the packets have to dropped when accessed over http
 
+## The following redirects can contain either a string or an array;
+## If it is a string, the same is used for both ProxyPass and ProxyPassReverse rules;
+## In case of array, 1st element of the array specifies ProxyPass rule and 2nd element specifies ProxyPassReverse rule.
 $httpRedirects = ["/ananya/ http://192.168.42.38:8080/ananya/"]
 $httpsRedirects = ["/nagios http://192.168.42.45/nagios",
-					"/ananyabatch http://192.168.42.45:8081/ananyabatch"]
+				   "/ananya-batch http://192.168.42.45:8081/ananya-batch",
+				   ["/jasperserver ajp://192.168.42.45:8081/jasperserver",
+					"/jasperserver http://192.168.42.45:8081/jasperserver"
+				   ]
+				  ]
 
 ## HTTPS
 $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"

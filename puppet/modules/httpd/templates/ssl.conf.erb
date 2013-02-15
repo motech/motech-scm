@@ -247,10 +247,14 @@ SSLProxyEngine on
 <% end -%>
 
 <% if @httpsRedirects!=nil and  @httpsRedirects.length > 0 -%>
-<% @httpsRedirects.each do |str| -%>
-ProxyPass <%= str %>
-ProxyPassReverse <%= str %>
-
+<%- @httpsRedirects.each do |redirectionRule| -%>
+	<%- if redirectionRule.is_a?(Array) -%>
+        ProxyPass <%= redirectionRule[0] %>
+        ProxyPassReverse <%= redirectionRule[1] %>
+    <%- else -%>
+        ProxyPass <%= redirectionRule %>
+        ProxyPassReverse <%= redirectionRule %>
+    <%- end -%>
 <% end -%>
 <% end -%>
 </VirtualHost>

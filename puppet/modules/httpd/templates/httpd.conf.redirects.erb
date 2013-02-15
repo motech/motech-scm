@@ -14,9 +14,14 @@
 <% end -%>
 
 <% if @httpRedirects!=nil and @httpRedirects.length > 0 -%>
-<% @httpRedirects.each do |str| -%>
-	ProxyPass <%= str %>
-	ProxyPassReverse <%= str %>
+<%- @httpRedirects.each do |redirectionRule| -%>
+	<%- if redirectionRule.is_a?(Array) -%>
+        ProxyPass <%= redirectionRule[0] %>
+        ProxyPassReverse <%= redirectionRule[1] %>
+    <%- else -%>
+        ProxyPass <%= redirectionRule %>
+        ProxyPassReverse <%= redirectionRule %>
+    <%- end -%>
 <% end -%>
 <% end -%>
 </VirtualHost>
