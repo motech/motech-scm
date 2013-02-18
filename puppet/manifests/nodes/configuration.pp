@@ -115,7 +115,7 @@ $dropPacketsIfIPNotInSslExcludeList = false # true if the packets have to droppe
 $httpRedirects = ["/ananya/ http://192.168.42.38:8080/ananya/"]
 $httpsRedirects = ["/nagios http://192.168.42.45/nagios",
 				   "/ananya-batch http://192.168.42.45:8081/ananya-batch",
-				   ["/jasperserver ajp://192.168.42.45:8081/jasperserver",
+				   ["/jasperserver ajp://192.168.42.45:8010/jasperserver",
 					"/jasperserver http://192.168.42.45:8081/jasperserver"
 				   ]
 				  ]
