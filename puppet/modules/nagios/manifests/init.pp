@@ -86,9 +86,4 @@
         ensure  => running,
         require => [ Exec["setup_object_files_in_config"], File["/usr/lib64/nagios/plugins/"] ]
     }
-
-    exec { "remove_nagios_package" :
-             command => "rm -rf /tmp/nagios_package",
-             require => [File["/etc/nagios/objects/hosts.cfg"],Service["nagios"]]
-        }
 }
