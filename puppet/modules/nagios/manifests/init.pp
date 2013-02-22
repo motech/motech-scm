@@ -88,7 +88,8 @@
     }
 
     exec { "remove_nagios_package" :
+             require   => Service["nagios"],
              command => "rm -rf /tmp/nagios_package",
-             require => [File["/etc/nagios/objects/hosts.cfg"],Service["nagios"]]
+             require => File["/etc/nagios/objects/hosts.cfg"]
         }
 }
