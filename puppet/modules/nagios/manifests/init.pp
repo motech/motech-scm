@@ -74,7 +74,7 @@
 
     file { "/etc/nagios/objects/hosts.cfg":
       source    => "/tmp/nagios_package/${host_file_path}",
-      require   => File["/usr/lib64/nagios/plugins/"]
+      require   => Exec["unjar_nagios_package"]
     }
 
     exec { "setup_object_files_in_config" :
@@ -89,7 +89,6 @@
 
     exec { "remove_nagios_package" :
              require   => Service["nagios"],
-             command => "rm -rf /tmp/nagios_package",
-             require => File["/etc/nagios/objects/hosts.cfg"]
+             command => "rm -rf /tmp/nagios_package"
         }
 }
