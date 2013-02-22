@@ -51,9 +51,9 @@
     }
 
     exec { "jar -xvf nagios_repo.jar" :
-        require => Exec["fetch_nagios_config_package"],
         cwd     => "/tmp/nagios_package",
-        alias   => "unjar_nagios_package"
+        alias   => "unjar_nagios_package",
+        require => Exec["fetch_nagios_config_package"]
     }
 
     file { "/etc/nagios/objects/":
@@ -63,32 +63,32 @@
       require   => Exec["unjar_nagios_package"]
     }
 
+    file { "/etc/nagios/objects/hosts.cfg":
+      source    => "/tmp/nagios_package/${host_file_path}",
+      require   => File["/etc/nagios/objects/"]
+    }
+
     file { "/usr/lib64/nagios/plugins/":
       source    => "/tmp/nagios_package/${nagios_plugins_path}",
       recurse   => true,
       owner => "nagios",
       group => "nagios",
       mode      =>  554,
-      require   => File["/etc/nagios/objects/"]
-    }
-
-    file { "/etc/nagios/objects/hosts.cfg":
-      source    => "/tmp/nagios_package/${host_file_path}",
-      require   => Exec["unjar_nagios_package"]
+      require   => File["/etc/nagios/objects/hosts.cfg"]
     }
 
     exec { "setup_object_files_in_config" :
         command => "sed -i 's/^cfg_file\s*=.*$//g' /etc/nagios/nagios.cfg ; find /etc/nagios/objects -name \\*cfg | sed 's/\\(.*\\)/cfg_file=\\1/g' >> /etc/nagios/nagios.cfg",
-        require => File["/etc/nagios/objects/"]
+        require => File["/usr/lib64/nagios/plugins/"]
     }
 
     service { "nagios":
         ensure  => running,
-        require => [ Exec["setup_object_files_in_config"], File["/usr/lib64/nagios/plugins/"] ]
+        require => Exec["setup_object_files_in_config"] 
     }
 
     exec { "remove_nagios_package" :
-             require   => Service["nagios"],
-             command => "rm -rf /tmp/nagios_package"
+             command => "rm -rf /tmp/nagios_package",
+             require   => Service["nagios"]
         }
 }
