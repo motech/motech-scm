@@ -1,5 +1,5 @@
---- WEB-INF/applicationContext-data-snapshots.xml	2012-12-05 05:31:04.000000000 +0530
-+++ WEB-INF/applicationContext-data-snapshots-modified.xml	2013-03-04 13:28:45.000000000 +0530
+--- ./WEB-INF/applicationContext-data-snapshots.xml	2012-12-05 05:31:04.000000000 +0530
++++ ./WEB-INF/applicationContext-data-snapshots-modified.xml	2013-03-04 13:28:45.000000000 +0530
 @@ -13,7 +13,7 @@
      </bean>
  	
