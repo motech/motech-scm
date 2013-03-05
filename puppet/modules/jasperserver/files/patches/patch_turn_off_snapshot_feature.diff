@@ -1,11 +1,11 @@
---- ./WEB-INF/applicationContext-data-snapshots.xml	2013-03-05 03:31:08.028172295 -0500
-+++ ./WEB-INF/applicationContext-data-snapshots-modified.xml	2013-03-05 03:30:47.678204510 -0500
+--- ./WEB-INF/applicationContext-data-snapshots.xml	2012-12-05 05:31:04.000000000 -0500
++++ ./WEB-INF/applicationContext-data-snapshots-modified.xml	2013-03-05 04:12:34.145169248 -0500
 @@ -13,7 +13,7 @@
      </bean>
  	
  	<bean id="dataSnapshotService" class="com.jaspersoft.jasperserver.api.engine.jasperreports.service.impl.StandardDataSnapshotService">
--		<property name="snapshotRecordingEnabled" value="false"/>
-+		<property name="snapshotRecordingEnabled" value="true"/>
+-		<property name="snapshotRecordingEnabled" value="true"/>
++		<property name="snapshotRecordingEnabled" value="false"/>
  		<property name="snapshotPersistenceEnabled" value="false"/><!-- data snapshot persistence is off by default -->
  		<property name="persistenceService" ref="dataSnapshotPersistenceService"/>
  		<property name="cachingService" ref="dataSnapshotCachingService"/>
@@ -14,5 +14,5 @@
  	</bean>
  
 -</beans>
-+</beans>
 \ No newline at end of file
++</beans>
