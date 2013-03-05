@@ -146,7 +146,7 @@ $jasperDbUsername = "postgres"
 $jasperDbPassword = "password"
 $jasperDbName = "jasperserver"
 $jasperResetDb = "y" ## Provide "y" or "n"
-$jasperPatches = "patch_add_export_restriction,patch_turn_off_snapshot_feature"  #space separated list
+$jasperPatches = "patch_add_export_restriction patch_turn_off_snapshot_feature"  #space separated list
 ######################## JASPER CONFIG END################################################
 
 
