@@ -1,0 +1,11 @@
+--- WEB-INF/applicationContext-data-snapshots.xml	2012-12-05 05:31:04.000000000 +0530
++++ WEB-INF/applicationContext-data-snapshots-modified.xml	2013-03-04 13:28:45.000000000 +0530
+@@ -13,7 +13,7 @@
+     </bean>
+ 	
+ 	<bean id="dataSnapshotService" class="com.jaspersoft.jasperserver.api.engine.jasperreports.service.impl.StandardDataSnapshotService">
+-		<property name="snapshotRecordingEnabled" value="true"/>
++		<property name="snapshotRecordingEnabled" value="false"/>
+ 		<property name="snapshotPersistenceEnabled" value="false"/><!-- data snapshot persistence is off by default -->
+ 		<property name="persistenceService" ref="dataSnapshotPersistenceService"/>
+ 		<property name="cachingService" ref="dataSnapshotCachingService"/>
