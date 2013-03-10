@@ -170,6 +170,11 @@ $jasperPatches = "patch_add_export_restriction patch_turn_off_snapshot_feature" 
 # class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}" }
 # class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
 
+## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
+## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
+
+# logrotate::rule { "ananya-kilkari" : path => "/home/motech/apache-tomcat-7.0.22/logs/ananya-kilkari.log", rotate => 30, rotate_every => 'day', copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
+
 # include git
 # include httpd
 # include ant
