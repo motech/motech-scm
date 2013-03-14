@@ -9,7 +9,6 @@ describe 'logrotate::base' do
       'owner'   => 'root',
       'group'   => 'root',
       'mode'    => '0444',
-      'source'  => 'puppet:///modules/logrotate/etc/logrotate.conf',
       'require' => 'Package[logrotate]',
     })
 
@@ -26,7 +25,6 @@ describe 'logrotate::base' do
       'owner'   => 'root',
       'group'   => 'root',
       'mode'    => '0555',
-      'source'  => 'puppet:///modules/logrotate/etc/cron.daily/logrotate',
       'require' => 'Package[logrotate]',
     })
   end

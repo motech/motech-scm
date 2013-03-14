@@ -17,15 +17,13 @@ class logrotate::base {
   file {
     '/etc/logrotate.conf':
       ensure  => file,
-      mode    => '0444',
-      source  => 'puppet:///modules/logrotate/etc/logrotate.conf';
+      mode    => '0444';
     '/etc/logrotate.d':
       ensure  => directory,
       mode    => '0755';
     '/etc/cron.daily/logrotate':
       ensure  => file,
-      mode    => '0555',
-      source  => 'puppet:///modules/logrotate/etc/cron.daily/logrotate';
+      mode    => '0555';
   }
 
   case $::operatingsystem {
