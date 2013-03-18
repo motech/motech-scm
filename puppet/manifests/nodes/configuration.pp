@@ -149,6 +149,13 @@ $jasperResetDb = "y" ## Provide "y" or "n"
 $jasperPatches = "patch_add_export_restriction patch_turn_off_snapshot_feature"  #space separated list
 ######################## JASPER CONFIG END################################################
 
+## GlusterFS Config - Find README in glusterfs module for details
+$peer = "192.168.42.2"
+$volumeName = "activemq-cluster-volume"
+$volumeCreationOptions = "replica 2 transport tcp 192.168.42.1:/home/motech/apache-activemq-5.5.1/data 192.168.42.2:/home/motech/apache-activemq-5.5.1/data"
+$mountPoint = "/mnt/glusterfs"
+$volumeToMount = "192.168.42.1:/activemq-cluster-volume"
+
 
 ##--------------------------------RESOURCES--------------------------------------------
 ## Comment out resources not required to be installed. And setup class dependencies using "->"
@@ -172,8 +179,12 @@ $jasperPatches = "patch_add_export_restriction patch_turn_off_snapshot_feature" 
 
 ## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
 ## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
-
 # logrotate::rule { "ananya-kilkari" : path => "/home/motech/apache-tomcat-7.0.22/logs/ananya-kilkari.log", rotate => 30, rotate_every => 'day', copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
+
+## GlusterFS setup - Find README in glusterfs module for details
+#class { 'glusterfs::server' : peers => "${peer}" }
+#glusterfs::volume { "${volumeName}" : create_options => "${volumeCreationOptions}" }
+#glusterfs::mount { "${mountPoint}" : device => "${volumeToMount}" }
 
 # include git
 # include httpd

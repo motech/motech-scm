@@ -1,0 +1,36 @@
+# Overview
+
+Install, enable and configure GlusterFS.
+
+* `glusterfs::server` : Class to install and enable the server.
+* `glusterfs::peer` : Definition to add a server peer. Used by the server class' $peer parameter.
+* `glusterfs::volume` : Definition to create server volumes.
+* `glusterfs::client` : Class to install and enable the client. Included from the mount definition.
+* `glusterfs::mount` : Definition to create client mounts.
+
+You will need to open TCP ports 24007:24009 and 38465:38466 on the servers.
+
+# Example Usage
+
+## Sample GlusterFS setup (with replication) for two machines 192.168.42.1(primary) and 192.168.42.2(secondary), IN ORDER
+
+1. On 192.168.42.2, installing glusterfs without a peer:
+    class { 'glusterfs::server' :  }
+
+2. On 192.168.42.1, installing and making both aware of the peer - the reason for which glusterfs was installed in secondary first, so that peer setup is replicated to secondary:
+    $peer = "192.168.42.2"
+    class { 'glusterfs::server' : peers => "${peer}" }
+
+3. Setting up volume with replication on either 192.168.42.1 or 192.168.42.2:
+    $volumeName = "activemq-cluster-volume"
+    $volumeCreationOptions = "replica 2 transport tcp 192.168.42.1:/home/motech/apache-activemq-5.5.1/data 192.168.42.2:/home/motech/apache-activemq-5.5.1/data"
+    glusterfs::volume { "${volumeName}" : create_options => "${volumeCreationOptions}" }
+
+4. Mounting volume on both machines:
+    $mountPoint = "/mnt/activemq_data/"
+    $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
+    glusterfs::mount { "${mountPoint}" : device => "${volumeToMount}" }
+
+    $mountPoint = "/mnt/activemq_data"
+    $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
+    glusterfs::mount { "${mountPoint}" : device => "${volumeToMount}" }
