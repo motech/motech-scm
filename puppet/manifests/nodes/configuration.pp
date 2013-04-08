@@ -149,6 +149,11 @@ $jasperResetDb = "y" ## Provide "y" or "n"
 $jasperPatches = "patch_add_export_restriction patch_turn_off_snapshot_feature"  #space separated list
 ######################## JASPER CONFIG END################################################
 
+## logrotate config
+$logRotateConfigFileName = "ananya-kilkari"
+$logFilePath = "/home/${motechUser}/apache-tomcat-7.0.22/logs/ananya-kilkari.log"
+$selinuxFileContextType = "var_log_t" ## If there are selinux restrictions for log file, provide appropriate fcontext type, else leave it empty
+
 ## GlusterFS Config - Find README in glusterfs module for details
 $peer = "192.168.42.2"
 $volumeName = "activemq-cluster-volume"
@@ -179,7 +184,7 @@ $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
 
 ## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
 ## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
-# logrotate::rule { "ananya-kilkari" : path => "/home/motech/apache-tomcat-7.0.22/logs/ananya-kilkari.log", rotate => 30, rotate_every => 'day', copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
+# logrotate::rule { "${logRotateConfigFileName}" : path => "${logFilePath}", rotate => 30, rotate_every => 'day', copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
 
 ## GlusterFS setup - Find README in glusterfs module for details
 #class { 'glusterfs::server' : peers => "${peer}" }

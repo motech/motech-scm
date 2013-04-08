@@ -379,4 +379,34 @@ define logrotate::rule(
     content => template('logrotate/etc/logrotate.d/rule.erb'),
     require => Class['logrotate::base'],
   }
+
+  if $selinuxFileContextType != '' {
+
+      $script_file = "/home/${motechUser}/set_selinux_fcontext_${name}.sh"
+
+      file { "${script_file}" :
+          content => template("logrotate/set_selinux_fcontext.sh"),
+          owner   => "${motechUser}",
+          group   => "${motechUser}",
+          mode    =>  777,
+      }
+
+      exec { "set_selinux_fcontext_type_for_parent_directory_${name}" :
+        require => File["${script_file}"],
+        command => "sh ${script_file} ${selinuxFileContextType} ${path} directory",
+        user => "root"
+      }
+
+      exec { "set_selinux_fcontext_type_for_log_file_${name}" :
+        command => "sh ${script_file} ${selinuxFileContextType} ${path}",
+        user => "root",
+        subscribe => Exec["set_selinux_fcontext_type_for_parent_directory_${name}"],
+        refreshonly => true
+      }
+
+      exec {"delete_script_${name}" :
+         require => Exec["set_selinux_fcontext_type_for_log_file_${name}"],
+         command => "rm -rf ${script_file}"
+      }
+  }
 }
