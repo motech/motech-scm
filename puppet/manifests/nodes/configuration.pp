@@ -208,6 +208,7 @@ $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
 # include ruby
 # include ssh
 # include nagios
+# include phantomjs
 
 ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
 # include nscd
