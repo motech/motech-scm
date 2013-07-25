@@ -2,6 +2,7 @@ class activemq ( $version, $activemqMachine, $activemqMasterHost, $activemqMaste
 
     exec { "getactivemqtar" :
         command     => "/usr/bin/wget -O /tmp/activemq.tar.gz http://motechrepo.github.com/pub/motech/other/apache-activemq-${version}-bin.tar.gz",
+        user        => "${motechUser}",
         timeout     => 0,
         provider    => "shell",
         onlyif      => "test ! -f /tmp/activemq.tar.gz"
