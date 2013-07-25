@@ -141,6 +141,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
                 mode        => 600,
+                require     => Exec["backup_conf"],
             }
         }
     }
