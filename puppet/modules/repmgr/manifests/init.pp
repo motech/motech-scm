@@ -1,7 +1,7 @@
 class repmgr($postgresVersion, $repmgrVersion) {
 
-    exec { "stop_postgres":
-            command => "service postgresql stop",
+    service { "postgresql" :
+        ensure => stopped
     }
 
     package { "libxslt-devel" :
@@ -27,7 +27,7 @@ class repmgr($postgresVersion, $repmgrVersion) {
     exec { "install-repmgr" :
         cwd => "/tmp/repmgr-${repmgrVersion}",
         command => "make USE_PGXS=1 && make install USE_PGXS=1",
-        require => [Exec["stop_postgres"], Exec["unTarRepMgr"], Package["libxslt-devel"], Package["pam-devel"]],
+        require => [Service["postgresql"], Exec["unTarRepMgr"], Package["libxslt-devel"], Package["pam-devel"]],
         path => "/bin/:/usr/bin/:/usr/pgsql-9.1/bin"
     }
 
