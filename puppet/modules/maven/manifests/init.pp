@@ -4,7 +4,7 @@ class maven ( $version ){
     user    => "${motechUser}",
     timeout => 0,
     provider => "shell",
-    require     => [User["${motechUser}"]],
+    require => [User["${motechUser}"]],
     onlyif  => "test ! -d /home/${motechUser}/apache-maven-${version}",
    }
 	

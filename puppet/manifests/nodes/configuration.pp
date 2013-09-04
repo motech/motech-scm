@@ -171,6 +171,10 @@ $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
 ## Maven
 $mavenVersion = "3.0.5"
 
+
+## Ant
+$antVersion = "1.8.2"
+
 ##--------------------------------RESOURCES--------------------------------------------
 ## Comment out resources not required to be installed. And setup class dependencies using "->"
 
@@ -192,6 +196,7 @@ $mavenVersion = "3.0.5"
 # class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
 # class { phantomjs }
 # class { maven: version => "${mavenVersion}" }
+# class { ant: version => "${antVersion}" }
 
 ## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
 ## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
@@ -204,7 +209,6 @@ $mavenVersion = "3.0.5"
 
 # include git
 # include httpd
-# include ant
 # include mysql
 # include mysqlserver
 # include asterisk
