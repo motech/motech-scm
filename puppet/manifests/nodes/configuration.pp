@@ -9,6 +9,8 @@ $word = "32b" ## [32b,64b]
 $arch = "x64" ## [x64|i586]
 
 ## User
+$motechUser = "motech"
+
 ## **************************************************************************************
 ## To generate password hash use [[echo "password" | openssl passwd -1 -stdin] OR [echo "password" | openssl passwd -1 -stdin | sed 's/\$/\\\$/g']]
 ## **************************************************************************************
@@ -19,7 +21,7 @@ $arch = "x64" ## [x64|i586]
 ## $motechPassword = "\$1\$IW4OvlrH\$Kui/55oif8W3VZIrnX6jL1"
 ## $motechPassword = '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
 ## **************************************************************************************
-$motechUser = "motech"
+
 $motechPassword = "\$1\$IW4OvlrH\$Kui/55oif8W3VZIrnX6jL1"
 
 ## MYSQL
@@ -40,7 +42,6 @@ $couchInstallationMode = "standalone" ## [standalone | withReplication]
 $couchReplicationSourceMachine = "127.0.0.1"
 $couchBindAddress = "127.0.0.1"
 $couchDbs = "tama-web ananya"
-$couchDbBackupLink = "/opt/backups/couchdb"
 
 $couchdbClusteringEnabled = true
 $couchdbClusterPort = 8181
@@ -48,19 +49,36 @@ $couchdbPrimaryIp = "192.168.42.51"
 $couchdbSecondaryIp = "192.168.42.52"
 
 ## CouchDb-Lucene
-$couchDbURL="http://localhost:5984/"
+$couchDbURL = "http://localhost:5984/"
+$couchdbLuceneVersion = "0.9.0-SNAPSHOT"
 
 ## Postgres
-$postgresUser="postgres"
-$postgresPassword= '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
+$postgresUser = "postgres"
+
+## **************************************************************************************
+## To generate password hash use [[echo "password" | openssl passwd -1 -stdin] OR [echo "password" | openssl passwd -1 -stdin | sed 's/\$/\\\$/g']]
+## **************************************************************************************
+## *****  WARNING   ****  WARNING   ****  WARNING   ****  WARNING   ****  WARNING   *****
+## **************************************************************************************
+## String generated should have '$'s escaped. Or should be written within single quotes.
+## For eg:
+## $motechPassword = "\$1\$IW4OvlrH\$Kui/55oif8W3VZIrnX6jL1"
+## $motechPassword = '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
+## **************************************************************************************
+
+$postgresPassword = '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
 $postgresMachine = "master" ## [master | slave]
 $postgresMaster = "127.0.0.1"
 $postgresSlave = "127.0.0.1"
-$postgresBackupLink = "/opt/backups/postgres"
-# $postgresDataLocation = "/usr/local/pgsql/data"
 $changeDefaultEncodingToUTF8 = false
 
+# Rep Manager
+$postgresVersion = "9.1"
+$repmgrVersion = "1.2.0"
+
 ## Data Backup
+$couchDbBackupLink = "/opt/backups/couchdb"
+$postgresBackupLink = "/opt/backups/postgres"
 $dataBackupDir = "/opt/backups"
 $machineType = "master" ## [master | slave]
 
@@ -70,6 +88,7 @@ $activemqMasterHost = "127.0.0.1"
 $activemqMasterPort = 61616
 $activemqDataDir = "/home/${motechUser}/apache-activemq-5.5.1" ## Root directory of activemq data directory
 $activemqMemoryLimit = "1mb"
+$activemqVersion = "5.5.1"
 
 ## SSH
 $SSHPort = "12200"
@@ -83,14 +102,14 @@ $tcp_ports_open = "80 443" ## List of ports that can be accessed from outside wo
 $ssh_port = "22" ## Port on which ssh daemon works.
 
 ## Hostname Configuration
-$host_name="localhost"
-$env="<environment>"
+$host_name = "localhost"
 
 ## Nagios
+$env = "" ## env is the environment for nagios configuration
 $nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/lastStableBuild/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
 $nagios_objects_path = "nagios/objects/"
 $nagios_plugins_path = "nagios/plugins/"
-$host_file_path = "properties/${env}/hosts.cfg" ## env is the environment for nagios configuration
+$host_file_path = "properties/${env}/hosts.cfg"
 
 ## Keepalived
 $machine_type = "MASTER" ## Can be one of MASTER/SLAVE
@@ -100,15 +119,15 @@ $priority = "101" ## Higher the priority the virtual ip address will be attached
 $virtual_ipaddress = "192.168.42.38/24" ## Virtual ip address that is attached to the winning node
 
 ## Tomcat 7.0.22 configuration
-## Optional
+$tomcatInstance = "" ## [[blank] / primary / secondary] This suffix will be discriminator for tomcat installations. Can be left blank.
 $tomcatManagerUserName = "" ## If left blank no tomcat manager user will be created.
 $tomcatManagerPassword = ""
 $tomcatManagerRoles = ["manager-gui", "manager-script", "manager-status"]
-$tomcatHttpPort="8080"
-$tomcatRedirectPort="8443"
-$tomcatShutdownPort="8005"
-$tomcatAjpPort="8009"
-$tomcatInstance = "" ## [[blank] / primary / secondary] This suffix will be discriminator for tomcat installations. Can be left blank.
+$tomcatHttpPort = "8080"
+$tomcatRedirectPort = "8443"
+$tomcatShutdownPort = "8005"
+$tomcatAjpPort = "8009"
+$tomcatVersion = "7.0.22"
 
 ######################## HTTPD CONFIG START#############################################
 ## HTTPD
@@ -171,7 +190,6 @@ $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
 ## Maven
 $mavenVersion = "3.0.5"
 
-
 ## Ant
 $antVersion = "1.8.2"
 
@@ -183,14 +201,14 @@ $antVersion = "1.8.2"
 # class { couchdb : couchdbPackageName => "${couchdbPackageName}", couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}", couchDatabaseDir => "${couchDatabaseDir}", couchBindAddress => "${couchBindAddress}" }
 # class { postgres : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}", changeDefaultEncodingToUTF8 => "${changeDefaultEncodingToUTF8}" }
 # class { databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}" }
-# class { activemq : version => "5.5.1", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }
+# class { activemq : version => "${activemqVersion}", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }
 # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
 # class { hostname : host_name => "${host_name}" }
 # class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName}
-# class { tomcat : version => "7.0.22", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
+# class { tomcat : version => "${tomcatVersion}", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
 # class { jasperserver : jasperPatches => "${jasperPatches}" }
-# class { couchdblucene : version => "0.9.0-SNAPSHOT" }
-# class { repmgr : postgresVersion => "9.1", repmgrVersion => "1.2.0" }
+# class { couchdblucene : version => "${couchdbLuceneVersion}" }
+# class { repmgr : postgresVersion => "${postgresVersion}", repmgrVersion => "${repmgrVersion}" }
 # class { scripts : urlOfScriptsJar => "your project scripts jar" }
 # class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}" }
 # class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
@@ -200,20 +218,17 @@ $antVersion = "1.8.2"
 
 ## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
 ## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
-# logrotate::rule { "${logRotateConfigFileName}" : path => "${logFilePath}", rotate => 30, rotate_every => 'day', copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
+# logrotate::rule { "${logRotateConfigFileName}" : path => "${logFilePath}", rotate => 30, rotate_every => "day", copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
 
 ## GlusterFS setup - Find README in glusterfs module for details
-#class { 'glusterfs::server' : peers => "${peer}" }
+#class { "glusterfs::server" : peers => "${peer}" }
 #glusterfs::volume { "${volumeName}" : create_options => "${volumeCreationOptions}" }
 #glusterfs::mount { "${mountPoint}" : device => "${volumeToMount}" }
 
 # include git
-# include httpd
 # include mysql
 # include mysqlserver
 # include asterisk
-# include activemq
-# include tomcat
 # include duplicity
 # include motechquartz
 # include monitor
@@ -221,7 +236,6 @@ $antVersion = "1.8.2"
 # include doxygen
 # include ruby
 # include ssh
-# include nagios
 # include phantomjs
 
 ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
