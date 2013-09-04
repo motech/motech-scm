@@ -4,8 +4,7 @@ class users ( $userName, $password ) {
         ensure      => present,
         shell       => "/bin/bash",
         home        => "/home/${userName}",
-        password    => $password,
-        onlyif      => "test `egrep -i '^${userName}:' /etc/passwd | wc -l` -eq 1"
+        password    => $password
     }
 
     exec { "$userName homedir":

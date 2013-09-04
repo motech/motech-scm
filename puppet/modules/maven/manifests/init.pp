@@ -14,7 +14,7 @@ class maven ( $version ){
     cwd     => "/home/${motechUser}",
     creates => "/home/${motechUser}/apache-maven-${version}",
     path    => ["/bin",],
-    require => [Exec["$userName homedir", "getmaventarfile"]],
+    require => [Exec["$motechUser homedir", "getmaventarfile"]],
     onlyif  => "test ! -d /home/${motechUser}/apache-maven-${version}"
   }
 }
