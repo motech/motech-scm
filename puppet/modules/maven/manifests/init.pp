@@ -13,7 +13,8 @@ class maven ( $version ){
     user    => "${motechUser}",
     cwd     => "/home/${motechUser}",
     creates => "/home/${motechUser}/apache-maven-${version}",
-    path    => ["/bin",],
+    path    => ["/bin"],
+    provider => "shell",
     require => [Exec["$motechUser homedir", "getmaventarfile"]],
     onlyif  => "test ! -d /home/${motechUser}/apache-maven-${version}"
   }

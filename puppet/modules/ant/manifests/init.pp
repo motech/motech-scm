@@ -13,7 +13,8 @@ class ant ( $version = "1.8.2" ){
     user    => "${motechUser}",
     cwd     => "/home/${motechUser}",
     creates => "/home/${motechUser}/apache-ant-${version}",
-    path    => ["/bin",],
+    path    => ["/bin"],
+    provider => "shell",
     require => [Exec["$motechUser homedir", "getanttarfile"]],
     onlyif  => "test ! -d /home/${motechUser}/apache-ant-${version}"
   }
