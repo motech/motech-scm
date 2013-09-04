@@ -5,6 +5,7 @@ class users ( $userName, $password ) {
         shell       => "/bin/bash",
         home        => "/home/${userName}",
         password    => $password,
+        onlyif      => "test `egrep -i '^${userName}:' /etc/passwd | wc -l` -eq 1"
     }
 
     exec { "$userName homedir":
@@ -12,7 +13,7 @@ class users ( $userName, $password ) {
         command     => "/bin/cp -R /etc/skel /home/$userName; /bin/chown -R $userName:$userName /home/$userName",
         creates     => "/home/$userName",
         onlyif      => "test ! -f /home/${userName}/.bashrc",
-        require     => User[$userName],
+        require     => User[$userName]
     }
 
     file { "add-user-to-sudoers.sh" :
