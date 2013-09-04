@@ -16,7 +16,13 @@
   limitations under the License.
 -->
 <tomcat-users>
-  <role rolename="tomcat"/> 
-  <role rolename="manager-gui"/>
-  <user username="<%= tomcatManagerUserName %>" password="<%= tomcatManagerPassword %>" roles="<%= tomcatManagerRoles %>"/>
+    <role rolename="tomcat"/>
+<% if @tomcatManagerRoles != nil and @tomcatManagerRoles.length > 0 %>
+    <% @tomcatManagerRoles.each do |role| %>
+    <role rolename="<%= role %>/>
+    <% end %>
+<% end %>
+<% if @tomcatManagerUserName != nil and @tomcatManagerUserName != "" %>
+    <user username="<%= tomcatManagerUserName %>" password="<%= tomcatManagerPassword %>" roles="<%= tomcatManagerRoles.join(",") %>"/>
+<% end %>
 </tomcat-users>

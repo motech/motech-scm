@@ -1,4 +1,4 @@
-class tomcat ( $version, $userName, $tomcatManagerUserName = "tomcat", $tomcatManagerPassword, $tomcatInstance = "", $tomcatHttpPort = "8080", $tomcatRedirectPort = "8443", $tomcatShutdownPort = "8005", $tomcatAjpPort = "8009", $tomcatManagerRoles = "") {
+class tomcat ( $version, $userName, $tomcatManagerUserName = "", $tomcatManagerPassword = "", $tomcatInstance = "", $tomcatHttpPort = "8080", $tomcatRedirectPort = "8443", $tomcatShutdownPort = "8005", $tomcatAjpPort = "8009", $tomcatManagerRoles = []) {
 
     exec {"gettomcattarfile" :
         command     => "/usr/bin/wget -O /tmp/apache-tomcat-${version}.tar.gz http://motechrepo.github.com/pub/motech/other/apache-tomcat-${version}.tar.gz",
@@ -11,13 +11,13 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "tomcat", $tomcatMa
 
     if $tomcatInstance != "" {
         $instanceSuffix = "-${tomcatInstance}"
-        $moveAfterExtractCommand = "mv apache-tomcat-${version} /home/${userName}/apache-tomcat-${version}${instanceSuffix}"
     } else {
 	    $instanceSuffix = ""
-	    $moveAfterExtractCommand = ""
     }
 
     $tomcatInstallationDirectory = "/home/${userName}/apache-tomcat-${version}${instanceSuffix}"
+
+    $moveAfterExtractCommand = "mv apache-tomcat-${version} ${tomcatInstallationDirectory}"
 
     exec { "tomcat_untar":
         command     => "tar xfz /tmp/apache-tomcat-${version}.tar.gz; $moveAfterExtractCommand",

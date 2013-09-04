@@ -9,9 +9,18 @@ $word = "32b" ## [32b,64b]
 $arch = "x64" ## [x64|i586]
 
 ## User
-## To generate password hash use 'echo "password" | openssl passwd -1 -stdin'
+## **************************************************************************************
+## To generate password hash use [[echo "password" | openssl passwd -1 -stdin] OR [echo "password" | openssl passwd -1 -stdin | sed 's/\$/\\\$/g']]
+## **************************************************************************************
+## *****  WARNING   ****  WARNING   ****  WARNING   ****  WARNING   ****  WARNING   *****
+## **************************************************************************************
+## String generated should have '$'s escaped. Or should be written within single quotes.
+## For eg:
+## $motechPassword = "\$1\$IW4OvlrH\$Kui/55oif8W3VZIrnX6jL1"
+## $motechPassword = '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
+## **************************************************************************************
 $motechUser = "motech"
-$motechPassword = '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
+$motechPassword = "\$1\$IW4OvlrH\$Kui/55oif8W3VZIrnX6jL1"
 
 ## MYSQL
 $mysqlPassword = "password"
@@ -91,17 +100,15 @@ $priority = "101" ## Higher the priority the virtual ip address will be attached
 $virtual_ipaddress = "192.168.42.38/24" ## Virtual ip address that is attached to the winning node
 
 ## Tomcat 7.0.22 configuration
-
-$tomcatManagerPassword = "p@ssw0rd"
-$tomcatManagerRoles = "manager-script"
-
 ## Optional
-$tomcatManagerUserName = "tomcat"
+$tomcatManagerUserName = "" ## If left blank no tomcat manager user will be created.
+$tomcatManagerPassword = ""
+$tomcatManagerRoles = ["manager-gui", "manager-script", "manager-status"]
 $tomcatHttpPort="8080"
 $tomcatRedirectPort="8443"
 $tomcatShutdownPort="8005"
 $tomcatAjpPort="8009"
-$tomcatInstance = "primary" ## [primary / secondary] This suffix will be discriminator for tomcat installations
+$tomcatInstance = "" ## [[blank] / primary / secondary] This suffix will be discriminator for tomcat installations. Can be left blank.
 
 ######################## HTTPD CONFIG START#############################################
 ## HTTPD
