@@ -168,6 +168,8 @@ $volumeCreationOptions = "replica 2 transport tcp 192.168.42.1:/home/motech/apac
 $mountPoint = "/mnt/glusterfs"
 $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
 
+## Maven
+$mavenVersion = "3.0.5"
 
 ##--------------------------------RESOURCES--------------------------------------------
 ## Comment out resources not required to be installed. And setup class dependencies using "->"
@@ -189,6 +191,7 @@ $volumeToMount = "192.168.42.1:/activemq-cluster-volume"
 # class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}" }
 # class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
 # class { phantomjs }
+# class { maven: version => "${mavenVersion}" }
 
 ## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
 ## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
