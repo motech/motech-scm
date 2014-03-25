@@ -306,6 +306,11 @@ log_rotation_size = 0			# Automatic rotation of logfiles will
 					# happen after that much log output.
 					# 0 disables.
 
+
+<% if !postgresTimeZone.nil? &&  !postgresTimeZone.empty? %>
+timezone = <%= serverName %>
+<% end %>
+
 # These are relevant when logging to syslog:
 #syslog_facility = 'LOCAL0'
 #syslog_ident = 'postgres'

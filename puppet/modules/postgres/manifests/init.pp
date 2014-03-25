@@ -1,4 +1,4 @@
-class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8) {
+class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8, $postgresTimeZone = "") {
 
     $allPacks = [ "postgresql91", "postgresql91-server", "postgresql91-libs", "postgresql91-contrib", "postgresql91-devel"]
 
