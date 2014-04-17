@@ -1,4 +1,4 @@
-class tomcat ( $version, $userName, $tomcatManagerUserName = "", $tomcatManagerPassword = "", $tomcatInstance = "", $tomcatHttpPort = "8080", $tomcatRedirectPort = "8443", $tomcatShutdownPort = "8005", $tomcatAjpPort = "8009", $tomcatManagerRoles = []) {
+class tomcat ( $version, $userName, $tomcatManagerUserName = "", $tomcatManagerPassword = "", $tomcatInstance = "", $tomcatHttpPort = "8080", $tomcatRedirectPort = "8443", $tomcatShutdownPort = "8005", $tomcatAjpPort = "8009", $tomcatManagerRoles = [],$minHeapMemory="512m",$maxHeapMemory="4096m",$minPermgenSize="256m",$maxPermgenSize="512m",$javaSystemProperties="") {
 
     exec {"gettomcattarfile" :
         command     => "/usr/bin/wget -O /tmp/apache-tomcat-${version}.tar.gz http://motechrepo.github.com/pub/motech/other/apache-tomcat-${version}.tar.gz",
@@ -53,8 +53,16 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "", $tomcatManagerP
             group       => "${userName}",
             owner       => "${userName}",
             mode        => 755,
-            require     => File["/etc/init.d/tomcat${instanceSuffix}"],
+            require     => [File["/etc/init.d/tomcat${instanceSuffix}"],File["/var/log/motech"]],
     }
+
+    file { "/var/log/motech" :
+            ensure  => directory,
+            group       => "${userName}",
+            owner       => "${userName}",
+            mode    => '0755',
+    }
+
 
     file { "$tomcatInstallationDirectory/conf/tomcat-users.xml" :
         ensure      => present,
