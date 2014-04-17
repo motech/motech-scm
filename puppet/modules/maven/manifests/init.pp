@@ -15,7 +15,15 @@ class maven ( $version ){
     creates => "/home/${motechUser}/apache-maven-${version}",
     path    => ["/bin"],
     provider => "shell",
-    require => [Exec["$motechUser homedir", "getmaventarfile"]],
+    require => [Exec["${motechUser} homedir", "getmaventarfile"]],
     onlyif  => "test ! -d /home/${motechUser}/apache-maven-${version}"
+  }
+
+  file {"/usr/local/bin/mvn" :
+      ensure => link,
+      target => "/home/${motechUser}/apache-maven-${version}/bin/mvn",
+      owner =>  "${motechUser}",
+      group => "${motechUser}",
+      require => Exec["maven_untar"],
   }
 }
