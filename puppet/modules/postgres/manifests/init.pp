@@ -1,16 +1,24 @@
-class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8, $postgresTimeZone = "") {
+class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8, $postgresTimeZone = "",$pgPackVersion="91",$postgresVersion = "9.1") {
 
-    $allPacks = [ "postgresql91", "postgresql91-server", "postgresql91-libs", "postgresql91-contrib", "postgresql91-devel"]
+    $allPacks = [ "postgresql${pgPackVersion}", "postgresql${pgPackVersion}-server", "postgresql${pgPackVersion}-libs", "postgresql${pgPackVersion}-contrib", "postgresql${pgPackVersion}-devel"]
+
+
+    if $postgresVersion == "9.3" {
+      $rpmVersion = "9.3-1"
+    }else{
+      $rpmVersion = "9.1-4"
+    }
+
 
     file{"/tmp/postgres-repo.rpm" :
         ensure      => present,
-        source      => "puppet:///modules/postgres/pgdg-${os}-9.1-4-${wordsize}.noarch.rpm",
+        source      => "puppet:///modules/postgres/pgdg-${os}-${rpmVersion}-${wordsize}.noarch.rpm",
     }
 
     exec { "run_postgres_repo" :
         provider    => "shell",
         command     => "rpm -i /tmp/postgres-repo.rpm",
-        creates     => "/etc/yum.repos.d/pgdg-91-centos.repo",
+        creates     => "/etc/yum.repos.d/pgdg-${pgPackVersion}-centos.repo",
         require     => File["/tmp/postgres-repo.rpm"],
         onlyif      => "test `rpm -qa postgres | wc -l` -eq 0",
     }
@@ -30,7 +38,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         managehome => true,
     }
 
-    file { "/etc/init.d/postgresql-9.1" :
+    file { "/etc/init.d/postgresql-${postgresVersion}" :
             ensure      => present,
             content     => template("postgres/postgres-init.d"),
             mode        =>  777,
@@ -52,7 +60,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec { "initdb":
-        command     => "/usr/pgsql-9.1/bin/initdb -D /usr/local/pgsql/data",
+        command     => "/usr/pgsql-${postgresVersion}/bin/initdb -D /usr/local/pgsql/data",
         user        => "${postgresUser}",
         require     => [File["/usr/local/pgsql/data"], Package["postgres_packs"]],
         provider    => "shell",
@@ -60,14 +68,14 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec { "start-server":
-        command     => "/usr/pgsql-9.1/bin/postgres -D /usr/local/pgsql/data &",
+        command     => "/usr/pgsql-${postgresVersion}/bin/postgres -D /usr/local/pgsql/data &",
         user        => "${postgresUser}",
         require     => [Exec["initdb"], Exec["add_to_path"]],
     }
 
     if $changeDefaultEncodingToUTF8 == "true" {
         exec { "postgres-utf8-encoding":
-            command     => "/usr/pgsql-9.1/bin/psql -U ${postgresUser} < /tmp/postgres-utf8-encoding.sql",
+            command     => "/usr/pgsql-${postgresVersion}/bin/psql -U ${postgresUser} < /tmp/postgres-utf8-encoding.sql",
             user        => "${motechUser}",
             require     => File["/tmp/postgres-utf8-encoding.sql"]
         }
@@ -83,7 +91,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
 
     file { "/etc/init.d/postgresql":
         ensure      => "link",
-        target      => "/etc/init.d/postgresql-9.1",
+        target      => "/etc/init.d/postgresql-${postgresVersion}",
     }
 
     exec{"backup_conf":
@@ -94,7 +102,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
     exec{"add_to_path":
-        command     => "echo \"export PATH=\$PATH:/usr/pgsql-9.1/bin/\" > /etc/profile.d/repmgr.sh && source /etc/profile.d/repmgr.sh",
+        command     => "echo \"export PATH=\$PATH:/usr/pgsql-${postgresVersion}/bin/\" > /etc/profile.d/repmgr.sh && source /etc/profile.d/repmgr.sh",
         require     => Package["postgres_packs"],
         onlyif      => "test ! -f  /etc/profile.d/repmgr.sh",
     }
