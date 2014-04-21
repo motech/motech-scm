@@ -1,4 +1,4 @@
-    class nagios ($nagios_config_url, $nagios_objects_path, $nagios_plugins_path, $host_file_path) {
+    class nagios ($nagios_config_url, $nagios_objects_path, $nagios_plugins_path, $host_file_path , $nrpe_config_path) {
 
     package { "nagios" :
         ensure  =>  "present"
@@ -65,7 +65,19 @@
 
     file { "/etc/nagios/objects/hosts.cfg":
       source    => "/tmp/nagios_package/${host_file_path}",
+      require   => [File["/etc/nagios/objects/"],File["/etc/nagios/nagios.cfg"]]
+    }
+
+    file { "/etc/nagios/nrpe.cfg":
+      source    => "/tmp/nagios_package/${nrpe_config_path}",
       require   => File["/etc/nagios/objects/"]
+    }
+
+    file { "/etc/nagios/nagios.cfg":
+      source    => "puppet:///modules/nagios/nagios.conf",
+      require   => File["/etc/nagios/objects/"],
+      owner => root,
+      group => root,
     }
 
     file { "/usr/lib64/nagios/plugins/":
@@ -77,14 +89,46 @@
       require   => File["/etc/nagios/objects/hosts.cfg"]
     }
 
-    exec { "setup_object_files_in_config" :
-        command => "sed -i 's/^cfg_file\s*=.*$//g' /etc/nagios/nagios.cfg ; find /etc/nagios/objects -name \\*cfg | sed 's/\\(.*\\)/cfg_file=\\1/g' >> /etc/nagios/nagios.cfg",
-        require => File["/usr/lib64/nagios/plugins/"]
+    file { "/etc/httpd/conf.d/nagios.conf":
+      source    => "puppet:///modules/nagios/httpd/nagios.conf",
+      ensure    => present,
+      owner => root,
+      group => root,
+      require   => File["/etc/nagios/passwd"],
+      notify    => Service["httpd"]
     }
+
+    file { "/etc/nagios/private/resource.cfg":
+      source    => "puppet:///modules/nagios/private/resource.cfg",
+      ensure    => present,
+      owner => root,
+      group => root,
+      require   => File["/etc/nagios/nagios.cfg"],
+    }
+
+    file { "/etc/nagios/passwd":
+      source    => "puppet:///modules/nagios/httpd/nagios.users",
+      owner => root,
+      group => root,
+      ensure    => present
+    }
+
+    file { ["/usr/local/nagios/","/usr/local/nagios/var/","/usr/local/nagios/var/spool","/usr/local/nagios/var/spool/checkresults"]:
+       ensure => directory,
+       owner =>     "nagios",
+       group =>     "nagios",
+       require =>  File["/etc/nagios/nagios.cfg"]
+    }
+
+    exec { "setup_object_files_in_config" :
+      command => "sed -i 's/^cfg_file\s*=.*$//g' /etc/nagios/nagios.cfg ; find /etc/nagios/objects -name \\*cfg | sed 's/\\(.*\\)/cfg_file=\\1/g' >> /etc/nagios/nagios.cfg",
+      require => File["/etc/nagios/nagios.cfg"]
+    }
+
 
     service { "nagios":
         ensure  => running,
-        require => Exec["setup_object_files_in_config"] 
+        require => [File["/usr/lib64/nagios/plugins/"],Exec["setup_object_files_in_config"],File["/etc/nagios/nrpe.cfg"],File["/etc/httpd/conf.d/nagios.conf"]]
     }
 
     exec { "remove_nagios_package" :

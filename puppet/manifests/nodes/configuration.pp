@@ -43,7 +43,7 @@ $couchReplicationSourceMachine = "127.0.0.1"
 $couchBindAddress = "127.0.0.1"
 $couchDbs = "tama-web ananya"
 
-$couchdbClusteringEnabled = true
+$couchdbClusteringEnabled = false
 $couchdbClusterPort = 8181
 $couchdbPrimaryIp = "192.168.42.51"
 $couchdbSecondaryIp = "192.168.42.52"
@@ -54,7 +54,7 @@ $couchdbLuceneVersion = "0.9.0-SNAPSHOT"
 
 ## Postgres
 $postgresUser = "postgres"
-$postgresTimeZone = ""
+$postgresTimeZone = "UTC"
 
 ## **************************************************************************************
 ## To generate password hash use [[echo "password" | openssl passwd -1 -stdin] OR [echo "password" | openssl passwd -1 -stdin | sed 's/\$/\\\$/g']]
@@ -109,10 +109,11 @@ $host_name = "localhost"
 
 ## Nagios
 $env = "" ## env is the environment for nagios configuration
-$nagios_config_url = 'http://192.168.42.26:8080/job/Ananya-Delivery-Kilkari/lastStableBuild/org.motechproject.ananya$ananya-deploy/artifact/org.motechproject.ananya/ananya-deploy/0.2.1-SNAPSHOT/ananya-deploy-0.2.1-SNAPSHOT.jar'
-$nagios_objects_path = "nagios/objects/"
+$nagios_config_url = 'http://old-ci.motechproject.org/job/motech-whp-deploy/lastStableBuild/org.motechproject.whp%24whp-mTraining-deploy/artifact/org.motechproject.whp/whp-mTraining-deploy/0.7-SNAPSHOT/whp-mTraining-deploy-0.7-SNAPSHOT.jar'
+$nagios_objects_path = "nagios/whp-mtraining/objects/"
 $nagios_plugins_path = "nagios/plugins/"
-$host_file_path = "properties/${env}/hosts.cfg"
+$host_file_path = "nagios/whp-mtraining/objects/hosts.cfg"
+$nrpe_config_path = "nagios/nrpe/etc/nrpe.cfg"
 
 ## Keepalived
 $machine_type = "MASTER" ## Can be one of MASTER/SLAVE
@@ -137,22 +138,22 @@ $tomcatVersion = "7.0.22"
 ## The following redirects can contain either a string or an array;
 ## If it is a string, the same is used for both ProxyPass and ProxyPassReverse rules;
 ## In case of array, 1st element of the array specifies ProxyPass rule and 2nd element specifies ProxyPassReverse rule.
-$httpRedirects = ["/ananya/ http://192.168.42.38:8080/ananya/"]
+$httpRedirects = ["/whp-mtraining/ http://localhost:8080/motech-platform-server/"]
 
 ## HTTPS
-$sslEnabled = true
+$sslEnabled = false
 $sslExcludeList = ["10.155.8.115","127.0.0.1","192.168.42.45"]
 $dropPacketsIfIPNotInSslExcludeList = false # true if the packets have to dropped when accessed over http
 
 ## The following redirects can contain either a string or an array;
 ## If it is a string, the same is used for both ProxyPass and ProxyPassReverse rules;
 ## In case of array, 1st element of the array specifies ProxyPass rule and 2nd element specifies ProxyPassReverse rule.
-$httpsRedirects = ["/nagios http://192.168.42.45/nagios",
-				   "/ananya-batch http://192.168.42.45:8081/ananya-batch",
-				   ["/jasperserver ajp://192.168.42.45:8010/jasperserver",
-					"/jasperserver http://192.168.42.45:8081/jasperserver"
-				   ]
-				  ]
+#$httpsRedirects = ["/nagios http://192.168.42.45/nagios",
+#				   "/ananya-batch http://192.168.42.45:8081/ananya-batch",
+#				   ["/jasperserver ajp://192.168.42.45:8010/jasperserver",
+#					"/jasperserver http://192.168.42.45:8081/jasperserver"
+#				   ]
+#				  ]
 
 $SSLCertificateFile = "/etc/pki/tls/certs/localhost.crt"
 $SSLCertificateKeyFile = "/etc/pki/tls/private/localhost.key"
@@ -183,8 +184,8 @@ $jasperPatches = "patch_add_export_restriction patch_turn_off_snapshot_feature" 
 ######################## JASPER CONFIG END################################################
 
 ## logrotate config
-$logRotateConfigFileName = "ananya-kilkari"
-$logFilePath = "/home/${motechUser}/apache-tomcat-7.0.22/logs/ananya-kilkari.log"
+$logRotateConfigFileName = "test-whp-mtraining"
+$logFilePath = "/home/${motechUser}/apache-tomcat-7.0.22/logs/catalina.out"
 $selinuxFileContextType = "var_log_t" ## If there are selinux restrictions for log file, provide appropriate fcontext type, else leave it empty
 
 ## GlusterFS Config - Find README in glusterfs module for details
@@ -211,13 +212,13 @@ $antVersion = "1.8.2"
 # class { activemq : version => "${activemqVersion}", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }
 # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
 # class { hostname : host_name => "${host_name}" }
-# class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName}
+class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName, httpRedirects => $httpRedirects}
 # class { tomcat : version => "${tomcatVersion}", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
 # class { jasperserver : jasperPatches => "${jasperPatches}" }
 # class { couchdblucene : version => "${couchdbLuceneVersion}" }
 # class { repmgr : postgresVersion => "${postgresVersion}", repmgrVersion => "${repmgrVersion}" }
 # class { scripts : urlOfScriptsJar => "your project scripts jar" }
-# class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}" }
+class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}", nrpe_config_path => "${nrpe_config_path}"}
 # class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
 # class { phantomjs }
 # class { maven: version => "${mavenVersion}" }
@@ -225,7 +226,8 @@ $antVersion = "1.8.2"
 
 ## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
 ## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
-# logrotate::rule { "${logRotateConfigFileName}" : path => "${logFilePath}", rotate => 30, rotate_every => "day", copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
+#include logrotate::base
+#logrotate::rule { "${logRotateConfigFileName}" : path => "${logFilePath}", rotate => 30, rotate_every => "day", copytruncate => true, dateext => true, compress => true, delaycompress => true, ifempty => false, missingok => true }
 
 ## GlusterFS setup - Find README in glusterfs module for details
 #class { "glusterfs::server" : peers => "${peer}" }
