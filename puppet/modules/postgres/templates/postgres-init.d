@@ -6,7 +6,7 @@
 # chkconfig: - 64 36
 # description: PostgreSQL database server.
 # processname: postmaster
-# pidfile: /var/run/postmaster-9.1.pid
+# pidfile: /var/run/postmaster-9.1.pid or  /var/run/postmaster-9.3.pid
 
 # This script is slightly unusual in that the name of the daemon (postmaster)
 # is not the same as the name of the subsystem (postgresql)
@@ -22,9 +22,9 @@
 
 # PGVERSION is the full package version, e.g., 9.1.0
 # Note: the specfile inserts the correct value during package build
-PGVERSION=9.1.6
+PGVERSION=<%= postgresVersion %>
 # PGMAJORVERSION is major version, e.g., 9.1 (this should match PG_VERSION)
-PGMAJORVERSION=`echo "$PGVERSION" | sed 's/^\([0-9]*\.[0-9]*\).*$/\1/'`
+PGMAJORVERSION=<%= postgresMajorVersion %>
 
 # Source function library.
 INITD=/etc/rc.d/init.d
@@ -55,10 +55,10 @@ fi
 LOCALEPARAMETER=$2
 
 # Set defaults for configuration variables
-PGENGINE=/usr/pgsql-9.1/bin
+PGENGINE=/usr/pgsql-<%= postgresMajorVersion %>/bin
 PGPORT=5432
-PGDATA=/usr/local/pgsql/data
-PGLOG=/usr/local/pgsql/data/pg_log/pgstartup.log
+PGDATA=<%= pg_data_dir %>
+PGLOG=<%= pg_log_dir %>/pgstartup.log
 
 # Override defaults from /etc/sysconfig/pgsql if file is present
 [ -f /etc/sysconfig/pgsql/${NAME} ] && . /etc/sysconfig/pgsql/${NAME}
@@ -67,7 +67,7 @@ export PGDATA
 export PGPORT
 
 lockfile="/var/lock/subsys/${NAME}"
-pidfile="/var/run/postmaster-9.1.pid"
+pidfile="/var/run/postmaster-<%= postgresMajorVersion %>.pid"
 
 [ -f "$PGENGINE/postmaster" ] || exit 1
 
@@ -235,7 +235,7 @@ case "$1" in
 	stop
 	;;
   status)
-	status -p /var/run/postmaster-9.1.pid
+	status -p /var/run/postmaster-<%= postgresMajorVersion %>.pid
 	script_result=$?
 	;;
   restart)

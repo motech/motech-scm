@@ -74,7 +74,7 @@ $postgresSlave = "127.0.0.1"
 $changeDefaultEncodingToUTF8 = false
 
 # postgres version used for repmgr as well
-$postgresVersion = "9.3"
+$postgresMajorVersion = "9.3"
 $pgPackVersion="93" ##used to ensure that postgres packs like postgresql91-contrib are present [91|93, default is 91]
 # Rep Manager version
 $repmgrVersion = "1.2.0"
@@ -207,7 +207,7 @@ $antVersion = "1.8.2"
 # class { users : userName => "${motechUser}", password => "${motechPassword}" }
 # class { keepalived : machine_type => "${machine_type}", check_services_script_path => "${check_services_script_path}", interface => "${interface}", priority => "${priority}", virtual_ipaddress => "${virtual_ipaddress}" }
 # class { couchdb : couchdbPackageName => "${couchdbPackageName}", couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}", couchDatabaseDir => "${couchDatabaseDir}", couchBindAddress => "${couchBindAddress}" }
-#class { postgres : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}", changeDefaultEncodingToUTF8 => "${changeDefaultEncodingToUTF8}" ,postgresTimeZone => "${postgresTimeZone}",pgPackVersion => "${pgPackVersion}",postgresVersion => "${postgresVersion}" }
+#class { postgres : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}", changeDefaultEncodingToUTF8 => "${changeDefaultEncodingToUTF8}" ,postgresTimeZone => "${postgresTimeZone}",pgPackVersion => "${pgPackVersion}",postgresMajorVersion => "${postgresMajorVersion}" }
 # class { databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}" }
 # class { activemq : version => "${activemqVersion}", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }
 # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
@@ -216,7 +216,7 @@ $antVersion = "1.8.2"
 # class { tomcat : version => "${tomcatVersion}", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
 # class { jasperserver : jasperPatches => "${jasperPatches}" }
 # class { couchdblucene : version => "${couchdbLuceneVersion}" }
-# class { repmgr : postgresVersion => "${postgresVersion}", repmgrVersion => "${repmgrVersion}" }
+# class { repmgr : postgresVersion => "${postgresMajorVersion}", repmgrVersion => "${repmgrVersion}" }
 # class { scripts : urlOfScriptsJar => "your project scripts jar" }
 #class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}", nrpe_config_path => "${nrpe_config_path}"}
 # class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
@@ -249,5 +249,5 @@ $antVersion = "1.8.2"
 
 ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
 # include nscd
-include backup::postgres
-include backup::couchdb
+#include backup::postgres
+#include backup::couchdb

@@ -1,14 +1,19 @@
-class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8, $postgresTimeZone = "",$pgPackVersion="91",$postgresVersion = "9.1") {
+class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8, $postgresTimeZone = "",$pgPackVersion="91",$postgresMajorVersion = "9.1") {
 
     $allPacks = [ "postgresql${pgPackVersion}", "postgresql${pgPackVersion}-server", "postgresql${pgPackVersion}-libs", "postgresql${pgPackVersion}-contrib", "postgresql${pgPackVersion}-devel"]
 
 
-    if $postgresVersion == "9.3" {
+    if $postgresMajorVersion == "9.3" {
       $rpmVersion = "9.3-1"
+      $postgresVersion = "9.3.1"
     }else{
       $rpmVersion = "9.1-4"
+      $postgresVersion = "9.1.4"
     }
 
+    $pg_dir = "/usr/local/pgsql-${postgresMajorVersion}"
+    $pg_data_dir = "${pg_dir}/data"
+    $pg_log_dir = "${pg_data_dir}/pg_log/"
 
     file{"/tmp/postgres-repo.rpm" :
         ensure      => present,
@@ -38,7 +43,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         managehome => true,
     }
 
-    file { "/etc/init.d/postgresql-${postgresVersion}" :
+    file { "/etc/init.d/postgresql-${$postgresMajorVersion}" :
             ensure      => present,
             content     => template("postgres/postgres-init.d"),
             mode        =>  777,
@@ -48,34 +53,45 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     }
 
 
-    file { "/usr/local/pgsql/" :
+    file { "${pg_dir}" :
         ensure      => "directory",
         owner       => "${postgresUser}",
     }
 
-    file { "/usr/local/pgsql/data":
+    file { "${pg_data_dir}":
         ensure      => "directory",
-        require     => File["/usr/local/pgsql/"],
+        require     => File["${pg_dir}"],
         owner       => "${postgresUser}",
+    }
+
+    file { "${pg_log_dir}":
+       ensure  => "directory",
+       owner       => "${postgresUser}",
+      require     => File["${pg_data_dir}"],
     }
 
     exec { "initdb":
-        command     => "/usr/pgsql-${postgresVersion}/bin/initdb -D /usr/local/pgsql/data",
+        command     => "/usr/pgsql-${$postgresMajorVersion}/bin/initdb -D ${pg_data_dir}",
         user        => "${postgresUser}",
-        require     => [File["/usr/local/pgsql/data"], Package["postgres_packs"]],
+        require     => [File["${pg_data_dir}"], Package["postgres_packs"]],
         provider    => "shell",
-        onlyif      => "test ! -f /usr/local/pgsql/data/PG_VERSION",
+        onlyif      => "test ! -f ${pg_data_dir}/PG_VERSION",
     }
 
-    exec { "start-server":
-        command     => "/usr/pgsql-${postgresVersion}/bin/postgres -D /usr/local/pgsql/data &",
-        user        => "${postgresUser}",
-        require     => [Exec["initdb"], Exec["add_to_path"]],
+#    exec { "start-server":
+#        command     => "/usr/pgsql-${$postgresMajorVersion}/bin/postgres -D ${pg_data_dir} &",
+#        user        => "${postgresUser}",
+#        require     => [Exec["initdb"], Exec["add_to_path"]],
+#    }
+
+    service { "postgresql":
+      ensure      => running,
+      require     => [Exec["initdb"], Exec["add_to_path"]],
     }
 
     if $changeDefaultEncodingToUTF8 == "true" {
         exec { "postgres-utf8-encoding":
-            command     => "/usr/pgsql-${postgresVersion}/bin/psql -U ${postgresUser} < /tmp/postgres-utf8-encoding.sql",
+            command     => "/usr/pgsql-${$postgresMajorVersion}/bin/psql -U ${postgresUser} < /tmp/postgres-utf8-encoding.sql",
             user        => "${motechUser}",
             require     => File["/tmp/postgres-utf8-encoding.sql"]
         }
@@ -91,18 +107,18 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
 
     file { "/etc/init.d/postgresql":
         ensure      => "link",
-        target      => "/etc/init.d/postgresql-${postgresVersion}",
+        target      => "/etc/init.d/postgresql-${$postgresMajorVersion}",
     }
 
     exec{"backup_conf":
-        cwd         => "/usr/local/pgsql/data/",
+        cwd         => "${pg_data_dir}",
         command     => "mv postgresql.conf postgresql.conf.backup && mv pg_hba.conf pg_hba.conf.backup",
         user        => "${postgresUser}",
-        require     => Exec["start-server"],
+        require     => Service["postgresql"],
     }
 
     exec{"add_to_path":
-        command     => "echo \"export PATH=\$PATH:/usr/pgsql-${postgresVersion}/bin/\" > /etc/profile.d/repmgr.sh && source /etc/profile.d/repmgr.sh",
+        command     => "echo \"export PATH=\$PATH:/usr/pgsql-${$postgresMajorVersion}/bin/\" > /etc/profile.d/repmgr.sh && source /etc/profile.d/repmgr.sh",
         require     => Package["postgres_packs"],
         onlyif      => "test ! -f  /etc/profile.d/repmgr.sh",
     }
@@ -110,7 +126,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
     case $postgresMachine {
 
         master:{
-            file {"/usr/local/pgsql/data/pg_hba.conf":
+            file {"${pg_data_dir}/pg_hba.conf":
                 content     => template("postgres/master_pg_hba.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
@@ -118,7 +134,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
                 require     => Exec["backup_conf"],
             }
 
-            file {"/usr/local/pgsql/data/postgresql.conf":
+            file {"${pg_data_dir}/postgresql.conf":
                 content     => template("postgres/master_postgresql.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
@@ -128,7 +144,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         }
 
         slave:{
-            file {"/usr/local/pgsql/data/pg_hba.conf":
+            file {"${pg_data_dir}/pg_hba.conf":
                 content     => template("postgres/slave_pg_hba.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
@@ -136,7 +152,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
                 require     => Exec["backup_conf"],
             }
 
-            file {"/usr/local/pgsql/data/postgresql.conf":
+            file {"${pg_data_dir}/postgresql.conf":
                 content     => template("postgres/slave_postgresql.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
@@ -144,7 +160,7 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
                 require     => Exec["backup_conf"],
             }
             
-            file {"/usr/local/pgsql/data/recovery.conf":
+            file {"${pg_data_dir}/recovery.conf":
                 content     => template("postgres/slave_recovery.erb"),
                 owner       => "${postgresUser}",
                 group       => "${postgresUser}",
