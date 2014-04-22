@@ -212,13 +212,13 @@ $antVersion = "1.8.2"
 # class { activemq : version => "${activemqVersion}", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }
 # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
 # class { hostname : host_name => "${host_name}" }
-class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName, httpRedirects => $httpRedirects}
+#class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName, httpRedirects => $httpRedirects}
 # class { tomcat : version => "${tomcatVersion}", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
 # class { jasperserver : jasperPatches => "${jasperPatches}" }
 # class { couchdblucene : version => "${couchdbLuceneVersion}" }
 # class { repmgr : postgresVersion => "${postgresVersion}", repmgrVersion => "${repmgrVersion}" }
 # class { scripts : urlOfScriptsJar => "your project scripts jar" }
-class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}", nrpe_config_path => "${nrpe_config_path}"}
+#class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_path => "${nagios_objects_path}", nagios_plugins_path => "${nagios_plugins_path}", host_file_path => "${host_file_path}", nrpe_config_path => "${nrpe_config_path}"}
 # class { faketime : javaHome => "path/to/java/home" , sunBootLibraryPath => "sun.boot.library.path"}
 # class { phantomjs }
 # class { maven: version => "${mavenVersion}" }
@@ -249,3 +249,5 @@ class { nagios : nagios_config_url => "${nagios_config_url}", nagios_objects_pat
 
 ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
 # include nscd
+include backup::postgres
+include backup::couchdb

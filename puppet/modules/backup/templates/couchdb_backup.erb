@@ -1,0 +1,25 @@
+#!/bin/sh
+
+DATA_DIR=<%= couchDataDir %>
+CONF_DIR=<%= couchConfDir %>
+LOG_DIR=<%= couchLogDir %>
+
+COUCH_BACKUP_DIR=/home/backups/couchdb
+
+cd $COUCH_BACKUP_DIR
+
+CURRENT_TIME=`date +%Y-%m-%d-%H-%M`
+BACKUP_TO=$CURRENT_TIME
+
+# make a directory with current time
+mkdir -p $BACKUP_TO/data
+mkdir -p $BACKUP_TO/conf
+mkdir -p $BACKUP_TO/log
+
+cp -r $DATA_DIR/** $BACKUP_TO/data
+cp -r $CONF_DIR/** $BACKUP_TO/conf
+cp -r $LOG_DIR/** $BACKUP_TO/log
+
+tar -zcf couchdb-backup-$CURRENT_TIME.tar.gz $BACKUP_TO
+
+rm -rf $BACKUP_TO

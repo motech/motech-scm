@@ -308,7 +308,7 @@ log_rotation_size = 0			# Automatic rotation of logfiles will
 
 
 <% if !postgresTimeZone.nil? &&  !postgresTimeZone.empty? %>
-timezone = <%= serverName %>
+timezone = <%= postgresTimeZone %>
 <% end %>
 
 # These are relevant when logging to syslog:

@@ -1,0 +1,29 @@
+#!/bin/sh
+
+USER=$1
+DATABASE=$2
+
+PG_BACKUP_DIR=/home/backups/postgres
+
+
+cd $PG_BACKUP_DIR
+
+CURRENT_TIME=`date +%Y-%m-%d-%H-%M`
+BACKUP_FILE=$DATABASE-$CURRENT_TIME
+
+# make a directory with current time
+pg_dump -o -U $USER -d $DATABASE > $BACKUP_FILE.sql
+
+PG_DUMP_RESULT=$?
+
+tar -zcf $BACKUP_FILE.tar.gz $BACKUP_FILE.sql
+
+CRON_RESULT_FILE=$PG_BACKUP_DIR/status.txt
+
+if [ $PG_DUMP_RESULT == 0 ];
+then
+    echo "OK" > $CRON_RESULT_FILE
+    rm -rf $BACKUP_FILE.sql
+else
+    echo "ERROR" > $CRON_RESULT_FILE
+fi
