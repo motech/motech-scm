@@ -51,7 +51,7 @@ class couchdblucene ($version) {
 
     replace { "append_http_global_handlers":
         file => "/etc/couchdb/local.ini",
-        pattern => "\[httpd_global_handlers\]",
+        pattern => '\[httpd_global_handlers\]',
         replacement => '\[httpd_global_handlers\] \n_fti = {couch_httpd_proxy, handle_proxy_req, <<"http:\/\/127.0.0.1:5985">>} ',
     }
 
@@ -77,10 +77,9 @@ class couchdblucene ($version) {
         require => Exec["install_couchdb_lucene_service"]
     }
 
-    service { "couchdb-lucene":
-        ensure     => running,
-        path       => "/home/${motechUser}/couchdb-lucene/bin/run",
-        enable     => true,
+    exec { "start_couchdb-lucene" :
+        command     => "service couchdb-lucene start",
+        user        => "root",
         require    => Exec["restart_couchdb"],
     }
 }
