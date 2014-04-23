@@ -52,7 +52,7 @@ $couchdbSecondaryIp = "192.168.42.52"
 ## Set requireCouchAuth true only if you want to disable unauhenticated access.
 $couchdbUser = "user"
 $couchdbPassword = "password"
-$requireCouchAuth = "false
+$requireCouchAuth = "false"
 
 ## CouchDb-Lucene
 $couchDbURL = "http://localhost:5984/"
