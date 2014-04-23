@@ -48,6 +48,12 @@ $couchdbClusterPort = 8181
 $couchdbPrimaryIp = "192.168.42.51"
 $couchdbSecondaryIp = "192.168.42.52"
 
+## CouchDB Authentication setup. Add an unencrpted password here or a couchdb pre-hashed password in the form '-hashed-439caa2d8d8240e6bb089e4d2fab5d706575fbe6,acd17db4ae20583a376a1f8086f0841f'
+## Set requireCouchAuth true only if you want to disable unauhenticated access.
+$couchdbUser = "user"
+$couchdbPassword = "password"
+$requireCouchAuth = "false
+
 ## CouchDb-Lucene
 $couchDbURL = "http://localhost:5984/"
 $couchdbLuceneVersion = "0.9.0-SNAPSHOT"
@@ -206,7 +212,7 @@ $antVersion = "1.8.2"
 
 # class { users : userName => "${motechUser}", password => "${motechPassword}" }
 # class { keepalived : machine_type => "${machine_type}", check_services_script_path => "${check_services_script_path}", interface => "${interface}", priority => "${priority}", virtual_ipaddress => "${virtual_ipaddress}" }
-# class { couchdb : couchdbPackageName => "${couchdbPackageName}", couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}", couchDatabaseDir => "${couchDatabaseDir}", couchBindAddress => "${couchBindAddress}" }
+# class { couchdb : couchdbPackageName => "${couchdbPackageName}", couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}", couchDatabaseDir => "${couchDatabaseDir}", couchBindAddress => "${couchBindAddress}", couchdbUser =>"${couchdbUser}", couchdbPassword => "${couchdbPassword}", requireAuth => "${requireCouchAuth}" }
 #class { postgres : postgresUser => "${postgresUser}", postgresPassword => "${postgresPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}", changeDefaultEncodingToUTF8 => "${changeDefaultEncodingToUTF8}" ,postgresTimeZone => "${postgresTimeZone}",pgPackVersion => "${pgPackVersion}",postgresMajorVersion => "${postgresMajorVersion}" }
 # class { databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}" }
 # class { activemq : version => "${activemqVersion}", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }

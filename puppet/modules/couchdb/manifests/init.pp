@@ -1,4 +1,4 @@
-class couchdb  ($couchdbPackageName, $couchReplicationSourceMachine, $couchDbs, $couchInstallationMode, $couchVersion, $couchDatabaseDir, $couchBindAddress) {
+class couchdb  ($couchdbPackageName, $couchReplicationSourceMachine, $couchDbs, $couchInstallationMode, $couchVersion, $couchDatabaseDir, $couchBindAddress, $couchdbUser, $couchdbPassword, $requireAuth) {
     include repos::epel
     include repos::motech
 
@@ -64,6 +64,14 @@ class couchdb  ($couchdbPackageName, $couchReplicationSourceMachine, $couchDbs, 
         file {"/etc/couchdb/default.ini" :
             require     => Package["${couchdbPackageName}"],
             content     => template("couchdb/default.ini.erb"),
+            owner       => "couchdb",
+        }
+    }
+
+      if $couchVersion >= "1.2.0-7.el6" {
+        file {"/etc/couchdb/local.ini" :
+            require     => Package["${couchdbPackageName}"],
+            content     => template("couchdb/local.ini.erb"),
             owner       => "couchdb",
         }
     }
