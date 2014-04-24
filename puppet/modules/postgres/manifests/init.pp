@@ -1,4 +1,4 @@
-class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8, $postgresTimeZone = "",$pgPackVersion="91",$postgresMajorVersion = "9.1") {
+class postgres ( $postgresUser, $postgresUserPassword, $postgresDBPassword, $postgresMachine, $postgresMaster, $postgresSlave, $os, $wordsize, $changeDefaultEncodingToUTF8, $postgresTimeZone = "",$pgPackVersion="91",$postgresMajorVersion = "9.1") {
 
     $allPacks = [ "postgresql${pgPackVersion}", "postgresql${pgPackVersion}-server", "postgresql${pgPackVersion}-libs", "postgresql${pgPackVersion}-contrib", "postgresql${pgPackVersion}-devel"]
 
@@ -38,8 +38,9 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         ensure      => present,
         shell       => "/bin/bash",
         home        => "/home/$postgresUser",
-        password    => $postgresPassword,
+        password    => $postgresUserPassword,
         require     => Exec["run_postgres_repo"],
+        groups      => ["wheel"],
         managehome => true,
     }
 
@@ -64,12 +65,6 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         owner       => "${postgresUser}",
     }
 
-    file { "${pg_log_dir}":
-       ensure  => "directory",
-       owner       => "${postgresUser}",
-      require     => File["${pg_data_dir}"],
-    }
-
     exec { "initdb":
         command     => "/usr/pgsql-${$postgresMajorVersion}/bin/initdb -D ${pg_data_dir}",
         user        => "${postgresUser}",
@@ -78,15 +73,15 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         onlyif      => "test ! -f ${pg_data_dir}/PG_VERSION",
     }
 
-#    exec { "start-server":
-#        command     => "/usr/pgsql-${$postgresMajorVersion}/bin/postgres -D ${pg_data_dir} &",
-#        user        => "${postgresUser}",
-#        require     => [Exec["initdb"], Exec["add_to_path"]],
-#    }
+    file { "${pg_log_dir}":
+       ensure  => "directory",
+       owner       => "${postgresUser}",
+      require     => Exec["initdb"],
+    }
 
     service { "postgresql":
       ensure      => running,
-      require     => [Exec["initdb"], Exec["add_to_path"]],
+      require     => [Exec["initdb"], Exec["add_to_path"], File["/etc/init.d/postgresql"]],
     }
 
     if $changeDefaultEncodingToUTF8 == "true" {
@@ -121,6 +116,12 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
         command     => "echo \"export PATH=\$PATH:/usr/pgsql-${$postgresMajorVersion}/bin/\" > /etc/profile.d/repmgr.sh && source /etc/profile.d/repmgr.sh",
         require     => Package["postgres_packs"],
         onlyif      => "test ! -f  /etc/profile.d/repmgr.sh",
+    }
+
+    exec{"alter_user_password":
+        command     => "psql -c \"ALTER ROLE ${postgresUser} with PASSWORD '${postgresDBPassword}'\" --username=${postgresUser} --dbname=postgres",
+        user        => "${postgresUser}",
+        require     => [Exec["initdb"], Exec["add_to_path"], Service["postgresql"]],
     }
 
     case $postgresMachine {
@@ -169,4 +170,11 @@ class postgres ( $postgresUser, $postgresPassword, $postgresMachine, $postgresMa
             }
         }
     }
+
+    exec{"restart_server":
+            command     => "service postgresql restart",
+            require     => [File["${pg_data_dir}/pg_hba.conf"],File["${pg_data_dir}/postgresql.conf"]],
+        }
+
+
 }

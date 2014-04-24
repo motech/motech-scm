@@ -82,7 +82,7 @@ start(){
 	if [ ! -e "$PGLOG" -a ! -h "$PGLOG" ]
 	then
 		touch "$PGLOG" || exit 1
-		chown postgres:postgres "$PGLOG"
+		chown <%= postgresUser %>:postgres "$PGLOG"
 		chmod go-rwx "$PGLOG"
 		[ -x /sbin/restorecon ] && /sbin/restorecon "$PGLOG"
 	fi
@@ -128,7 +128,7 @@ start(){
  	fi
 
 	echo -n "$PSQL_START"
-	$SU -l postgres -c "$PGENGINE/postmaster -p '$PGPORT' -D '$PGDATA' ${PGOPTS} &" >> "$PGLOG" 2>&1 < /dev/null
+	$SU -l <%= postgresUser %> -c "$PGENGINE/postmaster -p '$PGPORT' -D '$PGDATA' ${PGOPTS} &" >> "$PGLOG" 2>&1 < /dev/null
 	sleep 2
 	pid=`head -n 1 "$PGDATA/postmaster.pid" 2>/dev/null`
 	if [ "x$pid" != x ]
@@ -148,7 +148,7 @@ stop(){
 	echo -n $"Stopping ${NAME} service: "
 	if [ -e "$lockfile" ]
 	then
-		$SU -l postgres -c "$PGENGINE/pg_ctl stop -D '$PGDATA' -s -m fast" > /dev/null 2>&1 < /dev/null
+		$SU -l <%= postgresUser %> -c "$PGENGINE/pg_ctl stop -D '$PGDATA' -s -m fast" > /dev/null 2>&1 < /dev/null
 		ret=$?
 		if [ $ret -eq 0 ]
 		then
@@ -190,7 +190,7 @@ initdb(){
 			if [ ! -e "$PGDATA" -a ! -h "$PGDATA" ]
 			then
 				mkdir -p "$PGDATA" || exit 1
-				chown postgres:postgres "$PGDATA"
+				chown <%= postgresUser %>:postgres "$PGDATA"
 				chmod go-rwx "$PGDATA"
 			fi
 			# Clean up SELinux tagging for PGDATA
@@ -200,17 +200,17 @@ initdb(){
 			if [ ! -e "$PGLOG" -a ! -h "$PGLOG" ]
 			then
 				touch "$PGLOG" || exit 1
-				chown postgres:postgres "$PGLOG"
+				chown <%= postgresUser %>:postgres "$PGLOG"
 				chmod go-rwx "$PGLOG"
 				[ -x /sbin/restorecon ] && /sbin/restorecon "$PGLOG"
 			fi
 
 			# Initialize the database
-			$SU -l postgres -c "$PGENGINE/initdb --pgdata='$PGDATA' --auth='ident' $LOCALESTRING" >> "$PGLOG" 2>&1 < /dev/null
+			$SU -l <%= postgresUser %> -c "$PGENGINE/initdb --pgdata='$PGDATA' --auth='ident' $LOCALESTRING" >> "$PGLOG" 2>&1 < /dev/null
 
 			# Create directory for postmaster log
 			mkdir "$PGDATA/pg_log"
-			chown postgres:postgres "$PGDATA/pg_log"
+			chown <%= postgresUser %>:postgres "$PGDATA/pg_log"
 			chmod go-rwx "$PGDATA/pg_log"
 
 			[ -f "$PGDATA/PG_VERSION" ] && echo_success
@@ -223,7 +223,7 @@ condrestart(){
 }
 
 reload(){
-    $SU -l postgres -c "$PGENGINE/pg_ctl reload -D '$PGDATA' -s" > /dev/null 2>&1 < /dev/null
+    $SU -l <%= postgresUser %> -c "$PGENGINE/pg_ctl reload -D '$PGDATA' -s" > /dev/null 2>&1 < /dev/null
 }
 
 # See how we were called.
