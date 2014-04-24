@@ -59,25 +59,31 @@
     file { "/etc/nagios/objects/":
       source    => "/tmp/nagios_package/${nagios_objects_path}",
       recurse   => true,
+      owner =>     "nagios",
+      group =>     "nagios",
       purge     => true,
       require   => Exec["unjar_nagios_package"]
     }
 
     file { "/etc/nagios/objects/hosts.cfg":
       source    => "/tmp/nagios_package/${host_file_path}",
+      owner =>     "nagios",
+      group =>     "nagios",
       require   => [File["/etc/nagios/objects/"],File["/etc/nagios/nagios.cfg"]]
     }
 
     file { "/etc/nagios/nrpe.cfg":
       source    => "/tmp/nagios_package/${nrpe_config_path}",
+      owner =>     "nagios",
+      group =>     "nagios",
       require   => File["/etc/nagios/objects/"]
     }
 
     file { "/etc/nagios/nagios.cfg":
       source    => "puppet:///modules/nagios/nagios.conf",
       require   => File["/etc/nagios/objects/"],
-      owner => root,
-      group => root,
+      owner =>     "nagios",
+      group =>     "nagios",
     }
 
     file { "/usr/lib64/nagios/plugins/":
@@ -101,8 +107,8 @@
     file { "/etc/nagios/private/resource.cfg":
       source    => "puppet:///modules/nagios/private/resource.cfg",
       ensure    => present,
-      owner => root,
-      group => root,
+      owner =>     "nagios",
+      group =>     "nagios",
       require   => File["/etc/nagios/nagios.cfg"],
     }
 
@@ -124,7 +130,6 @@
       command => "sed -i 's/^cfg_file\s*=.*$//g' /etc/nagios/nagios.cfg ; find /etc/nagios/objects -name \\*cfg | sed 's/\\(.*\\)/cfg_file=\\1/g' >> /etc/nagios/nagios.cfg",
       require => File["/etc/nagios/nagios.cfg"]
     }
-
 
     service { "nagios":
         ensure  => running,

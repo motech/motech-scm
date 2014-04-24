@@ -2,6 +2,7 @@ class couchdblucene ($version) {
 
    exec { "get_couchdb_lucene_tar" :
         command     => "/usr/bin/wget -O /tmp/couchdb-lucene.tar.gz http://motechrepo.github.com/pub/motech/other/couchdb-lucene-${version}-dist.tar.gz",
+        user        => "${motechUser}",
         timeout     => 0,
         provider    => "shell",
         onlyif      => "test ! -f /tmp/couchdb-lucene.tar.gz"
