@@ -73,7 +73,7 @@ $postgresUser = "postgres"
 ## $motechPassword = '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
 ## **************************************************************************************
 
-$postgresUserPassword = '$1$/WTQQ4qA$Fm1lcqR0gnWBzGVK01QnV/'
+$postgresUserPassword = '$1$PVBSWp2F$NqIMInkmxh2b9hN7cNgwb1'
 
 
 ## **************************************************************************************
@@ -87,13 +87,26 @@ $postgresUserPassword = '$1$/WTQQ4qA$Fm1lcqR0gnWBzGVK01QnV/'
 ## Please ensure md5 encrypted password is preceded by 'md5'
 ## **************************************************************************************
 
-$postgresDBPassword = 'md527409069534d6fdd565efd2a7738b209'
+$postgresDBPassword = 'md532e12f215ba27cb750c9e093ce4b5127'
 
 $postgresTimeZone = "UTC"
 $postgresMachine = "master" ## [master | slave]
 $postgresMaster = "127.0.0.1"
 $postgresSlave = "127.0.0.1"
 $changeDefaultEncodingToUTF8 = false
+## ***************************************************************************************
+## After setting up postgresql on both master and slave, the following command is needed to be executed on the master.
+##
+##      psql --username=$POSTGRES_SYSTEM_USER -c "select pg_start_backup('backup_start');"
+##      rsync -cva --inplace --exclude=*.conf --exclude=*pg_xlog* $MASTER_DATA_FOLDER $SLAVE_POSTGRES_SYSTEM_USER@$SLAVE_IP_ADDRESS:$SLAVE_DATA_FOLDER
+##      psql --username=$POSTGRES_SYSTEM_USER -c "select pg_stop_backup();"
+##
+## ****************************************************************************************
+##      Also add the password in the $SLAVE_DATA_FOLDER/recovery.conf in the line :
+##
+##         primary_conninfo = 'host=master_IP_address port=5432 user=user password=yourpassword'
+##
+
 
 # postgres version used for repmgr as well
 $postgresMajorVersion = "9.3"
