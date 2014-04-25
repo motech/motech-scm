@@ -114,7 +114,6 @@
 
     file { "/etc/nagios/passwd":
       source    => "puppet:///modules/nagios/httpd/nagios.users",
-      require   => File["/etc/nagios/"],
       owner => root,
       group => root,
       ensure    => present
