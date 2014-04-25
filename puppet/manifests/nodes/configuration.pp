@@ -60,7 +60,7 @@ $couchdbLuceneVersion = "0.9.0-SNAPSHOT"
 
 ## Postgres
 
-$postgresUser = "siddharth"
+$postgresUser = "postgres"
 
 ## **************************************************************************************
 ## To generate password hash use [[echo "password" | openssl passwd -1 -stdin] OR [echo "password" | openssl passwd -1 -stdin | sed 's/\$/\\\$/g']]
@@ -229,12 +229,12 @@ $antVersion = "1.8.2"
 # class { users : userName => "${motechUser}", password => "${motechPassword}" }
 # class { keepalived : machine_type => "${machine_type}", check_services_script_path => "${check_services_script_path}", interface => "${interface}", priority => "${priority}", virtual_ipaddress => "${virtual_ipaddress}" }
 # class { couchdb : couchdbPackageName => "${couchdbPackageName}", couchReplicationSourceMachine => "${couchReplicationSourceMachine}", couchDbs => "${couchDbs}", couchInstallationMode => "${couchInstallationMode}", couchVersion => "${couchVersion}", couchDatabaseDir => "${couchDatabaseDir}", couchBindAddress => "${couchBindAddress}", couchdbUser =>"${couchdbUser}", couchdbPassword => "${couchdbPassword}", requireAuth => "${requireCouchAuth}" }
-class { postgres : postgresUser => "${postgresUser}", postgresUserPassword => "${postgresUserPassword}", postgresDBPassword => "${postgresDBPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}", changeDefaultEncodingToUTF8 => "${changeDefaultEncodingToUTF8}" ,postgresTimeZone => "${postgresTimeZone}",pgPackVersion => "${pgPackVersion}",postgresMajorVersion => "${postgresMajorVersion}" }
+# class { postgres : postgresUser => "${postgresUser}", postgresUserPassword => "${postgresUserPassword}", postgresDBPassword => "${postgresDBPassword}", postgresMachine => "${postgresMachine}", postgresMaster => "${postgresMaster}", postgresSlave => "${postgresSlave}", os => "${os}", wordsize => "${word}", changeDefaultEncodingToUTF8 => "${changeDefaultEncodingToUTF8}" ,postgresTimeZone => "${postgresTimeZone}",pgPackVersion => "${pgPackVersion}",postgresMajorVersion => "${postgresMajorVersion}" }
 # class { databackup : couchDbBackupLink => "${couchDbBackupLink}", postgresBackupLink => "${postgresBackupLink}", dataBackupDir => "${dataBackupDir}", machineType => "${machineType}" }
 # class { activemq : version => "${activemqVersion}", activemqMachine => "${activemqMachine}", activemqMasterHost => "${activemqMasterHost}", activemqMasterPort => "${activemqMasterPort}", activemqDataDir => "${activemqDataDir}", memoryLimit => "${activemqMemoryLimit}" }
 # class { iptables : admin_access_ips => "${admin_access_ips}", ssh_allowed_ips => "${ssh_allowed_ips}", tcp_ports_open => "${tcp_ports_open}", ssh_port => "${ssh_port}" }
 # class { hostname : host_name => "${host_name}" }
-#class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName, httpRedirects => $httpRedirects}
+# class { httpd : sslEnabled => $sslEnabled, sslCertificateFile => "${SSLCertificateFile}", sslCertificateKeyFile => "${SSLCertificateKeyFile}", sslCertificateChainFile => $sslCertificateChainFile, sslCACertificateFile => $sslCACertificateFile, serverName => $serverName, httpRedirects => $httpRedirects}
 # class { tomcat : version => "${tomcatVersion}", userName => "${motechUser}", tomcatManagerUserName => "${tomcatManagerUserName}", tomcatManagerPassword => "${tomcatManagerPassword}", tomcatInstance => "${tomcatInstance}", tomcatHttpPort => "${tomcatHttpPort}", tomcatRedirectPort => "${tomcatRedirectPort}", tomcatShutdownPort => "${tomcatShutdownPort}", tomcatAjpPort => "${tomcatAjpPort}" }
 # class { jasperserver : jasperPatches => "${jasperPatches}" }
 # class { couchdblucene : version => "${couchdbLuceneVersion}" }
@@ -245,6 +245,7 @@ class { postgres : postgresUser => "${postgresUser}", postgresUserPassword => "$
 # class { phantomjs }
 # class { maven: version => "${mavenVersion}" }
 # class { ant: version => "${antVersion}" }
+# class {java7 : motechUser => "${motechUser}", arch => "x64"}
 
 ## Sample logrotate class declaration. For all possible arguments, look at rule.pp of logrotate module.
 ## logrotate timing for a day is based on the cron job defined in /etc/crontab or /etc/anacrontab.
