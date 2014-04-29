@@ -121,6 +121,7 @@ class postgres ( $postgresUser, $postgresUserPassword, $postgresDBPassword, $pos
         command     => "psql -c \"ALTER ROLE ${postgresUser} with PASSWORD '${postgresDBPassword}'\" --username=${postgresUser} --dbname=postgres",
         user        => "${postgresUser}",
         require     => [Exec["initdb"], Exec["add_to_path"], Service["postgresql"]],
+        onlyif      => "psql -c "" -w",
     }
 
     case $postgresMachine {

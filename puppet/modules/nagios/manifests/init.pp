@@ -114,8 +114,8 @@
 
     file { "/etc/nagios/users":
       source    => "puppet:///modules/nagios/httpd/nagios.users",
-      owner => root,
-      group => root,
+      owner => nagios,
+      group => nagios,
       ensure    => present
     }
 
