@@ -28,6 +28,11 @@ class postgres ( $postgresUser, $postgresUserPassword, $postgresDBPassword, $pos
         onlyif      => "test `rpm -qa postgres | wc -l` -eq 0",
     }
 
+    file{"/tmp/create_monitoring_user.sql" :
+        ensure  => present,
+        source  => "puppet:///modules/postgres/CreateMonitoringUser.sql",
+    }
+
     package { "postgres_packs" :
         name        => $allPacks,
         ensure      => "present",
@@ -104,6 +109,15 @@ class postgres ( $postgresUser, $postgresUserPassword, $postgresDBPassword, $pos
         target      => "/etc/init.d/postgresql-${$postgresMajorVersion}",
     }
 
+
+    exec{"create_monitoring_user":
+       command  => "psql < /tmp/create_monitoring_user.sql",
+       user     => "${postgresUser}",
+       require     => [Exec["initdb"], Exec["add_to_path"], Service["postgresql"], File["/tmp/create_monitoring_user.sql"]],
+       onlyif      => "psql -w &> /dev/null",
+       }
+
+
     exec{"backup_conf":
         cwd         => "${pg_data_dir}",
         command     => "mv postgresql.conf postgresql.conf.backup && mv pg_hba.conf pg_hba.conf.backup",
@@ -120,8 +134,8 @@ class postgres ( $postgresUser, $postgresUserPassword, $postgresDBPassword, $pos
     exec{"alter_user_password":
         command     => "psql -c \"ALTER ROLE ${postgresUser} with PASSWORD '${postgresDBPassword}'\" --username=${postgresUser} --dbname=postgres",
         user        => "${postgresUser}",
-        require     => [Exec["initdb"], Exec["add_to_path"], Service["postgresql"]],
-        onlyif      => "psql -c "" -w",
+        require     => [Exec["initdb"], Exec["add_to_path"], Service["postgresql"], Exec["create_monitoring_user"]],
+        onlyif      => "psql -w &> /dev/null",
     }
 
     case $postgresMachine {
