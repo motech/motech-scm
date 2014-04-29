@@ -100,7 +100,7 @@
       ensure    => present,
       owner => root,
       group => root,
-      require   => File["/etc/nagios/passwd"],
+      require   => File["/etc/nagios/users"],
       notify    => Service["httpd"]
     }
 
@@ -112,7 +112,7 @@
       require   => File["/etc/nagios/nagios.cfg"],
     }
 
-    file { "/etc/nagios/passwd":
+    file { "/etc/nagios/users":
       source    => "puppet:///modules/nagios/httpd/nagios.users",
       owner => root,
       group => root,
