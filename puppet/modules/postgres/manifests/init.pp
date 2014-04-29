@@ -40,7 +40,6 @@ class postgres ( $postgresUser, $postgresUserPassword, $postgresDBPassword, $pos
         home        => "/home/$postgresUser",
         password    => $postgresUserPassword,
         require     => Exec["run_postgres_repo"],
-        group      => "${postgresUser}",
         managehome => true,
     }
 
