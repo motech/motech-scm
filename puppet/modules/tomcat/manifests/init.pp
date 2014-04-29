@@ -19,11 +19,19 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "", $tomcatManagerP
 
     $moveAfterExtractCommand = "mv apache-tomcat-${version} ${tomcatInstallationDirectory}"
 
+    exec { "move_tomcat":
+       command =>  "mv apache-tomcat-${version} ${tomcatInstallationDirectory}",
+       user        => "${userName}",
+       cwd         => "/tmp/",
+       creates     => "$tomcatInstallationDirectory",
+       path        => ["/bin"],
+       require     =>  Exec["tomcat_untar"]
+    }
+
     exec { "tomcat_untar":
-        command     => "tar xfz /tmp/apache-tomcat-${version}.tar.gz; $moveAfterExtractCommand",
+        command     => "tar -zxf /tmp/apache-tomcat-${version}.tar.gz",
         user        => "${userName}",
         cwd         => "/tmp/",
-        creates     => "$tomcatInstallationDirectory",
         path        => ["/bin"],
         require     => [Exec["$userName homedir"], Exec["gettomcattarfile"]],
         provider    => "shell",
@@ -35,7 +43,7 @@ class tomcat ( $version, $userName, $tomcatManagerUserName = "", $tomcatManagerP
         mode        => 777,
         group       => "root",
         owner       => "root",
-        require     => Exec["tomcat_untar"],
+        require     => Exec["move_tomcat"],
     }
 
     file { "$tomcatInstallationDirectory/conf/server.xml" :
