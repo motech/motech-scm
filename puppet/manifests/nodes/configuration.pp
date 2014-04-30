@@ -41,12 +41,13 @@ $couchDatabaseDir = "/var/lib/couchdb"
 $couchInstallationMode = "standalone" ## [standalone | withReplication]
 $couchReplicationSourceMachine = "127.0.0.1"
 $couchBindAddress = "127.0.0.1"
-$couchDbs = "tama-web ananya"
+$couchDbs = "tama-web ananya" #Space separated values
 
 $couchdbClusteringEnabled = false
 $couchdbClusterPort = 8181
 $couchdbPrimaryIp = "192.168.42.51"
 $couchdbSecondaryIp = "192.168.42.52"
+
 
 ## CouchDB Authentication setup. Add an unencrpted password here or a couchdb pre-hashed password in the form '-hashed-439caa2d8d8240e6bb089e4d2fab5d706575fbe6,acd17db4ae20583a376a1f8086f0841f'
 ## Set requireCouchAuth true only if you want to disable unauhenticated access.
@@ -62,6 +63,7 @@ $couchdbLuceneVersion = "0.9.0-SNAPSHOT"
 
 $postgresUser = "postgres"
 
+
 ## **************************************************************************************
 ## To generate password hash use [[echo "password" | openssl passwd -1 -stdin] OR [echo "password" | openssl passwd -1 -stdin | sed 's/\$/\\\$/g']]
 ## **************************************************************************************
@@ -73,11 +75,13 @@ $postgresUser = "postgres"
 ## $motechPassword = '$1$IW4OvlrH$Kui/55oif8W3VZIrnX6jL1'
 ## **************************************************************************************
 
-$postgresUserPassword = '$1$PVBSWp2F$NqIMInkmxh2b9hN7cNgwb1'
+$postgresUserPassword = '$1$PVBSWp2F$NqIMInkmxh2b9hN7cNgwb1'  ##Check above for instructions
+
 
 
 ## **************************************************************************************
 ## You may give an md5-encrypted or unencrypted password here.
+## You may put in something like 'md5fjdahfdsjhfhjdsgfjdgsjhfdsf' or 'password' here.
 ## To generate md5 password, run the following on tour terminal.
 ##
 ## USER=...
@@ -87,13 +91,13 @@ $postgresUserPassword = '$1$PVBSWp2F$NqIMInkmxh2b9hN7cNgwb1'
 ## Please ensure md5 encrypted password is preceded by 'md5'
 ## **************************************************************************************
 
-$postgresDBPassword = 'md532e12f215ba27cb750c9e093ce4b5127'
+$postgresDBPassword = 'md532e12f215ba27cb750c9e093ce4b5127' #Check above for instructions
 
 $postgresTimeZone = "UTC"
 $postgresMachine = "master" ## [master | slave]
 $postgresMaster = "127.0.0.1"
-$postgresSlave = "127.0.0.1"
-$changeDefaultEncodingToUTF8 = false
+$postgresSlave = "127.0.0.1"        # look below for further steps.
+
 ## ***************************************************************************************
 ## After setting up postgresql on both master and slave, the following command is needed to be executed on the master.
 ##
@@ -106,8 +110,14 @@ $changeDefaultEncodingToUTF8 = false
 ##
 ##         primary_conninfo = 'host=master_IP_address port=5432 user=user password=yourpassword'
 ##
+##      Also ensure that the Master's IPtables allow access from the slave.
+##      Add this to /etc/sysconfig/iptables:
+##
+##      -A INPUT -m state --state NEW -m tcp -p tcp --dport 5432 -j ACCEPT -s <slave_ip_here>
+##
+## *******************************************************************************************
 
-
+$changeDefaultEncodingToUTF8 = false
 # postgres version used for repmgr as well
 $postgresMajorVersion = "9.3"
 $pgPackVersion="93" ##used to ensure that postgres packs like postgresql91-contrib are present [91|93, default is 91]
