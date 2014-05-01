@@ -21,7 +21,8 @@ class backup::couchdb($couchDataDir = "/var/lib/couchdb/", $couchConfDir = "/etc
   cron { "mtraining-couchdb-backup":
     command => "/home/backups/scripts/couchdb_backup.sh",
     user    => root,
-    hour    => [0,8,16],
+    minute  => 0,
+    hour    => 0,
     require => File["/home/backups/scripts/couchdb_backup.sh"]
   }
 

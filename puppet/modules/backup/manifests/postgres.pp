@@ -19,9 +19,10 @@ class backup::postgres($database = "whp",$user = "postgres" ,$password = "passwd
   }
 
   cron { "mtraining-postgres-backup":
-    command => "/home/backups/scripts/pg_backup.sh ${user} ${database}",
+    command => "/home/backups/scripts/pg_backup.sh ${user} ${database} ${password}",
     user    => root,
-    hour    => [0,8,16],
+    minute  => 0,
+    hour    => 0,
     require => File["/home/backups/scripts/pg_backup.sh"]
   }
 

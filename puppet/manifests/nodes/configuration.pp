@@ -296,5 +296,5 @@ $antVersion = "1.8.2"
 
 ## nscd is name service caching daemon. It provides caching for many service requests, mainly dns lookup.
 # include nscd
-#include backup::postgres
+#class { backup::postgres : database => "whp",user => "postgres" ,password => "password"}
 #include backup::couchdb

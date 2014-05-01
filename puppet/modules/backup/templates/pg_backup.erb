@@ -2,6 +2,7 @@
 
 USER=$1
 DATABASE=$2
+PASSWD=$3
 
 PG_BACKUP_DIR=/home/backups/postgres
 
@@ -10,6 +11,8 @@ cd $PG_BACKUP_DIR
 
 CURRENT_TIME=`date +%Y-%m-%d-%H-%M`
 BACKUP_FILE=$DATABASE-$CURRENT_TIME
+
+export PGPASSWORD=$PASSWD
 
 # make a directory with current time
 pg_dump -o -U $USER -d $DATABASE > $BACKUP_FILE.sql
@@ -27,3 +30,5 @@ then
 else
     echo "ERROR" > $CRON_RESULT_FILE
 fi
+
+unset PGPASSWORD
